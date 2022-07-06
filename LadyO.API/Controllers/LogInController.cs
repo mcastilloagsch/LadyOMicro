@@ -28,58 +28,15 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/LogIn/LogIn")]
+        [Route("api/LogIn/LogInUser")]
         [HttpPost]
-        public object LogIn([FromBody] Models.LogIn obj)
+        public object LogInUser([FromBody] Models.LogIn obj)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    string token = Models.Persons.LogIn(obj.eMail);
-                    if (Generic.Tools.ValidarEmail(obj.eMail))
-                    {
-                        if (token != null)
-                        {
-                            bool isValid = Models.LogIn.IsUserValid(obj.eMail);
-                            if (isValid)
-                            {
-                                return new
-                                {
-                                    isValid = true,
-                                    token = token,
-                                    msg = "Usuario Valido"
-                                }; 
-                            }
-                            else
-                            {
-                                return new
-                                {
-                                    isValid = false,
-                                    token = string.Empty,
-                                    msg = "Usuario No Valido"
-                                };
-                            }
-                        }
-                        else
-                        {
-                            return new
-                            {
-                                isValid = true,
-                                token = string.Empty,
-                                msg = "Usuario No Valido"
-                            };
-                        }
-                    }
-                    else
-                    {
-                        return new
-                        {
-                            isValid = false,
-                            token = string.Empty,
-                            msg = "Usuario No Valido"
-                        };
-                    }
+                    return Models.LogIn.LogInUser(obj);
                 }
                 else
                 {

@@ -51,5 +51,42 @@ namespace LadyO.API.Models
                 throw ex;
             }
         }
+
+        public static object LogInUser(LogIn objLogIn)
+        {
+            APIGenericLogInResponse response = new APIGenericLogInResponse();
+            try
+            {
+                if (Generic.Tools.ValidarEmail(objLogIn.eMail))
+                {
+                    if (objLogIn.eMail.ToLower().Contains("@guiasyscoutschile.cl"))
+                    {
+                        response.isValid = true;
+                        response.token = Generic.Tools.TokenGen(30);
+                        response.msg = string.Empty;
+                    }
+                    else
+                    {
+                        response.isValid = false;
+                        response.token = string.Empty;
+                        response.msg = Generic.Message.LOGIN_USUARIO_NO_VALIDO;
+                    }
+                }
+                else
+                {
+                    response.isValid = false;
+                    response.token = string.Empty;
+                    response.msg = Generic.Message.EMAIL_INVALIDO;
+                }
+                return new { response };
+            }
+            catch (Exception ex)
+            {
+                response.isValid = false;
+                response.token = string.Empty;
+                response.msg = ex.Message;
+                return new { response };
+            }
+        }
     }
 }
