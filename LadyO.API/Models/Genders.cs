@@ -26,7 +26,32 @@ namespace LadyO.API.Models
         {
             try
             {
+
+
+
                 string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".genders VALUES(0, '" + objInsert.name + "')";
+                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                {
+                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    {
+                        conexion.Open();
+                        comando.ExecuteReader();
+                        conexion.Close();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static bool AddObject(Genders objAdd)
+        {
+            try
+            {
+                string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".genders VALUES(0, '" + objAdd.name + "')";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -120,6 +145,37 @@ namespace LadyO.API.Models
                     }
                 }
                 return objReturnList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static object getList()
+        {
+            try
+            {
+                APIGenericResponse response = new APIGenericResponse();
+                List<Genders> objReturnList = new List<Genders>();
+                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders";
+                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                {
+                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    {
+                        conexion.Open();
+                        MySqlDataReader reader = comando.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
+                        }
+                        conexion.Close();
+                    }
+                }
+                response.isValid = true;
+                response.msg = string.Empty;
+                response.data = objReturnList;
+                return new { response };
             }
             catch (Exception ex)
             {

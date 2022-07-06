@@ -185,6 +185,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\APIGenericLogInResponse.cs" />
+    <Compile Include="Models\APIGenericResponse.cs" />
     <Compile Include="Models\Branches.cs" />
     <Compile Include="Models\Communes.cs" />
     <Compile Include="Models\Countries.cs" />
