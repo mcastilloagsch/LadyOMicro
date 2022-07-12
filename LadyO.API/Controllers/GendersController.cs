@@ -54,7 +54,7 @@ namespace LadyO.API.Controllers
                     response.isValid = false;
                     response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
                     response.data = null;
-                    return new { response };
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace LadyO.API.Controllers
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
-                return new { response };
+                return response;
             }
         }
 
