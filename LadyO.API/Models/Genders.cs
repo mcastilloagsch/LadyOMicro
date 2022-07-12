@@ -22,60 +22,16 @@ namespace LadyO.API.Models
             this.name = name;
         }
 
+
         public static bool ObjInsert(Genders objInsert)
         {
             try
             {
-
-
-
-                string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".genders VALUES(0, '" + objInsert.name + "')";
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                string str = objInsert.name;
+                int length = str.Length;
+                if (length >= 1)
                 {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        comando.ExecuteReader();
-                        conexion.Close();
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static bool AddObject(Genders objAdd)
-        {
-            try
-            {
-                string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".genders VALUES(0, '" + objAdd.name + "')";
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        comando.ExecuteReader();
-                        conexion.Close();
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static bool ObjUpdate(Genders objUpdate)
-        {
-            try
-            {
-                if (ObjList(objUpdate.id).Count == 1)
-                {
-                    string sqlQuery = "UPDATE " + Generic.DBConnection.SCHEMA + ".genders SET name = '" + objUpdate.name + "' WHERE id = " + objUpdate.id;
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".genders VALUES(0, '" + objInsert.name + "')";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -91,6 +47,7 @@ namespace LadyO.API.Models
                 {
                     return false;
                 }
+
             }
             catch (Exception ex)
             {
@@ -98,26 +55,37 @@ namespace LadyO.API.Models
             }
         }
 
-        public static List<Genders> ObjList()
+        public static bool ObjUpdate(Genders objUpdate)
         {
             try
             {
-                List<Genders> objReturnList = new List<Genders>();
-                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders";
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                string str = objUpdate.name;
+                int length = str.Length;
+                if (length >= 1)
                 {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    if (ObjList(objUpdate.id).Count == 1)
                     {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
+                        string sqlQuery = "UPDATE " + Generic.DBConnection.SCHEMA + ".genders SET name = '" + objUpdate.name + "' WHERE id = " + objUpdate.id;
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
-                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
+                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                            {
+                                conexion.Open();
+                                comando.ExecuteReader();
+                                conexion.Close();
+                            }
                         }
-                        conexion.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
-                return objReturnList;
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -125,7 +93,7 @@ namespace LadyO.API.Models
             }
         }
 
-        private static List<Genders> ObjList(int id)
+        public static List<Genders> ObjList(int id)
         {
             try
             {
@@ -175,7 +143,7 @@ namespace LadyO.API.Models
                 response.isValid = true;
                 response.msg = string.Empty;
                 response.data = objReturnList;
-                return new { response };
+                return response;
             }
             catch (Exception ex)
             {

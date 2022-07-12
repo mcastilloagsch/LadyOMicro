@@ -8,18 +8,19 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class GendersController : ApiController
+    public class CountriesController : ApiController
     {
-        [Route("api/Genders/ObjList/{token}/{id}")]
+
+        [Route("api/Countries/getList/{token}")]
         [HttpGet]
-        public object ObjList(string token,int id)
+        public object getList(string token)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Genders.ObjList(id);
+                    return Models.Countries.getList();
                 }
                 else
                 {
@@ -38,23 +39,23 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Genders/getList/{token}")]
+        [Route("api/Countries/ObjList/{token}/{id}")]
         [HttpGet]
-        public object getList(string token)
+        public object ObjList(string token, int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Genders.getList();
+                    return Models.Countries.ObjList(id);
                 }
                 else
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
                     response.data = null;
-                    return new { response };
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -62,13 +63,13 @@ namespace LadyO.API.Controllers
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
-                return new { response };
+                return response;
             }
         }
 
-        [Route("api/Genders/ObjInsert/{token}")]
+        [Route("api/Countries/ObjInsert/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Genders objInsert)
+        public object ObjInsert(string token, [FromBody] Models.Countries objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -77,7 +78,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Genders.ObjInsert(objInsert) };
+                        return new { success = Models.Countries.ObjInsert(objInsert) };
                     }
                     else
                     {
@@ -104,10 +105,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-
-        [Route("api/Genders/ObjUpdate/{token}/{id}")]
+        [Route("api/Countries/ObjUpdate/{token}/{id}")]
         [HttpPut]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Genders objUpdate)
+        public object ObjUpdate(string token,int id, [FromBody] Models.Countries objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -118,7 +118,7 @@ namespace LadyO.API.Controllers
                     {
                         return new
                         {
-                            success = Models.Genders.ObjUpdate(objUpdate)
+                            success = Models.Countries.ObjUpdate(objUpdate)
                         };
                     }
                     else
@@ -145,5 +145,6 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
+
     }
 }
