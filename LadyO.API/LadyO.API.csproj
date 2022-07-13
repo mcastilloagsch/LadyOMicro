@@ -176,7 +176,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CountriesController.cs" />
-    <Compile Include="Controllers\GendersController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\ReligionsController.cs" />
     <Compile Include="Controllers\SexesController.cs" />

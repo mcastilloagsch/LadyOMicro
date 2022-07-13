@@ -39,16 +39,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Countries/ObjList/{token}/{id}")]
+        [Route("api/Countries/getObject/{token}/{id}")]
         [HttpGet]
-        public object ObjList(string token, int id)
+        public object getObject(string token, int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Countries.ObjList(id);
+                    return Models.Countries.getObject(id);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ namespace LadyO.API.Controllers
         }
 
         [Route("api/Countries/ObjUpdate/{token}/{id}")]
-        [HttpPut]
+        [HttpPost]
         public object ObjUpdate(string token,int id, [FromBody] Models.Countries objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
