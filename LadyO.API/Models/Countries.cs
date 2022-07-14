@@ -196,7 +196,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -280,7 +280,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }

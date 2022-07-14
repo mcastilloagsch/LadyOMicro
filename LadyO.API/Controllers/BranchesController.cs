@@ -8,10 +8,10 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class ReligionsController : ApiController
+    public class BranchesController : ApiController
     {
 
-        [Route("api/Religions/getList/{token}")]
+        [Route("api/Branches/getList/{token}")]
         [HttpGet]
         public object getList(string token)
         {
@@ -20,7 +20,7 @@ namespace LadyO.API.Controllers
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Religions.getList();
+                    return Models.Branches.getList();
                 }
                 else
                 {
@@ -39,7 +39,7 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Religions/getObject/{token}/{id}")]
+        [Route("api/Branches/getObject/{token}/{id}")]
         [HttpGet]
         public object getObject(string token, int id)
         {
@@ -48,7 +48,7 @@ namespace LadyO.API.Controllers
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Religions.getObject(id);
+                    return Models.Branches.getObject(id);
                 }
                 else
                 {
@@ -67,9 +67,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Religions/ObjInsert/{token}")]
+        [Route("api/Branches/ObjInsert/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Religions objInsert)
+        public object ObjInsert(string token, [FromBody] Models.Branches objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -78,7 +78,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Religions.ObjInsert(objInsert) };
+                        return new { success = Models.Branches.ObjInsert(objInsert) };
                     }
                     else
                     {
@@ -105,9 +105,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Religions/ObjUpdate/{token}/{id}")]
+        [Route("api/Branches/ObjUpdate/{token}/{id}")]
         [HttpPost]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Religions objUpdate)
+        public object ObjUpdate(string token, int id, [FromBody] Models.Branches objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -118,7 +118,7 @@ namespace LadyO.API.Controllers
                     {
                         return new
                         {
-                            success = Models.Religions.ObjUpdate(objUpdate)
+                            success = Models.Branches.ObjUpdate(objUpdate)
                         };
                     }
                     else
