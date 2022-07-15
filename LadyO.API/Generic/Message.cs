@@ -42,6 +42,12 @@ namespace LadyO.API.Generic
         public static string ID_REGIONS_GETOBJECT_NO_EXISTE = "La region que usted esta buscando no existe.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
+		
+		public static string ID_GENDERS_NO_EXISTE = "El id ingresado no existe";
+        public static string ID_SEXES_NO_EXISTE = "El id ingresado no existe";
+        public static string NAME_GENDERS_SIN_CARACTERES = "El nombre no tiene caracteres";
+        public static string NAME_GENDERS_NO_EXISTE = "El nombre no existe";
+
         
     }
 }
