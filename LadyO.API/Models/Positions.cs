@@ -149,7 +149,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                            int? _priority = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _priority = reader.GetInt32(2);
+                            }
+                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
                         }
                         conexion.Close();
                     }

@@ -42,7 +42,17 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _unit_name = null;
+                            string _small_team = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _unit_name = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _small_team = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
                         }
                         conexion.Close();
                     }
@@ -73,7 +83,17 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _unit_name = null;
+                            string _small_team = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _unit_name = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _small_team = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
                         }
                         conexion.Close();
                     }
@@ -117,7 +137,17 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _unit_name = null;
+                            string _small_team = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _unit_name = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _small_team = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
                         }
                         conexion.Close();
                     }

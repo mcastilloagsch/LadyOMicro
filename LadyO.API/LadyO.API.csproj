@@ -179,9 +179,9 @@
     <Compile Include="Controllers\CountriesController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\PositionsController.cs" />
-    <Compile Include="Controllers\RegionsController.cs" />
     <Compile Include="Controllers\ReligionsController.cs" />
     <Compile Include="Controllers\SexesController.cs" />
+    <Compile Include="Controllers\StructuresController.cs" />
     <Compile Include="Controllers\StructureTypeController.cs" />
     <Compile Include="Generic\DBConnection.cs" />
     <Compile Include="Generic\Message.cs" />
@@ -270,6 +270,7 @@
     <Folder Include="Views\Positions\" />
     <Folder Include="Views\Provinces\" />
     <Folder Include="Views\Regions\" />
+    <Folder Include="Views\Structures\" />
     <Folder Include="Views\StructureType\" />
     <Folder Include="Views\UnitAttributes\" />
   </ItemGroup>

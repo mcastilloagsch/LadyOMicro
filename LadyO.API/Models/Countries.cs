@@ -42,7 +42,22 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Countries(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _name = null;
+                            string _nationality = null;
+                            string _iso = null;
+                            if (!reader.IsDBNull(1))
+                            {
+                                _name = reader.GetString(1);
+                            }
+                            if (!reader.IsDBNull(2))
+                            {
+                                _nationality = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _iso = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Countries(reader.GetInt32(0), _name, _nationality, _iso));
                         }
                         conexion.Close();
                     }
@@ -73,7 +88,22 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Countries(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _name = null;
+                            string _nationality = null;
+                            string _iso = null;
+                            if (!reader.IsDBNull(1))
+                            {
+                                _name = reader.GetString(1);
+                            }
+                            if (!reader.IsDBNull(2))
+                            {
+                                _nationality = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _iso = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Countries(reader.GetInt32(0), _name, _nationality, _iso));
                         }
                         conexion.Close();
                     }
@@ -117,7 +147,22 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Countries(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                            string _name = null;
+                            string _nationality = null;
+                            string _iso = null;
+                            if (!reader.IsDBNull(1))
+                            {
+                                _name = reader.GetString(1);
+                            }
+                            if (!reader.IsDBNull(2))
+                            {
+                                _nationality = reader.GetString(2);
+                            }
+                            if (!reader.IsDBNull(3))
+                            {
+                                _iso = reader.GetString(3);
+                            }
+                            objReturnList.Add(new Countries(reader.GetInt32(0), _name, _nationality, _iso));
                         }
                         conexion.Close();
                     }

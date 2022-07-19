@@ -11,14 +11,14 @@ namespace LadyO.API.Models
     {
         public int id { get; set; }
         public string name { get; set; }
-        public int priority { get; set; }
+        public int? priority { get; set; }
 
         public StructureType()
         {
 
         }
 
-        public StructureType(int id, string name, int priority)
+        public StructureType(int id, string name, int? priority)
         {
             this.id = id;
             this.name = name;
@@ -40,7 +40,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                            int? _priority = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _priority = reader.GetInt32(2);
+                            }
+                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
                         }
                         conexion.Close();
                     }
@@ -71,7 +76,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                            int? _priority = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _priority = reader.GetInt32(2);
+                            }
+                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
                         }
                         conexion.Close();
                     }
@@ -115,7 +125,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                            int? _priority = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _priority = reader.GetInt32(2);
+                            }
+                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
                         }
                         conexion.Close();
                     }

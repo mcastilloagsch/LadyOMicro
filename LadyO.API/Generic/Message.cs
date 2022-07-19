@@ -19,8 +19,8 @@ namespace LadyO.API.Generic
         public static string ID_COUNTRIES_NO_EXISTE = "El pais que usted quiere modificar no existe.";
         public static string ID_COUNTRIES_GETOBJECT_NO_EXISTE = "El pais que usted esta buscando no existe.";
         //STRUCTURETYPE MESSAGES
-        public static string ID_STRUCTURETYPE_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
-        public static string ID_STRUCTURETYPE_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
+        public static string ID_STRUCTURETYPE_GETOBJECT_NO_EXISTE = "El tipo de estructura que usted esta buscando no existe.";
+        public static string ID_STRUCTURETYPE_NO_EXISTE = "El tipo de que usted quiere modificar no existe.";
         public static string STRUCTURETYPE_POSITION = "La posicion no puede ser negativa.";
         //BRANCHES MESSAGES
         public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
@@ -37,9 +37,9 @@ namespace LadyO.API.Generic
         public static string ID_UNITATTRIBUTES_GETOBJECT_NO_EXISTE = "Los atributos unitarios que usted esta buscando no existe.";
         public static string ID_UNITATTRIBUTES_STRUCTURE_NO_EXISTE = "No existe la estructura que usted puso.";
         public static string ID_UNITATTRIBUTES_BRANCH_NO_EXISTE = "No existe la rama que usted puso.";
-        //REGIONS MESSAGES
-        public static string ID_REGIONS_NO_EXISTE = "La region que usted quiere modificar no existe.";
-        public static string ID_REGIONS_GETOBJECT_NO_EXISTE = "La region que usted esta buscando no existe.";
+        //STRUCTURES MESSAGES
+        public static string ID_STRUCTURES_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
+        public static string ID_STRUCTURES_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
         
