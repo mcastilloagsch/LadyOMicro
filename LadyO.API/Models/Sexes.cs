@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Web;
 
@@ -22,54 +23,183 @@ namespace LadyO.API.Models
             this.name = name;
         }
 
-        public static bool ObjInsert(Sexes objInsert)
+        public static object getObject(int id)
         {
+            APIGenericResponse response = new APIGenericResponse();
             try
             {
-                string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".sexes VALUES(0, '" + objInsert.name + "')";
+                List<Sexes> objReturnList = new List<Sexes>();
+                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".sexes WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                     {
                         conexion.Open();
-                        comando.ExecuteReader();
+                        MySqlDataReader reader = comando.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            objReturnList.Add(new Sexes(reader.GetInt32(0), reader.GetString(1)));
+                        }
                         conexion.Close();
                     }
                 }
-                return true;
+                if (objReturnList.FirstOrDefault() == null)
+                {
+                    response.isValid = false;
+                    response.msg = Generic.Message.ID_SEXES_NO_EXISTE;
+                    response.data = null;
+                    return response;
+                }
+                else
+                {
+                    response.isValid = true;
+                    response.msg = string.Empty;
+                    response.data = objReturnList.FirstOrDefault();
+                    return response;
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.isValid = false;
+                response.msg = ex.Message;
+                response.data = null;
+                return response;
             }
         }
-
-        public static bool ObjUpdate(Sexes objUpdate)
+        private static Sexes getSexes(int id)
         {
             try
             {
-                if (ObjList(objUpdate.id).Count == 1)
+                List<Sexes> objReturnList = new List<Sexes>();
+                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".sexes WHERE id = " + id;
+                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
-                    string sqlQuery = "UPDATE " + Generic.DBConnection.SCHEMA + ".sexes SET name = '" + objUpdate.name + "' WHERE id = " + objUpdate.id;
+                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    {
+                        conexion.Open();
+                        MySqlDataReader reader = comando.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            objReturnList.Add(new Sexes(reader.GetInt32(0), reader.GetString(1)));
+                        }
+                        conexion.Close();
+                    }
+                }
+                if (objReturnList.FirstOrDefault() != null)
+                {
+                    return objReturnList.FirstOrDefault();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public static object ObjInsert(Sexes objInsert)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            Sexes objData = new Sexes();
+            try
+            {
+                string str_name = objInsert.name;
+                string String_name = Regex.Replace(str_name, @"\s", "");
+                int length_name = String_name.Length;
+                if (length_name >= 1)
+                {
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".sexes VALUES(0, '" + objInsert.name + "');SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
                             conexion.Open();
-                            comando.ExecuteReader();
+                            objData.id = Convert.ToInt32(comando.ExecuteScalar());
                             conexion.Close();
                         }
                     }
-                    return true;
+                    objData.name = objInsert.name;
+                    response.isValid = true;
+                    response.msg = string.Empty;
+                    response.data = objData;
+                    return response;
                 }
                 else
                 {
-                    return false;
+                    response.isValid = false;
+                    response.msg = Generic.Message.NAME_GENDERS_SIN_CARACTERES;
+                    response.data = null;
+                    return response;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.isValid = false;
+                response.msg = ex.Message;
+                response.data = null;
+                return response;
+            }
+        }
+
+
+        public static object ObjUpdate(Sexes objUpdate)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            Sexes objData = new Sexes();
+            try
+            {
+                string str_name = objUpdate.name;
+                string String_name = Regex.Replace(str_name, @"\s", "");
+                int length_name = String_name.Length;
+                if (length_name >= 1)
+                {
+                    Sexes valid = getSexes(objUpdate.id);
+                    if (valid != null)
+                    {
+                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".sexes SET name = '" + objUpdate.name + "'  WHERE id =  " + objUpdate.id;
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                        {
+                            using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                            {
+                                conexion.Open();
+                                comando.ExecuteReader();
+                                conexion.Close();
+                            }
+                        }
+                        objData.id = objUpdate.id;
+                        objData.name = objUpdate.name;
+                        response.isValid = true;
+                        response.msg = string.Empty;
+                        response.data = objData;
+                        return response;
+                    }
+                    else
+                    {
+                        response.isValid = false;
+                        response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
+                        response.data = null;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.isValid = false;
+                    response.msg = Generic.Message.NAME_GENDERS_NO_EXISTE;
+                    response.data = null;
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.isValid = false;
+                response.msg = ex.Message;
+                response.data = null;
+                return response;
             }
         }
 
@@ -100,12 +230,15 @@ namespace LadyO.API.Models
             }
         }
 
-        private static List<Sexes> ObjList(int id)
+
+
+        public static object getList()
         {
             try
             {
+                APIGenericResponse response = new APIGenericResponse();
                 List<Sexes> objReturnList = new List<Sexes>();
-                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".sexes WHERE id = " + id;
+                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".sexes";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -119,7 +252,10 @@ namespace LadyO.API.Models
                         conexion.Close();
                     }
                 }
-                return objReturnList;
+                response.isValid = true;
+                response.msg = string.Empty;
+                response.data = objReturnList;
+                return response;
             }
             catch (Exception ex)
             {
