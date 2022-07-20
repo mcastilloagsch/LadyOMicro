@@ -188,6 +188,7 @@
     <Compile Include="Controllers\SocioeconomicsController.cs" />
     <Compile Include="Controllers\StructuresController.cs" />
     <Compile Include="Controllers\StructureTypeController.cs" />
+    <Compile Include="Controllers\UnitAttributesController.cs" />
     <Compile Include="Generic\DBConnection.cs" />
     <Compile Include="Generic\Message.cs" />
     <Compile Include="Generic\Tools.cs" />

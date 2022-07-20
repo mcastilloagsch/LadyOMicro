@@ -91,7 +91,7 @@ namespace LadyO.API.Models
                 if (objReturnList.FirstOrDefault() == null)
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
+                    response.msg = Generic.Message.ID_COMMUNES_GETOBJECT_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -226,7 +226,7 @@ namespace LadyO.API.Models
                     else
                     {
                         response.isValid = false;
-                        response.msg = Generic.Message.PROVINCE_ID_COMMUNES_NO_EXISTE;
+                        response.msg = Generic.Message.ID_COMMUNES_PROVINCES_OBJ_NO_EXISTE;
                         response.data = null;
                         return response;
                     }
@@ -234,7 +234,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_COMMUNES_SIN_CARACTERES;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -287,7 +287,7 @@ namespace LadyO.API.Models
                         else
                         {
                             response.isValid = false;
-                            response.msg = Generic.Message.PROVINCE_ID_COMMUNES_NO_EXISTE;
+                            response.msg = Generic.Message.ID_COMMUNES_PROVINCES_OBJ_NO_EXISTE;
                             response.data = null;
                             return response;
                         }
@@ -303,7 +303,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_COMMUNES_SIN_CARACTERES;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }

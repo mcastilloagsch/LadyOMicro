@@ -22,6 +22,38 @@ namespace LadyO.API.Models
             this.id = id;
             this.name = name;
         }
+
+        public static object getList()
+        {
+            try
+            {
+                APIGenericResponse response = new APIGenericResponse();
+                List<Genders> objReturnList = new List<Genders>();
+                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders";
+                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                {
+                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    {
+                        conexion.Open();
+                        MySqlDataReader reader = comando.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
+                        }
+                        conexion.Close();
+                    }
+                }
+                response.isValid = true;
+                response.msg = string.Empty;
+                response.data = objReturnList;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -45,7 +77,7 @@ namespace LadyO.API.Models
                 if (objReturnList.FirstOrDefault() == null)
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
+                    response.msg = Generic.Message.ID_GENDERS_GETOBJECT_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -131,7 +163,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_GENDERS_SIN_CARACTERES;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -188,7 +220,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_GENDERS_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -202,89 +234,6 @@ namespace LadyO.API.Models
             }
         }
 
-        public static List<Genders> ObjList()
-        {
-            try
-            {
-                List<Genders> objReturnList = new List<Genders>();
-                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders";
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
-                        }
-                        conexion.Close();
-                    }
-                }
-                return objReturnList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        private static List<Genders> ObjList(int id)
-        {
-            try
-            {
-                List<Genders> objReturnList = new List<Genders>();
-                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
-                        }
-                        conexion.Close();
-                    }
-                }
-                return objReturnList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static object getList()
-        {
-            try
-            {
-                APIGenericResponse response = new APIGenericResponse();
-                List<Genders> objReturnList = new List<Genders>();
-                string sqlQuery = "SELECT id, name FROM " + Generic.DBConnection.SCHEMA + ".genders";
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            objReturnList.Add(new Genders(reader.GetInt32(0), reader.GetString(1)));
-                        }
-                        conexion.Close();
-                    }
-                }
-                response.isValid = true;
-                response.msg = string.Empty;
-                response.data = objReturnList;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }

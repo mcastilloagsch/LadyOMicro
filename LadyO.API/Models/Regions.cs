@@ -87,7 +87,7 @@ namespace LadyO.API.Models
                 if (objReturnList.FirstOrDefault() == null)
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_REGIONS_GETOBJECT_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -180,7 +180,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ISO_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -231,7 +231,7 @@ namespace LadyO.API.Models
                     else
                     {
                         response.isValid = false;
-                        response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
                         response.data = null;
                         return response;
                     }
@@ -239,7 +239,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ISO_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
