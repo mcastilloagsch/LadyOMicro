@@ -1,35 +1,37 @@
 ﻿using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Web;
-using System.Text.RegularExpressions;
 
 namespace LadyO.API.Models
 {
-    public class Regions
+    public class Socioeconomics
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string geom { get; set; }
+        public string values { get; set; }
 
-        public Regions()
+        public Socioeconomics()
         {
 
         }
-        public Regions(int id, string name, string geom)
+
+        public Socioeconomics(int id, string name, string values)
         {
             this.id = id;
             this.name = name;
-            this.geom = geom;
+            this.values = values;
         }
+
         public static object getList()
         {
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Regions> objReturnList = new List<Regions>();
-                string sqlQuery = "SELECT id, name, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".regions";
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "select * from " + Generic.DBConnection.SCHEMA + ".socioeconomics";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -38,12 +40,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _geom = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _geom = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            objReturnList.Add(new Regions(reader.GetInt32(0), reader.GetString(1), _geom));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -64,8 +66,8 @@ namespace LadyO.API.Models
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<Regions> objReturnList = new List<Regions>();
-                string sqlQuery = "SELECT id, name, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".regions WHERE id = " + id;
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "SELECT * FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -74,12 +76,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _geom = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _geom = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            objReturnList.Add(new Regions(reader.GetInt32(0), reader.GetString(1), _geom));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -87,7 +89,7 @@ namespace LadyO.API.Models
                 if (objReturnList.FirstOrDefault() == null)
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_SECODIOECONOMICS_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -107,13 +109,12 @@ namespace LadyO.API.Models
                 return response;
             }
         }
-
-        private static Regions getRegion(int id)
+        private static Socioeconomics getSocioeconomic(int id)
         {
             try
             {
-                List<Regions> objReturnList = new List<Regions>();
-                string sqlQuery = "SELECT id, name, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".regions WHERE id = " + id;
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "SELECT * FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -122,12 +123,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _geom = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _geom = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            objReturnList.Add(new Regions(reader.GetInt32(0), reader.GetString(1), _geom));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -147,10 +148,11 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjInsert(Regions objInsert)
+
+        public static object ObjInsert(Socioeconomics objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Regions objData = new Regions();
+            Socioeconomics objData = new Socioeconomics();
             try
             {
                 string str_name = objInsert.name;
@@ -158,9 +160,9 @@ namespace LadyO.API.Models
                 int length_name = String_name.Length;
                 if (length_name >= 1)
                 {
-
-                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".regions VALUES(0, '" + objInsert.name + "', ST_GeomFromText('" + objInsert.geom + "'));SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".socioeconomics VALUES(0, '" + objInsert.name + "', '" + objInsert.values + "' );SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
@@ -170,17 +172,16 @@ namespace LadyO.API.Models
                         }
                     }
                     objData.name = objInsert.name;
-                    objData.geom = objInsert.geom;
+                    objData.values = objInsert.values;
                     response.isValid = true;
                     response.msg = string.Empty;
                     response.data = objData;
                     return response;
-
                 }
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ISO_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_SOCIOECONOMICS_SIN_CARACTERES;
                     response.data = null;
                     return response;
                 }
@@ -194,10 +195,11 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjUpdate(Regions objUpdate)
+
+        public static object ObjUpdate(Socioeconomics objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Regions objData = new Regions();
+            Socioeconomics objData = new Socioeconomics();
             try
             {
                 string str_name = objUpdate.name;
@@ -205,11 +207,10 @@ namespace LadyO.API.Models
                 int length_name = String_name.Length;
                 if (length_name >= 1)
                 {
-                    Regions valid = getRegion(objUpdate.id);
+                    Socioeconomics valid = getSocioeconomic(objUpdate.id);
                     if (valid != null)
                     {
-
-                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".regions SET name = '" + objUpdate.name + "' ,  geom = ST_GeomFromText('" + objUpdate.geom + "')  WHERE id =  " + objUpdate.id;
+                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".socioeconomics SET name = '" + objUpdate.name + "', values = '" + objUpdate.values + "' WHERE id =  " + objUpdate.id;
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -221,17 +222,16 @@ namespace LadyO.API.Models
                         }
                         objData.id = objUpdate.id;
                         objData.name = objUpdate.name;
-                        objData.geom = objUpdate.geom;
+                        objData.values = objUpdate.values;
                         response.isValid = true;
                         response.msg = string.Empty;
                         response.data = objData;
                         return response;
-
                     }
                     else
                     {
                         response.isValid = false;
-                        response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                        response.msg = Generic.Message.ID_SECODIOECONOMICS_NO_EXISTE;
                         response.data = null;
                         return response;
                     }
@@ -239,7 +239,7 @@ namespace LadyO.API.Models
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ISO_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.NAME_SOCIOECONOMICS_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
