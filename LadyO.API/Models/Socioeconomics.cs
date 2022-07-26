@@ -31,7 +31,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Socioeconomics> objReturnList = new List<Socioeconomics>();
-                string sqlQuery = "select * from " + Generic.DBConnection.SCHEMA + ".socioeconomics";
+                string sqlQuery = "select id, name, `values` from " + Generic.DBConnection.SCHEMA + ".socioeconomics";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -67,7 +67,7 @@ namespace LadyO.API.Models
             try
             {
                 List<Socioeconomics> objReturnList = new List<Socioeconomics>();
-                string sqlQuery = "SELECT * FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
+                string sqlQuery = "SELECT id, name, `values` FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -114,7 +114,7 @@ namespace LadyO.API.Models
             try
             {
                 List<Socioeconomics> objReturnList = new List<Socioeconomics>();
-                string sqlQuery = "SELECT * FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
+                string sqlQuery = "SELECT id, name, `values` FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -210,7 +210,7 @@ namespace LadyO.API.Models
                     Socioeconomics valid = getSocioeconomic(objUpdate.id);
                     if (valid != null)
                     {
-                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".socioeconomics SET name = '" + objUpdate.name + "', values = '" + objUpdate.values + "' WHERE id =  " + objUpdate.id;
+                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".socioeconomics SET name = '" + objUpdate.name + "', `values` = '" + objUpdate.values + "' WHERE id =  " + objUpdate.id;
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
