@@ -8,9 +8,9 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class SexesController : ApiController
+    public class SocioeconomicsController : ApiController
     {
-        [Route("api/Sexes/getList/{token}")]
+        [Route("api/Socioeconomics/getList/{token}")]
         [HttpGet]
         public object getList(string token)
         {
@@ -19,7 +19,7 @@ namespace LadyO.API.Controllers
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Sexes.getList();
+                    return Models.Socioeconomics.getList();
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-        [Route("api/Sexes/getObject/{token}/{id}")]
+        [Route("api/Socioeconomics/getObject/{token}/{id}")]
         [HttpGet]
         public object getObject(string token, int id)
         {
@@ -46,7 +46,7 @@ namespace LadyO.API.Controllers
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Sexes.getObject(id);
+                    return Models.Socioeconomics.getObject(id);
                 }
                 else
                 {
@@ -64,9 +64,9 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-        [Route("api/Sexes/ObjInsert/{token}")]
+        [Route("api/Socioeconomics/ObjInsert/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Sexes objInsert)
+        public object ObjInsert(string token, [FromBody] Models.Socioeconomics objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -75,7 +75,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Sexes.ObjInsert(objInsert) };
+                        return new { success = Models.Socioeconomics.ObjInsert(objInsert) };
                     }
                     else
                     {
@@ -104,9 +104,9 @@ namespace LadyO.API.Controllers
 
 
 
-        [Route("api/Sexes/ObjUpdate/{token}/{id}")]
+        [Route("api/Socioeconomics/ObjUpdate/{token}/{id}")]
         [HttpPost]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Sexes objUpdate)
+        public object ObjUpdate(string token, int id, [FromBody] Models.Socioeconomics objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -117,7 +117,7 @@ namespace LadyO.API.Controllers
                     {
                         return new
                         {
-                            success = Models.Sexes.ObjUpdate(objUpdate)
+                            success = Models.Socioeconomics.ObjUpdate(objUpdate)
                         };
                     }
                     else

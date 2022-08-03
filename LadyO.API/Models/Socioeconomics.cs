@@ -1,30 +1,28 @@
 ﻿using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Web;
-using System.Text.RegularExpressions;
 
 namespace LadyO.API.Models
 {
-    public class Branches
+    public class Socioeconomics
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string unit_name { get; set; }
-        public string small_team { get; set; }
+        public string values { get; set; }
 
-        public Branches()
+        public Socioeconomics()
         {
 
         }
 
-        public Branches(int id, string name, string unit_name, string small_team)
+        public Socioeconomics(int id, string name, string values)
         {
             this.id = id;
             this.name = name;
-            this.unit_name = unit_name;
-            this.small_team = small_team;
+            this.values = values;
         }
 
         public static object getList()
@@ -32,8 +30,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Branches> objReturnList = new List<Branches>();
-                string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches";
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "select id, name, `values` from " + Generic.DBConnection.SCHEMA + ".socioeconomics";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -42,17 +40,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _unit_name = null;
-                            string _small_team = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _unit_name = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            if (!reader.IsDBNull(3))
-                            {
-                                _small_team = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -73,8 +66,8 @@ namespace LadyO.API.Models
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<Branches> objReturnList = new List<Branches>();
-                string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches WHERE id = " + id;
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "SELECT id, name, `values` FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -83,17 +76,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _unit_name = null;
-                            string _small_team = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _unit_name = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            if (!reader.IsDBNull(3))
-                            {
-                                _small_team = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -101,7 +89,7 @@ namespace LadyO.API.Models
                 if (objReturnList.FirstOrDefault() == null)
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.ID_BRANCHES_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_SOCIOECONOMICS_GETOBJECT_NO_EXISTE;
                     response.data = null;
                     return response;
                 }
@@ -121,14 +109,12 @@ namespace LadyO.API.Models
                 return response;
             }
         }
-
-
-        private static Branches getBranch(int id)
+        private static Socioeconomics getSocioeconomic(int id)
         {
             try
             {
-                List<Branches> objReturnList = new List<Branches>();
-                string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches WHERE id = " + id;
+                List<Socioeconomics> objReturnList = new List<Socioeconomics>();
+                string sqlQuery = "SELECT id, name, `values` FROM " + Generic.DBConnection.SCHEMA + ".socioeconomics WHERE id = " + id;
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -137,17 +123,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            string _unit_name = null;
-                            string _small_team = null;
+                            string _values = null;
                             if (!reader.IsDBNull(2))
                             {
-                                _unit_name = reader.GetString(2);
+                                _values = reader.GetString(2);
                             }
-                            if (!reader.IsDBNull(3))
-                            {
-                                _small_team = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
+                            objReturnList.Add(new Socioeconomics(reader.GetInt32(0), reader.GetString(1), _values));
                         }
                         conexion.Close();
                     }
@@ -167,10 +148,11 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjInsert(Branches objInsert)
+
+        public static object ObjInsert(Socioeconomics objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Branches objData = new Branches();
+            Socioeconomics objData = new Socioeconomics();
             try
             {
                 string str_name = objInsert.name;
@@ -178,8 +160,9 @@ namespace LadyO.API.Models
                 int length_name = String_name.Length;
                 if (length_name >= 1)
                 {
-                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".branches VALUES(0, '" + objInsert.name + "', '" + objInsert.unit_name + "', '" + objInsert.small_team + "');SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".socioeconomics VALUES(0, '" + objInsert.name + "', '" + objInsert.values + "' );SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
@@ -189,8 +172,7 @@ namespace LadyO.API.Models
                         }
                     }
                     objData.name = objInsert.name;
-                    objData.unit_name = objInsert.unit_name;
-                    objData.small_team = objInsert.small_team;
+                    objData.values = objInsert.values;
                     response.isValid = true;
                     response.msg = string.Empty;
                     response.data = objData;
@@ -213,10 +195,11 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjUpdate(Branches objUpdate)
+
+        public static object ObjUpdate(Socioeconomics objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Branches objData = new Branches();
+            Socioeconomics objData = new Socioeconomics();
             try
             {
                 string str_name = objUpdate.name;
@@ -224,10 +207,10 @@ namespace LadyO.API.Models
                 int length_name = String_name.Length;
                 if (length_name >= 1)
                 {
-                    Branches valid = getBranch(objUpdate.id);
+                    Socioeconomics valid = getSocioeconomic(objUpdate.id);
                     if (valid != null)
                     {
-                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".branches SET name = '" + objUpdate.name + "' ,  unit_name = '" + objUpdate.unit_name + "', small_team = '" + objUpdate.small_team + "'  WHERE id =  " + objUpdate.id;
+                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".socioeconomics SET name = '" + objUpdate.name + "', `values` = '" + objUpdate.values + "' WHERE id =  " + objUpdate.id;
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -239,8 +222,7 @@ namespace LadyO.API.Models
                         }
                         objData.id = objUpdate.id;
                         objData.name = objUpdate.name;
-                        objData.unit_name = objUpdate.unit_name;
-                        objData.small_team = objUpdate.small_team;
+                        objData.values = objUpdate.values;
                         response.isValid = true;
                         response.msg = string.Empty;
                         response.data = objData;
@@ -249,7 +231,7 @@ namespace LadyO.API.Models
                     else
                     {
                         response.isValid = false;
-                        response.msg = Generic.Message.ID_BRANCHES_NO_EXISTE;
+                        response.msg = Generic.Message.ID_SOCIOECONOMICS_NO_EXISTE;
                         response.data = null;
                         return response;
                     }

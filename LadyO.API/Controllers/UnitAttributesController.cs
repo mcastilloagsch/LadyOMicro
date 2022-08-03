@@ -8,9 +8,10 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class SexesController : ApiController
+    public class UnitAttributesController : ApiController
     {
-        [Route("api/Sexes/getList/{token}")]
+
+        [Route("api/UnitAttributes/getList/{token}")]
         [HttpGet]
         public object getList(string token)
         {
@@ -19,7 +20,7 @@ namespace LadyO.API.Controllers
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Sexes.getList();
+                    return Models.UnitAttributes.getList();
                 }
                 else
                 {
@@ -37,16 +38,17 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-        [Route("api/Sexes/getObject/{token}/{id}")]
+
+        [Route("api/UnitAttributes/getObject/{token}/{structure_id}/{branch_id}")]
         [HttpGet]
-        public object getObject(string token, int id)
+        public object getObject(string token, int structure_id, int branch_id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Sexes.getObject(id);
+                    return Models.UnitAttributes.getObject(structure_id, branch_id);
                 }
                 else
                 {
@@ -64,9 +66,10 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-        [Route("api/Sexes/ObjInsert/{token}")]
+
+        [Route("api/UnitAttributes/ObjInsert/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Sexes objInsert)
+        public object ObjInsert(string token, [FromBody] Models.UnitAttributes objInsert)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -75,7 +78,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Sexes.ObjInsert(objInsert) };
+                        return new { success = Models.UnitAttributes.ObjInsert(objInsert) };
                     }
                     else
                     {
@@ -102,48 +105,7 @@ namespace LadyO.API.Controllers
             }
         }
 
-
-
-        [Route("api/Sexes/ObjUpdate/{token}/{id}")]
-        [HttpPost]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Sexes objUpdate)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            try
-            {
-                if (Models.LogIn.IsTokenValid(token))
-                {
-                    if (ModelState.IsValid)
-                    {
-                        return new
-                        {
-                            success = Models.Sexes.ObjUpdate(objUpdate)
-                        };
-                    }
-                    else
-                    {
-                        response.isValid = false;
-                        response.msg = Generic.Message.OBJETO_NO_CORRESPONDE;
-                        response.data = null;
-                        return response;
-                    }
-                }
-                else
-                {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.isValid = false;
-                response.msg = ex.Message;
-                response.data = null;
-                return response;
-            }
-        }
+        
 
     }
 }
