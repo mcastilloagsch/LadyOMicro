@@ -8,37 +8,65 @@ namespace LadyO.API.Models
     public class LogIn
     {
         public string eMail { get; set; }
+        public string token { get; set; }
 
         public LogIn()
         {
 
         }
-        public LogIn(string eMail)
+
+        public LogIn(string eMail, string token)
         {
             this.eMail = eMail;
+            this.token = token;
         }
 
-        public static bool IsUserValid(string objMail)
+        ///<summary>
+        ///Clase que permite el Inicio de Sesión y Establece el TOKEN.
+        ///</summary>
+        public static object LogInUser(LogIn objLogIn)
         {
+            APIGenericResponse response = new APIGenericResponse();
+            response.data = null;
             try
             {
-                List<LogIn> objListadoCorreos = new List<LogIn>();
-                objListadoCorreos.Add(new LogIn("mcastillo@guiasyscoutschile.cl"));
-                objListadoCorreos.Add(new LogIn("cugarte@guiasyscoutschile.cl"));
-                objListadoCorreos.Add(new LogIn("rarenas@guiasyscoutschile.cl"));
-                objListadoCorreos.Add(new LogIn("mmontero@guiasyscoutschile.cl"));
-                if (objListadoCorreos.FirstOrDefault(x => x.eMail.ToLower() == objMail.ToLower()) != null)
+                if (objLogIn.eMail.Length != 0)
                 {
-                    return true;
+                    if (Generic.Tools.ValidarEmail(objLogIn.eMail))
+                    {
+                        if (objLogIn.eMail.ToLower().Contains("@guiasyscoutschile.cl"))
+                        {
+                            response.isValid = true;
+                            response.msg = string.Empty;
+                            LogIn obj = new LogIn();
+                            obj.eMail = objLogIn.eMail.ToLower();
+                            obj.token = Generic.Tools.TokenGen(30);
+                            response.data = obj;
+                        }
+                        else
+                        {
+                            response.isValid = false;
+                            response.msg = Generic.Message.LOGIN_USUARIO_NO_VALIDO;
+                        }
+                    }
+                    else
+                    {
+                        response.isValid = false;
+                        response.msg = Generic.Message.EMAIL_INVALIDO;
+                    }
                 }
-                return false;
+                else
+                {
+                    response.isValid = false;
+                    response.msg = Generic.Message.EMAIL_VACIO;
+                }
+                return response;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception(ex.Message);
             }
         }
-
 
         public static bool IsTokenValid(string token)
         {
@@ -49,43 +77,6 @@ namespace LadyO.API.Models
             catch (Exception ex)
             {
                 throw ex;
-            }
-        }
-
-        public static object LogInUser(LogIn objLogIn)
-        {
-            APIGenericLogInResponse response = new APIGenericLogInResponse();
-            try
-            {
-                if (Generic.Tools.ValidarEmail(objLogIn.eMail))
-                {
-                    if (objLogIn.eMail.ToLower().Contains("@guiasyscoutschile.cl"))
-                    {
-                        response.isValid = true;
-                        response.token = Generic.Tools.TokenGen(30);
-                        response.msg = string.Empty;
-                    }
-                    else
-                    {
-                        response.isValid = false;
-                        response.token = string.Empty;
-                        response.msg = Generic.Message.LOGIN_USUARIO_NO_VALIDO;
-                    }
-                }
-                else
-                {
-                    response.isValid = false;
-                    response.token = string.Empty;
-                    response.msg = Generic.Message.EMAIL_INVALIDO;
-                }
-                return new { response };
-            }
-            catch (Exception ex)
-            {
-                response.isValid = false;
-                response.token = string.Empty;
-                response.msg = ex.Message;
-                return new { response };
             }
         }
     }

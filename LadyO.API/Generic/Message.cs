@@ -12,6 +12,8 @@ namespace LadyO.API.Generic
         public static string TOKEN_INVALIDO_EXPIRADO = "Token Expirado o Invalido.";
         public static string EMAIL_INVALIDO = "e-Mail ingresado es Invalido y/o Incorrecto.";
         public static string NAME_NO_EXISTE = "El nombre viene vacio.";
+        public static string EMAIL_VACIO = "Campo eMail vacio - Campo no puede ser vacio, debe establecer usuario.";
+
         #endregion
         //COUNTRIES MESSAGES
         public static string ISO_COUNTRIES_NO_EXISTE = "El iso viene vacio.";
