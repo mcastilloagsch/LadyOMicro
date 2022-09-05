@@ -1,6 +1,0 @@
-C:\00-AGSCH-Proyects\LadyO.Data\bin\Debug\LadyO.Data.dll
-C:\00-AGSCH-Proyects\LadyO.Data\bin\Debug\LadyO.Data.pdb
-C:\00-AGSCH-Proyects\LadyO.Data\obj\Debug\LadyO.Data.csproj.AssemblyReference.cache
-C:\00-AGSCH-Proyects\LadyO.Data\obj\Debug\LadyO.Data.csproj.CoreCompileInputs.cache
-C:\00-AGSCH-Proyects\LadyO.Data\obj\Debug\LadyO.Data.dll
-C:\00-AGSCH-Proyects\LadyO.Data\obj\Debug\LadyO.Data.pdb
