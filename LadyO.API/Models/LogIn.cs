@@ -68,6 +68,22 @@ namespace LadyO.API.Models
             }
         }
 
+        public static object TokenInvalid()
+        {
+            try
+            {
+                APIGenericResponse response = new APIGenericResponse();
+                response.data = null;
+                response.isValid = false;
+                response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static bool IsTokenValid(string token)
         {
             try
