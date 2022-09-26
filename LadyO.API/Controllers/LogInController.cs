@@ -22,7 +22,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    return Models.LogIn.LogInUser(obj);
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)

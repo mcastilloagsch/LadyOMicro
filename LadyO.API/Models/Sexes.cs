@@ -177,7 +177,6 @@ namespace LadyO.API.Models
             }
         }
 
-
         public static object ObjUpdate(Sexes objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
