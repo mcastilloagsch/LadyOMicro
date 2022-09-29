@@ -199,7 +199,7 @@ namespace LadyO.API.Models
         public static object objUpdate(Communes obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Communes objData = new Communes();
+            response.data = null;
             try
             {
                 if (obj.id > 0)
@@ -232,7 +232,6 @@ namespace LadyO.API.Models
                             {
                                 response.isValid = false;
                                 response.msg = Generic.Message.NAME_NO_EXISTE;
-                                response.data = null;
                                 return response;
                             }
                         }
@@ -240,7 +239,6 @@ namespace LadyO.API.Models
                         {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_COMMUNES_PROVINCES_OBJ_NO_EXISTE;
-                        response.data = null;
                         return response;
                         }
                     }
@@ -248,7 +246,6 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -256,9 +253,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {

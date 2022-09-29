@@ -176,7 +176,6 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_PROVINCES_REGIONS_OBJ_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -184,7 +183,6 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
                 return response;
@@ -201,7 +199,7 @@ namespace LadyO.API.Models
         public static object objUpdate(Provinces obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Provinces objData = new Provinces();
+            response.data = null;
             try
             {
                 if (obj.id > 0)
@@ -229,29 +227,25 @@ namespace LadyO.API.Models
                                 response.isValid = true;
                                 response.msg = string.Empty;
                                 response.data = Provinces.getObj(obj.id);
-                                return response;
                             }
                             else
                             {
                                 response.isValid = false;
                                 response.msg = Generic.Message.NAME_NO_EXISTE;
-                                response.data = null;
                                 return response;
                             }
                         }
                         else
                         {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_PROVINCES_REGIONS_OBJ_NO_EXISTE;
-                        response.data = null;
-                        return response;
+                            response.isValid = false;
+                            response.msg = Generic.Message.ID_PROVINCES_REGIONS_OBJ_NO_EXISTE;
+                            return response;
                         }
                     }
                     else
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_PROVINCES_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -259,9 +253,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_PROVINCES_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {

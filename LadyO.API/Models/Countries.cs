@@ -199,7 +199,7 @@ namespace LadyO.API.Models
         public static object objUpdate(Countries obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Countries objData = new Countries();
+            response.data = null;
             try
             {
                 if(obj.id > 0)
@@ -233,7 +233,6 @@ namespace LadyO.API.Models
                                 {
                                     response.isValid = false;
                                     response.msg = Generic.Message.ISO_COUNTRIES_NO_EXISTE;
-                                    response.data = null;
                                     return response;
                                 }
                             }
@@ -241,7 +240,6 @@ namespace LadyO.API.Models
                             {
                                 response.isValid = false;
                                 response.msg = Generic.Message.NATIONALITY_COUNTRIES_NO_EXISTE;
-                                response.data = null;
                                 return response;
                             }
                         }
@@ -249,7 +247,6 @@ namespace LadyO.API.Models
                         {
                             response.isValid = false;
                             response.msg = Generic.Message.NAME_NO_EXISTE;
-                            response.data = null;
                             return response;
                         }
                     }
@@ -257,7 +254,6 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }    
@@ -265,9 +261,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
