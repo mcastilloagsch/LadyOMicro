@@ -15,23 +15,22 @@ namespace LadyO.API.Controllers
         [HttpGet]
         public object getList(string token)
         {
-            APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Religions.getList();
+                    objReturn = Models.Religions.getList();
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    objReturn = LogIn.TokenInvalid();
                 }
+                return objReturn;
             }
             catch (Exception ex)
             {
+                APIGenericResponse response = new APIGenericResponse();
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
@@ -43,12 +42,47 @@ namespace LadyO.API.Controllers
         [HttpGet]
         public object getObject(string token, int id)
         {
+            try
+            {
+                object objReturn = new object();
+                if (Models.LogIn.IsTokenValid(token))
+                {
+                    objReturn = Models.Religions.getObject(id);
+                }
+                else
+                {
+                    objReturn = LogIn.TokenInvalid();
+                }
+                return objReturn;
+            }
+            catch (Exception ex)
+            {
+                APIGenericResponse response = new APIGenericResponse();
+                response.isValid = false;
+                response.msg = ex.Message;
+                response.data = null;
+                return response;
+            }
+        }
+
+        [Route("api/Religions/objAdd/{token}")]
+        [HttpPost]
+        public object objAdd(string token, [FromBody] Models.Religions obj)
+        {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Religions.getObject(id);
+                    if (ModelState.IsValid)
+                    {
+                        return Models.Religions.objAdd(obj);
+                    }
+                    else
+                    {
+                        return LogIn.TokenInvalid();
+                    }
                 }
                 else
                 {
@@ -67,9 +101,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Religions/ObjInsert/{token}")]
-        [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Religions objInsert)
+        [Route("api/Religions/ObjUpdate/{token}")]
+        [HttpPut]
+        public object ObjUpdate(string token, [FromBody] Models.Religions objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -78,7 +112,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Religions.ObjInsert(objInsert) };
+                        return Models.Religions.objUpdate(objUpdate);
                     }
                     else
                     {
@@ -90,51 +124,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.isValid = false;
-                response.msg = ex.Message;
-                response.data = null;
-                return response;
-            }
-        }
-
-        [Route("api/Religions/ObjUpdate/{token}/{id}")]
-        [HttpPost]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Religions objUpdate)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            try
-            {
-                if (Models.LogIn.IsTokenValid(token))
-                {
-                    if (ModelState.IsValid)
-                    {
-                        return new
-                        {
-                            success = Models.Religions.ObjUpdate(objUpdate)
-                        };
-                    }
-                    else
-                    {
-                        response.isValid = false;
-                        response.msg = Generic.Message.OBJETO_NO_CORRESPONDE;
-                        response.data = null;
-                        return response;
-                    }
-                }
-                else
-                {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)
