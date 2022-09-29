@@ -15,23 +15,22 @@ namespace LadyO.API.Controllers
         [HttpGet]
         public object getList(string token)
         {
-            APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Countries.getList();
+                    objReturn = Models.Countries.getList();
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    objReturn = LogIn.TokenInvalid();
                 }
+                return objReturn;
             }
             catch (Exception ex)
             {
+                APIGenericResponse response = new APIGenericResponse();
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
@@ -43,23 +42,22 @@ namespace LadyO.API.Controllers
         [HttpGet]
         public object getObject(string token, int id)
         {
-            APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Countries.getObject(id);
+                    objReturn = Models.Countries.getObject(id);
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    objReturn = LogIn.TokenInvalid();
                 }
+                return objReturn;
             }
             catch (Exception ex)
             {
+                APIGenericResponse response = new APIGenericResponse();
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
@@ -67,18 +65,19 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Countries/ObjInsert/{token}")]
+        [Route("api/Countries/objAdd/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Countries objInsert)
+        public object objAdd(string token, [FromBody] Models.Countries obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Countries.ObjInsert(objInsert) };
+                        return Models.Countries.objAdd(obj);
                     }
                     else
                     {
@@ -90,10 +89,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)
@@ -105,9 +101,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Countries/ObjUpdate/{token}/{id}")]
-        [HttpPost]
-        public object ObjUpdate(string token,int id, [FromBody] Models.Countries objUpdate)
+        [Route("api/Countries/ObjUpdate/{token}")]
+        [HttpPut]
+        public object ObjUpdate(string token, [FromBody] Models.Countries objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -116,10 +112,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new
-                        {
-                            success = Models.Countries.ObjUpdate(objUpdate)
-                        };
+                        return Models.Countries.objUpdate(objUpdate);
                     }
                     else
                     {
@@ -131,10 +124,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)
