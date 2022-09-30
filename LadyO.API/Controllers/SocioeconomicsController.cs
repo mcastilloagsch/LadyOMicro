@@ -14,59 +14,61 @@ namespace LadyO.API.Controllers
         [HttpGet]
         public object getList(string token)
         {
-            APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Socioeconomics.getList();
+                    objReturn = Models.Socioeconomics.getList();
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    objReturn = LogIn.TokenInvalid();
                 }
+                return objReturn;
             }
             catch (Exception ex)
             {
+                APIGenericResponse response = new APIGenericResponse();
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
                 return response;
             }
         }
+
+
         [Route("api/Socioeconomics/getObject/{token}/{id}")]
         [HttpGet]
         public object getObject(string token, int id)
         {
-            APIGenericResponse response = new APIGenericResponse();
             try
             {
+                object objReturn = new object();
                 if (Models.LogIn.IsTokenValid(token))
                 {
-                    return Models.Socioeconomics.getObject(id);
+                    objReturn = Models.Socioeconomics.getObject(id);
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    objReturn = LogIn.TokenInvalid();
                 }
+                return objReturn;
             }
             catch (Exception ex)
             {
+                APIGenericResponse response = new APIGenericResponse();
                 response.isValid = false;
                 response.msg = ex.Message;
                 response.data = null;
                 return response;
             }
         }
-        [Route("api/Socioeconomics/ObjInsert/{token}")]
+
+
+        [Route("api/Socioeconomics/objAdd/{token}")]
         [HttpPost]
-        public object ObjInsert(string token, [FromBody] Models.Socioeconomics objInsert)
+        public object objAdd(string token, [FromBody] Models.Socioeconomics obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -75,7 +77,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new { success = Models.Socioeconomics.ObjInsert(objInsert) };
+                        return Models.Socioeconomics.objAdd(obj);
                     }
                     else
                     {
@@ -87,10 +89,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)
@@ -104,9 +103,9 @@ namespace LadyO.API.Controllers
 
 
 
-        [Route("api/Socioeconomics/ObjUpdate/{token}/{id}")]
-        [HttpPost]
-        public object ObjUpdate(string token, int id, [FromBody] Models.Socioeconomics objUpdate)
+        [Route("api/Socioeconomics/ObjUpdate/{token}")]
+        [HttpPut]
+        public object objUpdate(string token, [FromBody] Models.Socioeconomics objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -115,10 +114,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return new
-                        {
-                            success = Models.Socioeconomics.ObjUpdate(objUpdate)
-                        };
+                        return Models.Socioeconomics.objUpdate(objUpdate);
                     }
                     else
                     {
@@ -130,10 +126,7 @@ namespace LadyO.API.Controllers
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.TOKEN_INVALIDO_EXPIRADO;
-                    response.data = null;
-                    return response;
+                    return LogIn.TokenInvalid();
                 }
             }
             catch (Exception ex)
@@ -144,6 +137,5 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-
     }
 }
