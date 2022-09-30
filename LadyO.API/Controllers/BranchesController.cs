@@ -101,9 +101,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Branches/ObjUpdate/{token}")]
+        [Route("api/Branches/objUpdate/{token}")]
         [HttpPut]
-        public object ObjUpdate(string token, [FromBody] Models.Branches objUpdate)
+        public object objUpdate(string token, [FromBody] Models.Branches objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try

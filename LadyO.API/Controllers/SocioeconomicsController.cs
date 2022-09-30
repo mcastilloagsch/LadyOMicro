@@ -103,7 +103,7 @@ namespace LadyO.API.Controllers
 
 
 
-        [Route("api/Socioeconomics/ObjUpdate/{token}")]
+        [Route("api/Socioeconomics/objUpdate/{token}")]
         [HttpPut]
         public object objUpdate(string token, [FromBody] Models.Socioeconomics objUpdate)
         {

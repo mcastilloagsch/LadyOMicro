@@ -101,9 +101,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Communes/ObjUpdate/{token}")]
+        [Route("api/Communes/objUpdate/{token}")]
         [HttpPut]
-        public object ObjUpdate(string token, [FromBody] Models.Communes objUpdate)
+        public object objUpdate(string token, [FromBody] Models.Communes objUpdate)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
