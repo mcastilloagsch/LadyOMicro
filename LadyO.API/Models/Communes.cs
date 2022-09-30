@@ -226,7 +226,6 @@ namespace LadyO.API.Models
                                 response.isValid = true;
                                 response.msg = string.Empty;
                                 response.data = Communes.getObj(obj.id);
-                                return response;
                             }
                             else
                             {

@@ -227,7 +227,6 @@ namespace LadyO.API.Models
                                     response.isValid = true;
                                     response.msg = string.Empty;
                                     response.data = Countries.getObj(obj.id);
-                                    return response;
                                 }
                                 else
                                 {
