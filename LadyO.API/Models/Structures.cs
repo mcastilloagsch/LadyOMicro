@@ -154,28 +154,37 @@ namespace LadyO.API.Models
             {
                 if (obj.name.Length > 0)
                 {
-                    StructureType structure_type_Fk = new StructureType();
-                    structure_type_Fk = Structures.getStructureType(obj.structure_type_id);
-                    if(structure_type_Fk != null)
+                    if (obj.parent_id > 0 || obj.parent_id == null)
                     {
-                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".structures VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.structure_type_id + "', '" + obj.parent_id + "');SELECT LAST_INSERT_ID();";
-                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                        StructureType structure_type_Fk = new StructureType();
+                        structure_type_Fk = Structures.getStructureType(obj.structure_type_id);
+                        if (structure_type_Fk != null)
                         {
-                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                            string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".structures VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.structure_type_id + "', '" + obj.parent_id + "');SELECT LAST_INSERT_ID();";
+                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
-                                conexion.Open();
-                                obj.id = Convert.ToInt32(comando.ExecuteScalar());
-                                conexion.Close();
+                                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                                {
+                                    conexion.Open();
+                                    obj.id = Convert.ToInt32(comando.ExecuteScalar());
+                                    conexion.Close();
+                                }
                             }
+                            response.isValid = true;
+                            response.msg = string.Empty;
+                            response.data = obj;
                         }
-                        response.isValid = true;
-                        response.msg = string.Empty;
-                        response.data = obj;
+                        else
+                        {
+                            response.isValid = false;
+                            response.msg = Generic.Message.ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE;
+                            return response;
+                        }
                     }
                     else
                     {
                         response.isValid = false;
-                        response.msg = Generic.Message.ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE;
+                        response.msg = Generic.Message.ID_STRUCTURES_PARENT_ID;
                         return response;
                     }
                 }
@@ -212,26 +221,35 @@ namespace LadyO.API.Models
                     {
                         if(structure_type_Fk != null)
                         {
-                            if (obj.name.Length > 0)
+                            if(obj.parent_id > 0 || obj.parent_id == null)
                             {
-                                string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".structures SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  structure_type_id = '" + obj.structure_type_id + "', parent_id = '" + obj.parent_id + "'  WHERE id =  " + obj.id;
-                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                if (obj.name.Length > 0)
                                 {
-                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".structures SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  structure_type_id = '" + obj.structure_type_id + "', parent_id = '" + obj.parent_id + "'  WHERE id =  " + obj.id;
+                                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                     {
-                                        conexion.Open();
-                                        comando.ExecuteReader();
-                                        conexion.Close();
+                                        using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                        {
+                                            conexion.Open();
+                                            comando.ExecuteReader();
+                                            conexion.Close();
+                                        }
                                     }
+                                    response.isValid = true;
+                                    response.msg = string.Empty;
+                                    response.data = Structures.getObj(obj.id);
                                 }
-                                response.isValid = true;
-                                response.msg = string.Empty;
-                                response.data = Structures.getObj(obj.id);
+                                else
+                                {
+                                    response.isValid = false;
+                                    response.msg = Generic.Message.NAME_NO_EXISTE;
+                                    return response;
+                                }
                             }
                             else
                             {
                                 response.isValid = false;
-                                response.msg = Generic.Message.NAME_NO_EXISTE;
+                                response.msg = Generic.Message.ID_STRUCTURES_PARENT_ID;
                                 return response;
                             }
                         }

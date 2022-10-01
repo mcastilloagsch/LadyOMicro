@@ -27,6 +27,7 @@ namespace LadyO.API.Generic
         //STRUCTURE MESSAGES
         public static string ID_STRUCTURES_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
         public static string ID_STRUCTURES_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
+        public static string ID_STRUCTURES_PARENT_ID = "El parent id no puede ser negativo.";
         public static string ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
         //BRANCHES MESSAGES
         public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
