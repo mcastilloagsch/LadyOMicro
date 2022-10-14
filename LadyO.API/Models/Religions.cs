@@ -11,14 +11,14 @@ namespace LadyO.API.Models
     {
         public int id { get; set; }
         public string name { get; set; }
-        public int confesion { get; set; }
+        public int? confesion { get; set; }
 
         public Religions()
         {
 
         }
 
-        public Religions(int id, string name, int confesion)
+        public Religions(int id, string name, int? confesion)
         {
             this.id = id;
             this.name = name;
@@ -40,7 +40,12 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Religions(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                            int? _confesion = null;
+                            if (!reader.IsDBNull(2))
+                            {
+                                _confesion = reader.GetInt32(2);
+                            }
+                            objReturnList.Add(new Religions(reader.GetInt32(0), reader.GetString(1), _confesion));
                         }
                         conexion.Close();
                     }
@@ -56,27 +61,39 @@ namespace LadyO.API.Models
             }
         }
 
+        private static Religions getObj(int id)
+        {
+            List<Religions> objReturnList = new List<Religions>();
+            string sqlQuery = "SELECT id, name, confesion FROM " + Generic.DBConnection.SCHEMA + ".religions WHERE id = " + id;
+            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+            {
+                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int? _confesion = null;
+                        if (!reader.IsDBNull(2))
+                        {
+                            _confesion = reader.GetInt32(2);
+                        }
+                        objReturnList.Add(new Religions(reader.GetInt32(0), reader.GetString(1), _confesion));
+                    }
+                    conexion.Close();
+                }
+            }
+            return objReturnList.FirstOrDefault();
+        }
+
+
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<Religions> objReturnList = new List<Religions>();
-                string sqlQuery = "SELECT id, name, confesion FROM " + Generic.DBConnection.SCHEMA + ".religions WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            objReturnList.Add(new Religions(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() == null)
+                Religions objReturn = Religions.getObj(id);
+                if (objReturn == null)
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_RELIGIONS_GETOBJECT_NO_EXISTE;
@@ -87,7 +104,7 @@ namespace LadyO.API.Models
                 {
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = objReturnList.FirstOrDefault();
+                    response.data = objReturn;
                     return response;
                 }
             }
@@ -101,75 +118,34 @@ namespace LadyO.API.Models
         }
 
 
-        private static Religions getReligion(int id)
-        {
-            try
-            {
-                List<Religions> objReturnList = new List<Religions>();
-                string sqlQuery = "SELECT id, name, confesion FROM " + Generic.DBConnection.SCHEMA + ".religions WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            objReturnList.Add(new Religions(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() != null)
-                {
-                    return objReturnList.FirstOrDefault();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static object ObjInsert(Religions objInsert)
+        public static object objAdd(Religions obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Religions objData = new Religions();
+            response.data = null;
             try
             {
-                string str_name = objInsert.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.name.Length > 0)
                 {
-                    if (objInsert.confesion >= 0 && objInsert.confesion < 2)
+                    if(obj.confesion >= 0 && obj.confesion < 2)
                     {
-                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".religions VALUES(0, '" + objInsert.name + "', '" + objInsert.confesion + "');SELECT LAST_INSERT_ID();";
+                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".religions VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.confesion + "');SELECT LAST_INSERT_ID();";
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
                                 conexion.Open();
-                                objData.id = Convert.ToInt32(comando.ExecuteScalar());
+                                obj.id = Convert.ToInt32(comando.ExecuteScalar());
                                 conexion.Close();
                             }
                         }
-                        objData.name = objInsert.name;
-                        objData.confesion = objInsert.confesion;
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = objData;
-                        return response;
+                        response.data = obj;
                     }
                     else
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.RELIGIONS_CONFESION_OUTVALOR;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -177,9 +153,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
@@ -190,45 +166,48 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjUpdate(Religions objUpdate)
+
+        public static object objUpdate(Religions obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Religions objData = new Religions();
+            response.data = null;
             try
             {
-                string str_name = objUpdate.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.id > 0)
                 {
-                    Religions valid = getReligion(objUpdate.id);
-                    if (valid != null)
+                    Religions objUpdate = new Religions();
+                    objUpdate = Religions.getObj(obj.id);
+                    if (objUpdate != null)
                     {
-                        if (objUpdate.confesion >= 0 && objUpdate.confesion < 2)
+                        if (obj.name.Length > 0)
                         {
-                            string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".religions SET name = '" + objUpdate.name + "' ,  confesion = '" + objUpdate.confesion + "'  WHERE id =  " + objUpdate.id;
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            if(obj.confesion >= 0 && obj.confesion < 2)
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".religions SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  confesion = '" + obj.confesion + "'  WHERE id =  " + obj.id;
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
                                 }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Religions.getObj(obj.id);
                             }
-                            objData.id = objUpdate.id;
-                            objData.name = objUpdate.name;
-                            objData.confesion = objUpdate.confesion;
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = objData;
-                            return response;
+                            else
+                            {
+                                response.isValid = false;
+                                response.msg = Generic.Message.RELIGIONS_CONFESION_OUTVALOR;
+                                return response;
+                            }
                         }
                         else
                         {
                             response.isValid = false;
-                            response.msg = Generic.Message.RELIGIONS_CONFESION_OUTVALOR;
-                            response.data = null;
+                            response.msg = Generic.Message.NAME_NO_EXISTE;
                             return response;
                         }
                     }
@@ -236,17 +215,16 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_RELIGIONS_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_RELIGIONS_NO_EXISTE;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {

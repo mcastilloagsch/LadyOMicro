@@ -61,32 +61,40 @@ namespace LadyO.API.Models
             }
         }
 
+
+        private static StructureType getObj(int id)
+        {
+            List<StructureType> objReturnList = new List<StructureType>();
+            string sqlQuery = "SELECT id, name, priority FROM " + Generic.DBConnection.SCHEMA + ".structure_types WHERE id = " + id;
+            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+            {
+                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int? _priority = null;
+                        if (!reader.IsDBNull(2))
+                        {
+                            _priority = reader.GetInt32(2);
+                        }
+                        objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
+                    }
+                    conexion.Close();
+                }
+            }
+            return objReturnList.FirstOrDefault();
+        }
+
+
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT id, name, priority FROM " + Generic.DBConnection.SCHEMA + ".structure_types WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            int? _priority = null;
-                            if (!reader.IsDBNull(2))
-                            {
-                                _priority = reader.GetInt32(2);
-                            }
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() == null)
+                StructureType objReturn = StructureType.getObj(id);
+                if (objReturn == null)
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_STRUCTURETYPE_GETOBJECT_NO_EXISTE;
@@ -97,7 +105,7 @@ namespace LadyO.API.Models
                 {
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = objReturnList.FirstOrDefault();
+                    response.data = objReturn;
                     return response;
                 }
             }
@@ -111,80 +119,34 @@ namespace LadyO.API.Models
         }
 
 
-        private static StructureType getStructureType(int id)
-        {
-            try
-            {
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT id, name, priority FROM " + Generic.DBConnection.SCHEMA + ".structure_types WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            int? _priority = null;
-                            if (!reader.IsDBNull(2))
-                            {
-                                _priority = reader.GetInt32(2);
-                            }
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), _priority));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() != null)
-                {
-                    return objReturnList.FirstOrDefault();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static object ObjInsert(StructureType objInsert)
+        public static object objAdd(StructureType obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            StructureType objData = new StructureType();
+            response.data = null;
             try
             {
-                string str_name = objInsert.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.name.Length > 0)
                 {
-                    if (objInsert.priority >= 0)
+                    if(obj.priority >= 0)
                     {
-                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".structure_types VALUES(0, '" + objInsert.name + "', '" + objInsert.priority + "');SELECT LAST_INSERT_ID();";
+                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".structure_types VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.priority + "');SELECT LAST_INSERT_ID();";
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
                                 conexion.Open();
-                                objData.id = Convert.ToInt32(comando.ExecuteScalar());
+                                obj.id = Convert.ToInt32(comando.ExecuteScalar());
                                 conexion.Close();
                             }
                         }
-                        objData.name = objInsert.name;
-                        objData.priority = objInsert.priority;
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = objData;
-                        return response;
+                        response.data = obj;
                     }
                     else
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.STRUCTURETYPE_POSITION;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -192,9 +154,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
@@ -204,46 +166,49 @@ namespace LadyO.API.Models
                 return response;
             }
         }
+        
 
-        public static object ObjUpdate(StructureType objUpdate)
+        public static object objUpdate(StructureType obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            StructureType objData = new StructureType();
+            response.data = null;
             try
             {
-                string str_name = objUpdate.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.id > 0)
                 {
-                    StructureType valid = getStructureType(objUpdate.id);
-                    if (valid != null)
+                    StructureType objUpdate = new StructureType();
+                    objUpdate = StructureType.getObj(obj.id);
+                    if (objUpdate != null)
                     {
-                        if (objUpdate.priority >= 0)
+                        if (obj.name.Length > 0)
                         {
-                            string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".structure_types SET name = '" + objUpdate.name + "' ,  priority = '" + objUpdate.priority + "'  WHERE id =  " + objUpdate.id;
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            if(obj.priority >= 0)
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".structure_types SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  priority = '" + obj.priority + "'  WHERE id =  " + obj.id;
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
                                 }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = StructureType.getObj(obj.id);
                             }
-                            objData.id = objUpdate.id;
-                            objData.name = objUpdate.name;
-                            objData.priority = objUpdate.priority;
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = objData;
-                            return response;
+                            else
+                            {
+                                response.isValid = false;
+                                response.msg = Generic.Message.STRUCTURETYPE_POSITION;
+                                return response;
+                            }
                         }
                         else
                         {
                             response.isValid = false;
-                            response.msg = Generic.Message.STRUCTURETYPE_POSITION;
-                            response.data = null;
+                            response.msg = Generic.Message.NAME_NO_EXISTE;
                             return response;
                         }
                     }
@@ -251,17 +216,16 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {

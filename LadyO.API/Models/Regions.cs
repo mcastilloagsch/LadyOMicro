@@ -83,7 +83,7 @@ namespace LadyO.API.Models
                     conexion.Close();
                 }
             }
-            return objReturnList.FirstOrDefault(); ;
+            return objReturnList.FirstOrDefault();
         }
 
         public static object getObject(int id)
@@ -124,7 +124,7 @@ namespace LadyO.API.Models
             {
                 if (obj.name.Length > 0)
                 {
-                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".regions (id, name) VALUES(0, '" + obj.name + "');SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".regions (id, name) VALUES(0, '" + Generic.Tools.Capital(obj.name) + "');SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -158,7 +158,7 @@ namespace LadyO.API.Models
         public static object objUpdate(Regions obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Regions objData = new Regions();
+            response.data = null;
             try
             {
                 if (obj.id > 0)
@@ -182,13 +182,11 @@ namespace LadyO.API.Models
                             response.isValid = true;
                             response.msg = string.Empty;
                             response.data = Regions.getObj(obj.id);
-                            return response;
                         }
                         else
                         {
                             response.isValid = false;
                             response.msg = Generic.Message.REGIONS_NO_NAME;
-                            response.data = null;
                             return response;
                         }
                     }
@@ -196,7 +194,6 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -204,9 +201,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {

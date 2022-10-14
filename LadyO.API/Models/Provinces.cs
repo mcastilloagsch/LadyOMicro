@@ -63,32 +63,40 @@ namespace LadyO.API.Models
             }
         }
 
+        private static Provinces getObj(int id)
+        {
+
+            List<Provinces> objReturnList = new List<Provinces>();
+            string sqlQuery = "SELECT id, name, region_id, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".provinces WHERE id = " + id;
+            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+            {
+                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string _geom = null;
+                        if (!reader.IsDBNull(3))
+                        {
+                            _geom = reader.GetString(3);
+                        }
+                        objReturnList.Add(new Provinces(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), _geom));
+                    }
+                    conexion.Close();
+                }
+            }
+            return objReturnList.FirstOrDefault(); 
+        }
+
+
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<Provinces> objReturnList = new List<Provinces>();
-                string sqlQuery = "SELECT id, name, region_id, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".provinces WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            string _geom = null;
-                            if (!reader.IsDBNull(3))
-                            {
-                                _geom = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Provinces(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), _geom));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() == null)
+                Provinces objReturn = Provinces.getObj(id);
+                if (objReturn == null)
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_PROVINCES_GETOBJECT_NO_EXISTE;
@@ -99,7 +107,7 @@ namespace LadyO.API.Models
                 {
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = objReturnList.FirstOrDefault();
+                    response.data = objReturn;
                     return response;
                 }
             }
@@ -112,122 +120,62 @@ namespace LadyO.API.Models
             }
         }
 
-
-        private static Provinces getProvince(int id)
-        {
-            try
-            {
-                List<Provinces> objReturnList = new List<Provinces>();
-                string sqlQuery = "SELECT id, name, region_id, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".provinces WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            string _geom = null;
-                            if (!reader.IsDBNull(3))
-                            {
-                                _geom = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Provinces(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), _geom));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() != null)
-                {
-                    return objReturnList.FirstOrDefault();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         private static Regions getRegion(int id)
         {
-            try
+
+            List<Regions> objReturnList = new List<Regions>();
+            string sqlQuery = "SELECT id, name, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".regions WHERE id = " + id;
+            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
-                List<Regions> objReturnList = new List<Regions>();
-                string sqlQuery = "SELECT id, name, ST_AsText(geom) FROM " + Generic.DBConnection.SCHEMA + ".regions WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                 {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    while (reader.Read())
                     {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
+                        string _geom = null;
+                        if (!reader.IsDBNull(2))
                         {
-                            string _geom = null;
-                            if (!reader.IsDBNull(2))
-                            {
-                                _geom = reader.GetString(2);
-                            }
-                            objReturnList.Add(new Regions(reader.GetInt32(0), reader.GetString(1), _geom));
+                            _geom = reader.GetString(2);
                         }
-                        conexion.Close();
+                        objReturnList.Add(new Regions(reader.GetInt32(0), reader.GetString(1), _geom));
                     }
-                }
-                if (objReturnList.FirstOrDefault() != null)
-                {
-                    return objReturnList.FirstOrDefault();
-                }
-                else
-                {
-                    return null;
+                    conexion.Close();
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return objReturnList.FirstOrDefault(); 
         }
 
-        public static object ObjInsert(Provinces objInsert)
+        public static object objAdd(Provinces obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Provinces objData = new Provinces();
+            response.data = null;
             try
             {
-                string str_name = objInsert.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.name.Length > 0)
                 {
-                    Regions validFk = getRegion(objInsert.region_id);
-                    if (validFk != null)
+                    Regions regions_Fk = new Regions();
+                    regions_Fk = Provinces.getRegion(obj.region_id);
+                    if (regions_Fk != null)
                     {
-                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".provinces VALUES(0, '" + objInsert.name + "', '" + objInsert.region_id + "', ST_GeomFromText('" + objInsert.geom + "'));SELECT LAST_INSERT_ID();";
+                        string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".provinces (id,name,region_id) VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.region_id + "');SELECT LAST_INSERT_ID();";
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
                                 conexion.Open();
-                                objData.id = Convert.ToInt32(comando.ExecuteScalar());
+                                obj.id = Convert.ToInt32(comando.ExecuteScalar());
                                 conexion.Close();
                             }
                         }
-                        objData.name = objInsert.name;
-                        objData.region_id = objInsert.region_id;
-                        objData.geom = objInsert.geom;
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = objData;
-                        return response;
+                        response.data = obj;
                     }
                     else
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_PROVINCES_REGIONS_OBJ_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
@@ -235,9 +183,9 @@ namespace LadyO.API.Models
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
@@ -248,47 +196,49 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjUpdate(Provinces objUpdate)
+        public static object objUpdate(Provinces obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Provinces objData = new Provinces();
+            response.data = null;
             try
             {
-                string str_name = objUpdate.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.id > 0)
                 {
-                    Provinces valid = getProvince(objUpdate.id);
-                    Regions validFk = getRegion(objUpdate.region_id);
-                    if (valid != null)
+                    Provinces objUpdate = new Provinces();
+                    objUpdate = Provinces.getObj(obj.id);
+                    Regions regions_Fk = new Regions();
+                    regions_Fk = Provinces.getRegion(obj.region_id);
+                    if (objUpdate != null)
                     {
-                        if (validFk != null)
+                        if(regions_Fk != null)
                         {
-                            string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".provinces SET name = '" + objUpdate.name + "' ,  region_id = '" + objUpdate.region_id + "', geom = ST_GeomFromText('" + objUpdate.geom + "')  WHERE id =  " + objUpdate.id;
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            if (obj.name.Length > 0)
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".provinces SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  region_id = '" + obj.region_id + "'  WHERE id =  " + obj.id;
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
                                 }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Provinces.getObj(obj.id);
                             }
-                            objData.id = objUpdate.id;
-                            objData.name = objUpdate.name;
-                            objData.region_id = objUpdate.region_id;
-                            objData.geom = objUpdate.geom;
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = objData;
-                            return response;
+                            else
+                            {
+                                response.isValid = false;
+                                response.msg = Generic.Message.NAME_NO_EXISTE;
+                                return response;
+                            }
                         }
                         else
                         {
                             response.isValid = false;
                             response.msg = Generic.Message.ID_PROVINCES_REGIONS_OBJ_NO_EXISTE;
-                            response.data = null;
                             return response;
                         }
                     }
@@ -296,17 +246,16 @@ namespace LadyO.API.Models
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_PROVINCES_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_PROVINCES_NO_EXISTE;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
@@ -316,6 +265,7 @@ namespace LadyO.API.Models
                 return response;
             }
         }
+
 
     }
 }
