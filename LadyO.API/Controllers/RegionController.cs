@@ -131,7 +131,7 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/getListAdm")]
+        [Route("api/Region/getListAdm/{idPerson}")]
         [HttpGet]
         public object getListAdm(int idPerson)
         {
