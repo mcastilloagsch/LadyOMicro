@@ -104,4 +104,4 @@ C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.csproj.CoreCompileInputs.ca
 C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.dll
 C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.pdb
 C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.csproj.CopyComplete
-C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.csproj.AssemblyReference.cache
+C:\00-AGSCH-Proyects\LadyO.API\obj\Release\LadyO.API.csprojAssemblyReference.cache
