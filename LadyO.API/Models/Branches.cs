@@ -169,7 +169,7 @@ namespace LadyO.API.Models
             }
         }
 
-        
+
         public static object objUpdate(Branches obj)
         {
             APIGenericResponse response = new APIGenericResponse();
