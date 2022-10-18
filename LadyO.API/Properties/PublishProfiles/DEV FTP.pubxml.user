@@ -6,9 +6,9 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAaZIVlWC8kEWa+QaBUy6veAAAAAACAAAAAAAQZgAAAAEAACAAAAC2Cj56E6a0qbzqV2ooheeA9+AgjbaFV1KqjWtiFLlcTAAAAAAOgAAAAAIAACAAAADyFued5fr+/0GzySwXiROyUZwqgu185i4BPXcEQEn06iAAAACcKoc7wt9LAWmf1sxLP2z4+VKeWmC5psWvC5bc6JPpdkAAAAD/GZEoF1jC9nWGTQTbnkurLzaqb2q8A5FI4KwzmvmFvY5zqzGEA9LydBbUmlCN0+1RZW2yf/c2tU/uEaZCJtjt</EncryptedPassword>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAvxQjqOm1O0K01oplJjstigAAAAACAAAAAAADZgAAwAAAABAAAAA+hnRmBYqnzjtyxOLZLKglAAAAAASAAACgAAAAEAAAANbnUfQQOc02kTcN/awRZpcwAAAALpcIM9LPB1WKHGdXdEvMl3yfk542/UZimkQr/Dw1YlkgmqXKGkJr+45kyr/0A+s/FAAAAIrdkkh5tWWVmrzYOWZrpOjNWh/v</EncryptedPassword>
     <_PublishTargetUrl>ftp://10.0.3.5</_PublishTargetUrl>
-    <History>True|2021-11-15T20:00:47.8084865Z;False|2021-11-15T16:52:20.6660160-03:00;False|2021-11-15T16:50:22.2021174-03:00;</History>
+    <History>False|2022-10-18T14:58:55.0470062Z;False|2022-10-18T11:41:44.3031069-03:00;False|2022-10-17T22:31:32.9283539-03:00;False|2022-10-17T22:15:23.9393393-03:00;False|2022-10-17T22:11:03.1762610-03:00;False|2022-10-17T21:23:24.3248744-03:00;False|2022-10-17T20:53:09.6611730-03:00;True|2021-11-15T17:00:47.8084865-03:00;False|2021-11-15T16:52:20.6660160-03:00;False|2021-11-15T16:50:22.2021174-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
