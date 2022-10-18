@@ -15,6 +15,7 @@ namespace LadyO.API.Generic
         public string PASSWORD { get; set; }
 
         public static string SCHEMA = getSCHEMA();
+        public string PORT { get; set; }
 
         public DBConnection()
         {
@@ -48,10 +49,13 @@ namespace LadyO.API.Generic
                             case "PASSWORD":
                                 objConecttion.PASSWORD = values[1];
                                 break;
+                            case "PORT":
+                                objConecttion.PORT = values[1];
+                                break;
                         }
                     }
                 }
-                obj.ConnectionString = "Database=" + objConecttion.DB + "; Data Source=" + objConecttion.SERVIDOR + "; User Id=" + objConecttion.USUARIO + "; Password=" + objConecttion.PASSWORD;
+                obj.ConnectionString = "Database=" + objConecttion.DB + "; Port="+ objConecttion.PORT + "; Data Source=" + objConecttion.SERVIDOR + "; User Id=" + objConecttion.USUARIO + "; Password=" + objConecttion.PASSWORD;
                 return obj;
             }
             catch (Exception ex)
@@ -73,7 +77,7 @@ namespace LadyO.API.Generic
                         var values = line.Split(',');
                         switch (values[0])
                         {
-                            case "SCHEMA":
+                            case "DB":
                                 tempSCHEMA = values[1];
                                 break;
                         }

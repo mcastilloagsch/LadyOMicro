@@ -13,8 +13,8 @@ namespace LadyO.API.Generic
         public static string EMAIL_INVALIDO = "e-Mail ingresado es Invalido y/o Incorrecto.";
         public static string NAME_NO_EXISTE = "El nombre viene vacio.";
         public static string EMAIL_VACIO = "Campo eMail vacio - Campo no puede ser vacio, debe establecer usuario.";
-
         #endregion
+
         //COUNTRIES MESSAGES
         public static string ISO_COUNTRIES_NO_EXISTE = "El iso viene vacio.";
         public static string NATIONALITY_COUNTRIES_NO_EXISTE = "El nationality viene vacio.";
@@ -27,6 +27,8 @@ namespace LadyO.API.Generic
         //STRUCTURE MESSAGES
         public static string ID_STRUCTURES_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
         public static string ID_STRUCTURES_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
+        public static string ID_STRUCTURES_PARENT_ID = "El parent id no puede ser negativo.";
+        public static string ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
         //BRANCHES MESSAGES
         public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
         public static string ID_BRANCHES_NO_EXISTE = "La rama que usted quiere modificar no existe.";
@@ -44,6 +46,7 @@ namespace LadyO.API.Generic
         public static string ID_UNITATTRIBUTES_STRUCTURE_NO_EXISTE = "No existe la estructura que usted puso.";
         public static string ID_UNITATTRIBUTES_BRANCH_NO_EXISTE = "No existe la rama que usted puso.";
         //REGIONS MESSAGES
+        public static string REGIONS_NO_NAME = "Nombre de la Región no indicado.";
         public static string ID_REGIONS_NO_EXISTE = "La region que usted quiere modificar no existe.";
         public static string ID_REGIONS_GETOBJECT_NO_EXISTE = "La region que usted esta buscando no existe.";
         //SOCIOECONOMICS MESSAGE

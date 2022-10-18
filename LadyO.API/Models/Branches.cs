@@ -68,37 +68,44 @@ namespace LadyO.API.Models
             }
         }
 
+
+        private static Branches getObj(int id)
+        {
+            List<Branches> objReturnList = new List<Branches>();
+            string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches WHERE id = " + id;
+            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+            {
+                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                {
+                    conexion.Open();
+                    MySqlDataReader reader = comando.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string _unit_name = null;
+                        string _small_team = null;
+                        if (!reader.IsDBNull(2))
+                        {
+                            _unit_name = reader.GetString(2);
+                        }
+                        if (!reader.IsDBNull(3))
+                        {
+                            _small_team = reader.GetString(3);
+                        }
+                        objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
+                    }
+                    conexion.Close();
+                }
+            }
+            return objReturnList.FirstOrDefault();
+        }
+
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
-                List<Branches> objReturnList = new List<Branches>();
-                string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            string _unit_name = null;
-                            string _small_team = null;
-                            if (!reader.IsDBNull(2))
-                            {
-                                _unit_name = reader.GetString(2);
-                            }
-                            if (!reader.IsDBNull(3))
-                            {
-                                _small_team = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() == null)
+                Branches objReturn = Branches.getObj(id);
+                if (objReturn == null)
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.ID_BRANCHES_GETOBJECT_NO_EXISTE;
@@ -109,7 +116,7 @@ namespace LadyO.API.Models
                 {
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = objReturnList.FirstOrDefault();
+                    response.data = objReturn;
                     return response;
                 }
             }
@@ -123,86 +130,35 @@ namespace LadyO.API.Models
         }
 
 
-        private static Branches getBranch(int id)
-        {
-            try
-            {
-                List<Branches> objReturnList = new List<Branches>();
-                string sqlQuery = "SELECT id, name, unit_name, small_team FROM " + Generic.DBConnection.SCHEMA + ".branches WHERE id = " + id;
-                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                {
-                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                    {
-                        conexion.Open();
-                        MySqlDataReader reader = comando.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            string _unit_name = null;
-                            string _small_team = null;
-                            if (!reader.IsDBNull(2))
-                            {
-                                _unit_name = reader.GetString(2);
-                            }
-                            if (!reader.IsDBNull(3))
-                            {
-                                _small_team = reader.GetString(3);
-                            }
-                            objReturnList.Add(new Branches(reader.GetInt32(0), reader.GetString(1), _unit_name, _small_team));
-                        }
-                        conexion.Close();
-                    }
-                }
-                if (objReturnList.FirstOrDefault() != null)
-                {
-                    return objReturnList.FirstOrDefault();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static object ObjInsert(Branches objInsert)
+        public static object objAdd(Branches obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Branches objData = new Branches();
+            response.data = null;
             try
             {
-                string str_name = objInsert.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.name.Length > 0)
                 {
-                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".branches VALUES(0, '" + objInsert.name + "', '" + objInsert.unit_name + "', '" + objInsert.small_team + "');SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + Generic.DBConnection.SCHEMA + ".branches VALUES(0, '" + Generic.Tools.Capital(obj.name) + "', '" + obj.unit_name + "', '" + obj.small_team + "');SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
                             conexion.Open();
-                            objData.id = Convert.ToInt32(comando.ExecuteScalar());
+                            obj.id = Convert.ToInt32(comando.ExecuteScalar());
                             conexion.Close();
                         }
                     }
-                    objData.name = objInsert.name;
-                    objData.unit_name = objInsert.unit_name;
-                    objData.small_team = objInsert.small_team;
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = objData;
-                    return response;
+                    response.data = obj;
                 }
                 else
                 {
                     response.isValid = false;
                     response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
@@ -213,54 +169,56 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object ObjUpdate(Branches objUpdate)
+
+        public static object objUpdate(Branches obj)
         {
             APIGenericResponse response = new APIGenericResponse();
-            Branches objData = new Branches();
+            response.data = null;
             try
             {
-                string str_name = objUpdate.name;
-                string String_name = Regex.Replace(str_name, @"\s", "");
-                int length_name = String_name.Length;
-                if (length_name >= 1)
+                if (obj.id > 0)
                 {
-                    Branches valid = getBranch(objUpdate.id);
-                    if (valid != null)
+                    Branches objUpdate = new Branches();
+                    objUpdate = Branches.getObj(obj.id);
+                    if (objUpdate != null)
                     {
-                        string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".branches SET name = '" + objUpdate.name + "' ,  unit_name = '" + objUpdate.unit_name + "', small_team = '" + objUpdate.small_team + "'  WHERE id =  " + objUpdate.id;
-                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                        if (obj.name.Length > 0)
                         {
-                            using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                            string sqlQueryUpdate = "UPDATE " + Generic.DBConnection.SCHEMA + ".branches SET name = '" + Generic.Tools.Capital(obj.name) + "' ,  unit_name = '" + obj.unit_name + "', small_team = '" + obj.small_team + "'  WHERE id =  " + obj.id;
+                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
-                                conexion.Open();
-                                comando.ExecuteReader();
-                                conexion.Close();
+                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                {
+                                    conexion.Open();
+                                    comando.ExecuteReader();
+                                    conexion.Close();
+                                }
                             }
+                            response.isValid = true;
+                            response.msg = string.Empty;
+                            response.data = Branches.getObj(obj.id);
                         }
-                        objData.id = objUpdate.id;
-                        objData.name = objUpdate.name;
-                        objData.unit_name = objUpdate.unit_name;
-                        objData.small_team = objUpdate.small_team;
-                        response.isValid = true;
-                        response.msg = string.Empty;
-                        response.data = objData;
-                        return response;
+                        else
+                        {
+                            response.isValid = false;
+                            response.msg = Generic.Message.NAME_NO_EXISTE;
+                            return response;
+                        }
                     }
                     else
                     {
                         response.isValid = false;
                         response.msg = Generic.Message.ID_BRANCHES_NO_EXISTE;
-                        response.data = null;
                         return response;
                     }
                 }
                 else
                 {
                     response.isValid = false;
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_BRANCHES_NO_EXISTE;
                     return response;
                 }
+                return response;
             }
             catch (Exception ex)
             {
