@@ -16,7 +16,7 @@ namespace LadyO.API.Controllers
         {
             try
             {
-                return Models.Region.getObject(idRegion); ;
+                return Models.Region.getObject(idRegion);
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace LadyO.API.Controllers
         {
             try
             {
-                return Models.Region.getList(); ;
+                return Models.Region.getList();
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace LadyO.API.Controllers
         {
             try
             {
-                return Models.Region.getListAdm(idPerson); ;
+                return Models.Region.getListAdm(idPerson);
             }
             catch (Exception ex)
             {

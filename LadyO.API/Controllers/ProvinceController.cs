@@ -16,7 +16,7 @@ namespace LadyO.API.Controllers
         {
             try
             {
-                return Models.Province.getObject(idProvince); ;
+                return Models.Province.getObject(idProvince);
             }
             catch (Exception ex)
             {
