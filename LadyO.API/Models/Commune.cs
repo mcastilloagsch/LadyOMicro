@@ -6,32 +6,30 @@ using System.Web;
 
 namespace LadyO.API.Models
 {
-    public class Region
+    public class Commune
     {
-        #region Atributos
-        public int IdRegion { get; set; }
-        public string RegionName { get; set; }
-        public int OrderSec { get; set; }
+        public int IdCommune { get; set; }
+        public int IdProvince { get; set; }
+        public string CommuneName { get; set; }
         public bool IsDeleted { get; set; }
-        #endregion
 
-        public Region()
+        public Commune()
         {
 
         }
 
-        public Region(int idRegion, string regionName, int orderSec, bool isDeleted)
+        public Commune(int idCommune, int idProvince, string communeName, bool isDeleted)
         {
-            IdRegion = idRegion;
-            RegionName = regionName;
-            OrderSec = orderSec;
+            IdCommune = idCommune;
+            IdProvince = idProvince;
+            CommuneName = communeName;
             IsDeleted = isDeleted;
         }
 
-        public static Region getObj(int idRegion)
+        public static Commune getObj(int idCommune)
         {
-            List<Region> objReturnList = new List<Region>();
-            string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 AND IdRegion = " + idRegion + ";";
+            List<Commune> objReturnList = new List<Commune>();
+            string sqlQuery = "SELECT IdCommune, IdProvince, CommuneName, IsDeleted FROM " + nameof(Commune).ToUpper() + " WHERE IsDeleted = 0 AND IdCommune = " + idCommune + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -40,7 +38,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                        objReturnList.Add(new Commune(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3) == "0" ? false : true));
                     }
                     conexion.Close();
                 }
@@ -51,14 +49,14 @@ namespace LadyO.API.Models
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
+            response.isValid = false;
+            response.data = null;
             try
             {
-                Region objReturn = Region.getObj(id);
+                Commune objReturn = Commune.getObj(id);
                 if (objReturn == null)
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_GETOBJECT_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_COMMUNES_GETOBJECT_NO_EXISTE;
                     return response;
                 }
                 else
@@ -71,131 +69,138 @@ namespace LadyO.API.Models
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
 
-        public static object objAdd(Region obj)
+        public static object objAdd(Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
+            response.isValid = false;
             try
             {
-                if (obj.RegionName.Length > 0)
+                if (Province.getObj(obj.IdProvince) != null)
                 {
-                    obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                    string sqlQuery = "INSERT INTO " + nameof(Region).ToUpper() + " VALUES(NULL, '" + Generic.Tools.Capital(obj.RegionName) + "', " + obj.OrderSec + " , 0); SELECT LAST_INSERT_ID();";
-                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                    if (obj.CommuneName.Length > 0)
                     {
-                        using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                        obj.CommuneName = Generic.Tools.Capital(obj.CommuneName);
+                        string sqlQuery = "INSERT INTO " + nameof(Commune).ToUpper() + " VALUES(NULL, '" + obj.IdProvince + "', '" + obj.CommuneName + "' , 0); SELECT LAST_INSERT_ID();";
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
-                            conexion.Open();
-                            obj.IdRegion = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
-                            conexion.Close();
-                        }
-                    }
-                    response.isValid = true;
-                    response.msg = string.Empty;
-                    response.data = Region.getObj(obj.IdRegion);
-                }
-                else
-                {
-                    response.isValid = false;
-                    response.msg = Generic.Message.REGIONS_NO_NAME;
-                    return response;
-                }
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.isValid = false;
-                response.msg = ex.Message;
-                response.data = null;
-                return response;
-            }
-        }
-
-        public static object objUpdate(Region obj)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            response.data = null;
-            try
-            {
-                if (obj.IdRegion > 0)
-                {
-                    if (Region.getObj(obj.IdRegion) != null)
-                    {
-                        if (obj.RegionName.Length > 0)
-                        {
-                            obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET RegionName = '" + obj.RegionName + "', ORDERSEC = " + obj.OrderSec + " WHERE IsDeleted = 0 AND IdRegion =  " + obj.IdRegion + ";";
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
-                                }
+                                conexion.Open();
+                                obj.IdCommune = Convert.ToInt32(comando.ExecuteScalar());
+                                conexion.Close();
                             }
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = Region.getObj(obj.IdRegion);
                         }
-                        else
-                        {
-                            response.isValid = false;
-                            response.msg = Generic.Message.REGIONS_NO_NAME;
-                            return response;
-                        }
+                        response.isValid = true;
+                        response.msg = string.Empty;
+                        response.data = Commune.getObj(obj.IdCommune);
                     }
                     else
                     {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                        response.msg = Generic.Message.NAME_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                    response.msg = Generic.Message.ID_COMMUNES_PROVINCES_OBJ_NO_EXISTE;
                     return response;
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
 
-        public static object objDelete(Region obj)
+        public static object objUpdate(Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
+            response.isValid = false;
             try
             {
-                if (obj.IdRegion > 0)
+                if (obj.IdCommune > 0)
                 {
-                    if (Region.getObj(obj.IdRegion) != null)
+                    if (Commune.getObj(obj.IdCommune) != null)
                     {
-                        string sqlQueryUpdate = string.Empty;
-                        obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                        if (Region.getObj(obj.IdRegion).IsDeleted)
+                        if (Province.getObj(obj.IdProvince) != null)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 0 WHERE IdRegion =  " + obj.IdRegion + ";";
+                            if (obj.CommuneName.Length > 0)
+                            {
+                                obj.CommuneName = Generic.Tools.Capital(obj.CommuneName);
+                                string sqlQueryUpdate = "UPDATE " + nameof(Commune).ToUpper() + " SET CommuneName = '" + obj.CommuneName + "', IdProvince = " + obj.IdProvince + " WHERE IsDeleted = 0 AND IdCommune =  " + obj.IdCommune + ";";
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                {
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
+                                }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Commune.getObj(obj.IdCommune);
+                            }
+                            else
+                            {
+                                response.msg = Generic.Message.NAME_NO_EXISTE;
+                                return response;
+                            }
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 1 WHERE IdRegion =  " + obj.IdRegion + ";";
+                            response.msg = Generic.Message.ID_COMMUNES_PROVINCES_OBJ_NO_EXISTE;
+                            return response;
+                        }
+                    }
+                    else
+                    {
+                        response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
+                    return response;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.msg = ex.Message;
+                return response;
+            }
+        }
+
+        public static object objDelete(Commune obj)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            response.data = null;
+            response.isValid = false;
+            try
+            {
+                if (obj.IdCommune > 0)
+                {
+                    if (Commune.getObj(obj.IdCommune) != null)
+                    {
+                        string sqlQueryUpdate = string.Empty;
+                        if (Commune.getObj(obj.IdCommune).IsDeleted)
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Commune).ToUpper() + " SET IsDeleted = 0 WHERE IdCommune =  " + obj.IdCommune + ";";
+                        }
+                        else
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Commune).ToUpper() + " SET IsDeleted = 1 WHERE IdCommune =  " + obj.IdCommune + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -212,24 +217,20 @@ namespace LadyO.API.Models
                     }
                     else
                     {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                        response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                    response.msg = Generic.Message.ID_COMMUNES_NO_EXISTE;
                     return response;
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
@@ -239,8 +240,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 ORDER BY OrderSec, RegionName;";
+                List<Commune> objReturnList = new List<Commune>();
+                string sqlQuery = "SELECT IdCommune, IdProvince, CommuneName, IsDeleted FROM " + nameof(Commune).ToUpper() + " WHERE IsDeleted = 0 ORDER BY CommuneName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -249,7 +250,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                            objReturnList.Add(new Commune(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
@@ -270,8 +271,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " ORDER BY 3, 1;";
+                List<Commune> objReturnList = new List<Commune>();
+                string sqlQuery = "SELECT IdCommune, IdProvince, CommuneName, IsDeleted FROM " + nameof(Commune).ToUpper() + " ORDER BY CommuneName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -280,7 +281,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                            objReturnList.Add(new Commune(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }

@@ -6,32 +6,28 @@ using System.Web;
 
 namespace LadyO.API.Models
 {
-    public class Region
+    public class Gender
     {
-        #region Atributos
-        public int IdRegion { get; set; }
-        public string RegionName { get; set; }
-        public int OrderSec { get; set; }
+        public int IdGender { get; set; }
+        public string GenderName { get; set; }
         public bool IsDeleted { get; set; }
-        #endregion
 
-        public Region()
+        public Gender()
         {
 
         }
 
-        public Region(int idRegion, string regionName, int orderSec, bool isDeleted)
+        public Gender(int idGender, string genderName, bool isDeleted)
         {
-            IdRegion = idRegion;
-            RegionName = regionName;
-            OrderSec = orderSec;
+            IdGender = idGender;
+            GenderName = genderName;
             IsDeleted = isDeleted;
         }
 
-        public static Region getObj(int idRegion)
+        public static Gender getObj(int idGender)
         {
-            List<Region> objReturnList = new List<Region>();
-            string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 AND IdRegion = " + idRegion + ";";
+            List<Gender> objReturnList = new List<Gender>();
+            string sqlQuery = "SELECT IdGender, GenderName, IsDeleted FROM " + nameof(Gender).ToUpper() + " WHERE IsDeleted = 0 AND IdGender = " + idGender + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -40,7 +36,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                        objReturnList.Add(new Gender(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                     }
                     conexion.Close();
                 }
@@ -51,14 +47,14 @@ namespace LadyO.API.Models
         public static object getObject(int id)
         {
             APIGenericResponse response = new APIGenericResponse();
+            response.isValid = false;
+            response.data = null;
             try
             {
-                Region objReturn = Region.getObj(id);
+                Gender objReturn = Gender.getObj(id);
                 if (objReturn == null)
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_GETOBJECT_NO_EXISTE;
-                    response.data = null;
+                    response.msg = Generic.Message.ID_GENDERS_GETOBJECT_NO_EXISTE;
                     return response;
                 }
                 else
@@ -71,68 +67,64 @@ namespace LadyO.API.Models
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
 
-        public static object objAdd(Region obj)
+        public static object objAdd(Gender obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
+            response.isValid = false;
             try
             {
-                if (obj.RegionName.Length > 0)
+                if (obj.GenderName.Length > 0)
                 {
-                    obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                    string sqlQuery = "INSERT INTO " + nameof(Region).ToUpper() + " VALUES(NULL, '" + Generic.Tools.Capital(obj.RegionName) + "', " + obj.OrderSec + " , 0); SELECT LAST_INSERT_ID();";
+                    obj.GenderName = Generic.Tools.Capital(obj.GenderName);
+                    string sqlQuery = "INSERT INTO " + nameof(Gender).ToUpper() + " VALUES(NULL, '" + obj.GenderName + "', 0); SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
                             conexion.Open();
-                            obj.IdRegion = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
+                            obj.IdGender = Convert.ToInt32(comando.ExecuteScalar());
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = Region.getObj(obj.IdRegion);
+                    response.data = Gender.getObj(obj.IdGender);
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.REGIONS_NO_NAME;
+                    response.msg = Generic.Message.NAME_NO_EXISTE;
                     return response;
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
 
-        public static object objUpdate(Region obj)
+        public static object objUpdate(Gender obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
+            response.isValid = false;
             try
             {
-                if (obj.IdRegion > 0)
+                if (obj.IdGender > 0)
                 {
-                    if (Region.getObj(obj.IdRegion) != null)
+                    if (Gender.getObj(obj.IdGender) != null)
                     {
-                        if (obj.RegionName.Length > 0)
+                        if (obj.GenderName.Length > 0)
                         {
-                            obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET RegionName = '" + obj.RegionName + "', ORDERSEC = " + obj.OrderSec + " WHERE IsDeleted = 0 AND IdRegion =  " + obj.IdRegion + ";";
+                            obj.GenderName = Generic.Tools.Capital(obj.GenderName);
+                            string sqlQueryUpdate = "UPDATE " + nameof(Gender).ToUpper() + " SET GenderName = '" + obj.GenderName + "' WHERE IsDeleted = 0 AND IdGender =  " + obj.IdGender + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -144,58 +136,53 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = Region.getObj(obj.IdRegion);
+                            response.data = Gender.getObj(obj.IdGender);
                         }
                         else
                         {
-                            response.isValid = false;
-                            response.msg = Generic.Message.REGIONS_NO_NAME;
+                            response.msg = Generic.Message.NAME_NO_EXISTE;
                             return response;
                         }
                     }
                     else
                     {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                        response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                    response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
                     return response;
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
 
-        public static object objDelete(Region obj)
+        public static object objDelete(Gender obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
+            response.isValid = false;
             try
             {
-                if (obj.IdRegion > 0)
+                if (obj.IdGender > 0)
                 {
-                    if (Region.getObj(obj.IdRegion) != null)
+                    if (Gender.getObj(obj.IdGender) != null)
                     {
                         string sqlQueryUpdate = string.Empty;
-                        obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                        if (Region.getObj(obj.IdRegion).IsDeleted)
+                        if (Gender.getObj(obj.IdGender).IsDeleted)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 0 WHERE IdRegion =  " + obj.IdRegion + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Gender).ToUpper() + " SET IsDeleted = 0 WHERE IdGender =  " + obj.IdGender + ";";
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 1 WHERE IdRegion =  " + obj.IdRegion + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Gender).ToUpper() + " SET IsDeleted = 1 WHERE IdGender =  " + obj.IdGender + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -212,24 +199,20 @@ namespace LadyO.API.Models
                     }
                     else
                     {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                        response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                    response.msg = Generic.Message.ID_GENDERS_NO_EXISTE;
                     return response;
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                response.isValid = false;
                 response.msg = ex.Message;
-                response.data = null;
                 return response;
             }
         }
@@ -239,8 +222,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 ORDER BY OrderSec, RegionName;";
+                List<Gender> objReturnList = new List<Gender>();
+                string sqlQuery = "SELECT IdGender, GenderName, IsDeleted FROM " + nameof(Gender).ToUpper() + " WHERE IsDeleted = 0 ORDER BY GenderName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -249,7 +232,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                            objReturnList.Add(new Gender(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
@@ -270,8 +253,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " ORDER BY 3, 1;";
+                List<Gender> objReturnList = new List<Gender>();
+                string sqlQuery = "SELECT IdGender, GenderName, IsDeleted FROM " + nameof(Gender).ToUpper() + " ORDER BY GenderName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -280,7 +263,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
+                            objReturnList.Add(new Gender(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                         }
                         conexion.Close();
                     }

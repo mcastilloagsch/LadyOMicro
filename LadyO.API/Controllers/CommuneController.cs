@@ -8,15 +8,15 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class RegionController : ApiController
+    public class CommuneController : ApiController
     {
-        [Route("api/Region/getObject/{idRegion}")]
+        [Route("api/Commune/getObject/{idCommune}")]
         [HttpGet]
-        public object getObject(int idRegion)
+        public object getObject(int idCommune)
         {
             try
             {
-                return Models.Region.getObject(idRegion);
+                return Models.Commune.getObject(idCommune);
             }
             catch (Exception ex)
             {
@@ -28,9 +28,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/objAdd")]
+        [Route("api/Commune/objAdd")]
         [HttpPost]
-        public object objAdd([FromBody] Models.Region obj)
+        public object objAdd([FromBody] Models.Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -38,7 +38,7 @@ namespace LadyO.API.Controllers
                 object objReturn = new object();
                 if (ModelState.IsValid)
                 {
-                    return Models.Region.objAdd(obj);
+                    return Models.Commune.objAdd(obj);
                 }
                 else
                 {
@@ -57,16 +57,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/objUpdate")]
+        [Route("api/Commune/objUpdate")]
         [HttpPut]
-        public object objUpdate([FromBody] Models.Region obj)
+        public object objUpdate([FromBody] Models.Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Region.objUpdate(obj);
+                    return Models.Commune.objUpdate(obj);
                 }
                 else
                 {
@@ -85,16 +85,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/objDelete")]
+        [Route("api/Commune/objDelete")]
         [HttpDelete]
-        public object objDelete([FromBody] Models.Region obj)
+        public object objDelete([FromBody] Models.Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Region.objDelete(obj);
+                    return Models.Commune.objDelete(obj);
                 }
                 else
                 {
@@ -113,13 +113,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/getList")]
+        [Route("api/Commune/getList")]
         [HttpGet]
         public object getList()
         {
             try
             {
-                return Models.Region.getList();
+                return Models.Commune.getList();
             }
             catch (Exception ex)
             {
@@ -131,13 +131,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Region/getListAdm/{idPerson}")]
+        [Route("api/Commune/getListAdm/{idPerson}")]
         [HttpGet]
         public object getListAdm(int idPerson)
         {
             try
             {
-                return Models.Region.getListAdm(idPerson);
+                return Models.Commune.getListAdm(idPerson);
             }
             catch (Exception ex)
             {

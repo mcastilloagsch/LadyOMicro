@@ -103,7 +103,7 @@ namespace LadyO.API.Controllers
 
         [Route("api/Religions/objUpdate/{token}")]
         [HttpPut]
-        public object objUpdate(string token, [FromBody] Models.Religions objUpdate)
+        public object objUpdate(string token, [FromBody] Models.Religions obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -112,7 +112,7 @@ namespace LadyO.API.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        return Models.Religions.objUpdate(objUpdate);
+                        return Models.Religions.objUpdate(obj);
                     }
                     else
                     {
@@ -135,6 +135,5 @@ namespace LadyO.API.Controllers
                 return response;
             }
         }
-
     }
 }
