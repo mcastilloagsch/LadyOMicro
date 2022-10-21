@@ -29,7 +29,7 @@ namespace LadyO.API.Models
         private static Position getObj(int idPosition)
         {
             List<Position> objReturnList = new List<Position>();
-            string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IdPosition = " + idPosition + ";";
+            string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 AND IdPosition = " + idPosition + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -74,26 +74,6 @@ namespace LadyO.API.Models
             }
         }
 
-        private static StructureType getStructureType(int idStructureType)
-        {
-            List<StructureType> objReturnList = new List<StructureType>();
-            string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IdStructureType = " + idStructureType + ";";
-            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-            {
-                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                {
-                    conexion.Open();
-                    MySqlDataReader reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
-                    }
-                    conexion.Close();
-                }
-            }
-            return objReturnList.FirstOrDefault();
-        }
-
         public static object objAdd(Position obj)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -101,7 +81,7 @@ namespace LadyO.API.Models
             response.isValid = false;
             try
             {
-                if (Position.getStructureType(obj.IdStructureType) != null)
+                if (StructureType.getObj(obj.IdStructureType) != null)
                 {
                     if (obj.PositionName.Length > 0)
                     {
@@ -113,13 +93,12 @@ namespace LadyO.API.Models
                             {
                                 conexion.Open();
                                 obj.IdPosition = Convert.ToInt32(comando.ExecuteScalar());
-                                obj.IsDeleted = false;
                                 conexion.Close();
                             }
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = obj;
+                        response.data = Position.getObj(obj.IdPosition);
                     }
                     else
                     {
@@ -152,7 +131,7 @@ namespace LadyO.API.Models
                 {
                     if (Position.getObj(obj.IdPosition) != null)
                     {
-                        if (Position.getStructureType(obj.IdStructureType) != null)
+                        if (StructureType.getObj(obj.IdStructureType) != null)
                         {
                             if (obj.PositionName.Length > 0)
                             {
@@ -169,7 +148,7 @@ namespace LadyO.API.Models
                                 }
                                 response.isValid = true;
                                 response.msg = string.Empty;
-                                response.data = obj;
+                                response.data = Position.getObj(obj.IdPosition);
                             }
                             else
                             {
@@ -234,7 +213,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Position.getObj(obj.IdPosition);
+                        response.data = null;
                     }
                     else
                     {

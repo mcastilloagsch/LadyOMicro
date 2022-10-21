@@ -6,9 +6,9 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAaZIVlWC8kEWa+QaBUy6veAAAAAACAAAAAAAQZgAAAAEAACAAAADzMmXoIOlSeqt3dWaPIe6QzqbRxbNV27HQtqXT6tpL7AAAAAAOgAAAAAIAACAAAABJUTPZkQaldr7zI+wuvs6m5XKF1P1VW0b4cOKa3NPfRjAAAABbFpQx7yZITIjsX/QxB9ieyVZaZb2Oq+S9BL/K9szIcV3xGQUsyOUYkhldKf1spctAAAAAzhV/jIMdBMFAu34cvLlL9RUTRLcK/r4s/QTD3Hk6eLpzwy9t+dABpwZWErzMiP+YKws13Lcef+121/4U30OX1w==</EncryptedPassword>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAvxQjqOm1O0K01oplJjstigAAAAACAAAAAAADZgAAwAAAABAAAACTVxng92BWU/5vRORy5ZXdAAAAAASAAACgAAAAEAAAAMlMmt26sPllHimEdxWlknMoAAAAD2JlOSVP9vK8N1/GNwncELto3aTi+LZNcj69XuOk9ZITz8B3XVWY7xQAAACOSHwn+GqoXnUR48tGRkpr38Z4Rw==</EncryptedPassword>
     <_PublishTargetUrl>ftp://10.0.3.5</_PublishTargetUrl>
-    <History>True|2022-10-21T18:04:31.4712696Z;True|2022-10-21T13:02:40.1199497-03:00;False|2022-10-18T11:58:55.0470062-03:00;False|2022-10-18T11:41:44.3031069-03:00;False|2022-10-17T22:31:32.9283539-03:00;False|2022-10-17T22:15:23.9393393-03:00;False|2022-10-17T22:11:03.1762610-03:00;False|2022-10-17T21:23:24.3248744-03:00;False|2022-10-17T20:53:09.6611730-03:00;True|2021-11-15T17:00:47.8084865-03:00;False|2021-11-15T16:52:20.6660160-03:00;False|2021-11-15T16:50:22.2021174-03:00;</History>
+    <History>True|2022-10-21T20:02:03.4179645Z;True|2022-10-21T15:04:31.4712696-03:00;True|2022-10-21T13:02:40.1199497-03:00;False|2022-10-18T11:58:55.0470062-03:00;False|2022-10-18T11:41:44.3031069-03:00;False|2022-10-17T22:31:32.9283539-03:00;False|2022-10-17T22:15:23.9393393-03:00;False|2022-10-17T22:11:03.1762610-03:00;False|2022-10-17T21:23:24.3248744-03:00;False|2022-10-17T20:53:09.6611730-03:00;True|2021-11-15T17:00:47.8084865-03:00;False|2021-11-15T16:52:20.6660160-03:00;False|2021-11-15T16:50:22.2021174-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
@@ -111,10 +111,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/17/2022 18:04:33</publishTime>
     </File>
     <File Include="bin/LadyO.API.dll">
-      <publishTime>10/21/2022 15:03:22</publishTime>
+      <publishTime>10/21/2022 17:00:29</publishTime>
     </File>
     <File Include="bin/LadyO.API.pdb">
-      <publishTime>10/21/2022 15:03:22</publishTime>
+      <publishTime>10/21/2022 17:00:29</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>10/14/2022 10:22:21</publishTime>
@@ -408,13 +408,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/14/2022 10:22:20</publishTime>
     </File>
     <File Include="Views/Web.config">
-      <publishTime>10/21/2022 12:09:06</publishTime>
+      <publishTime>10/21/2022 15:46:08</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>10/14/2022 10:22:20</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/21/2022 12:55:46</publishTime>
+      <publishTime>10/21/2022 17:01:33</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ namespace LadyO.API.Models
         private static SocioEconomic getObj(int idSocioEconomic)
         {
             List<SocioEconomic> objReturnList = new List<SocioEconomic>();
-            string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " WHERE IdSocioEconomic = " + idSocioEconomic + ";";
+            string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " WHERE IsDeleted = 0 AND IdSocioEconomic = " + idSocioEconomic + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -89,13 +89,12 @@ namespace LadyO.API.Models
                         {
                             conexion.Open();
                             obj.IdSocioEconomic = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = SocioEconomic.getObj(obj.IdSocioEconomic);
                 }
                 else
                 {
@@ -125,7 +124,7 @@ namespace LadyO.API.Models
                         if (obj.SocioEconomicName.Length > 0)
                         {
                             obj.SocioEconomicName = Generic.Tools.Capital(obj.SocioEconomicName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(SocioEconomic).ToUpper() + " SET SocioEconomicName = '" + obj.SocioEconomicName + "' WHERE IdSocioEconomic =  " + obj.IdSocioEconomic + ";";
+                            string sqlQueryUpdate = "UPDATE " + nameof(SocioEconomic).ToUpper() + " SET SocioEconomicName = '" + obj.SocioEconomicName + "' WHERE IsDeleted = 0 AND IdSocioEconomic =  " + obj.IdSocioEconomic + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -137,7 +136,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = obj;
+                            response.data = SocioEconomic.getObj(obj.IdSocioEconomic);
                         }
                         else
                         {

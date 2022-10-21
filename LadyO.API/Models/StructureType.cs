@@ -24,10 +24,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static StructureType getObj(int idStructureType)
+        public static StructureType getObj(int idStructureType)
         {
             List<StructureType> objReturnList = new List<StructureType>();
-            string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IdStructureType = " + idStructureType + ";";
+            string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IsDeleted = 0 AND IdStructureType = " + idStructureType + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -89,13 +89,12 @@ namespace LadyO.API.Models
                         {
                             conexion.Open();
                             obj.IdStructureType = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = StructureType.getObj(obj.IdStructureType);
                 }
                 else
                 {
@@ -125,7 +124,7 @@ namespace LadyO.API.Models
                         if (obj.StructureTypeName.Length > 0)
                         {
                             obj.StructureTypeName = Generic.Tools.Capital(obj.StructureTypeName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET StructureTypeName = '" + obj.StructureTypeName + "' WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            string sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET StructureTypeName = '" + obj.StructureTypeName + "' WHERE IsDeleted = 0 AND IdStructureType =  " + obj.IdStructureType + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -137,7 +136,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = obj;
+                            response.data = StructureType.getObj(obj.IdStructureType);
                         }
                         else
                         {
@@ -196,7 +195,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = StructureType.getObj(obj.IdStructureType);
+                        response.data = null;
                     }
                     else
                     {
