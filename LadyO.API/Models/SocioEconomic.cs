@@ -6,28 +6,28 @@ using System.Web;
 
 namespace LadyO.API.Models
 {
-    public class StructureType
+    public class SocioEconomic
     {
-        public int IdStructureType { get; set; }
-        public string StructureTypeName { get; set; }
+        public int IdSocioEconomic { get; set; }
+        public string SocioEconomicName { get; set; }
         public bool IsDeleted { get; set; }
 
-        public StructureType()
+        public SocioEconomic()
         {
 
         }
 
-        public StructureType(int idStructureType, string structureTypeName, bool isDeleted)
+        public SocioEconomic(int idSocioEconomic, string socioEconomicName, bool isDeleted)
         {
-            IdStructureType = idStructureType;
-            StructureTypeName = structureTypeName;
+            IdSocioEconomic = idSocioEconomic;
+            SocioEconomicName = socioEconomicName;
             IsDeleted = isDeleted;
         }
 
-        private static StructureType getObj(int idStructureType)
+        private static SocioEconomic getObj(int idSocioEconomic)
         {
-            List<StructureType> objReturnList = new List<StructureType>();
-            string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IdStructureType = " + idStructureType + ";";
+            List<SocioEconomic> objReturnList = new List<SocioEconomic>();
+            string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " WHERE IdSocioEconomic = " + idSocioEconomic + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -36,7 +36,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                        objReturnList.Add(new SocioEconomic(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                     }
                     conexion.Close();
                 }
@@ -51,10 +51,10 @@ namespace LadyO.API.Models
             response.data = null;
             try
             {
-                StructureType objReturn = StructureType.getObj(id);
+                SocioEconomic objReturn = SocioEconomic.getObj(id);
                 if (objReturn == null)
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_SOCIOECONOMICS_GETOBJECT_NO_EXISTE;
                     return response;
                 }
                 else
@@ -72,23 +72,23 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objAdd(StructureType obj)
+        public static object objAdd(SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.StructureTypeName.Length > 0)
+                if (obj.SocioEconomicName.Length > 0)
                 {
-                    obj.StructureTypeName = Generic.Tools.Capital(obj.StructureTypeName);
-                    string sqlQuery = "INSERT INTO " + nameof(StructureType).ToUpper() + " VALUES(NULL, '" + obj.StructureTypeName + "', 0); SELECT LAST_INSERT_ID();";
+                    obj.SocioEconomicName = Generic.Tools.Capital(obj.SocioEconomicName);
+                    string sqlQuery = "INSERT INTO " + nameof(SocioEconomic).ToUpper() + " VALUES(NULL, '" + obj.SocioEconomicName + "', 0); SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                         {
                             conexion.Open();
-                            obj.IdStructureType = Convert.ToInt32(comando.ExecuteScalar());
+                            obj.IdSocioEconomic = Convert.ToInt32(comando.ExecuteScalar());
                             obj.IsDeleted = false;
                             conexion.Close();
                         }
@@ -111,21 +111,21 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objUpdate(StructureType obj)
+        public static object objUpdate(SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.IdStructureType > 0)
+                if (obj.IdSocioEconomic > 0)
                 {
-                    if (StructureType.getObj(obj.IdStructureType) != null)
+                    if (SocioEconomic.getObj(obj.IdSocioEconomic) != null)
                     {
-                        if (obj.StructureTypeName.Length > 0)
+                        if (obj.SocioEconomicName.Length > 0)
                         {
-                            obj.StructureTypeName = Generic.Tools.Capital(obj.StructureTypeName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET StructureTypeName = '" + obj.StructureTypeName + "' WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            obj.SocioEconomicName = Generic.Tools.Capital(obj.SocioEconomicName);
+                            string sqlQueryUpdate = "UPDATE " + nameof(SocioEconomic).ToUpper() + " SET SocioEconomicName = '" + obj.SocioEconomicName + "' WHERE IdSocioEconomic =  " + obj.IdSocioEconomic + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -147,13 +147,13 @@ namespace LadyO.API.Models
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                        response.msg = Generic.Message.ID_SOCIOECONOMICS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                    response.msg = Generic.Message.ID_SOCIOECONOMICS_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -165,25 +165,25 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objDelete(StructureType obj)
+        public static object objDelete(SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.IdStructureType > 0)
+                if (obj.IdSocioEconomic > 0)
                 {
-                    if (StructureType.getObj(obj.IdStructureType) != null)
+                    if (SocioEconomic.getObj(obj.IdSocioEconomic) != null)
                     {
                         string sqlQueryUpdate = string.Empty;
-                        if (StructureType.getObj(obj.IdStructureType).IsDeleted)
+                        if (SocioEconomic.getObj(obj.IdSocioEconomic).IsDeleted)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET IsDeleted = 0 WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(SocioEconomic).ToUpper() + " SET IsDeleted = 0 WHERE IdSocioEconomic =  " + obj.IdSocioEconomic + ";";
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET IsDeleted = 1 WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(SocioEconomic).ToUpper() + " SET IsDeleted = 1 WHERE IdSocioEconomic =  " + obj.IdSocioEconomic + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -196,17 +196,17 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = StructureType.getObj(obj.IdStructureType);
+                        response.data = SocioEconomic.getObj(obj.IdSocioEconomic);
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                        response.msg = Generic.Message.ID_SOCIOECONOMICS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                    response.msg = Generic.Message.ID_SOCIOECONOMICS_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -223,8 +223,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IsDeleted = 0 ORDER BY StructureTypeName;";
+                List<SocioEconomic> objReturnList = new List<SocioEconomic>();
+                string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " WHERE IsDeleted = 0 ORDER BY SocioEconomicName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -233,7 +233,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new SocioEconomic(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
@@ -254,8 +254,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " ORDER BY StructureTypeName;";
+                List<SocioEconomic> objReturnList = new List<SocioEconomic>();
+                string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " ORDER BY SocioEconomicName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -264,7 +264,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new SocioEconomic(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
                         }
                         conexion.Close();
                     }

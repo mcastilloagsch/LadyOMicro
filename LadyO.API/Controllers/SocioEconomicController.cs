@@ -8,15 +8,15 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class StructureTypeController : ApiController
+    public class SocioEconomicController : ApiController
     {
-        [Route("api/StructureType/getObject/{idStructureType}")]
+        [Route("api/SocioEconomic/getObject/{idSocioEconomic}")]
         [HttpGet]
-        public object getObject(int idStructureType)
+        public object getObject(int idSocioEconomic)
         {
             try
             {
-                return Models.StructureType.getObject(idStructureType);
+                return Models.SocioEconomic.getObject(idSocioEconomic);
             }
             catch (Exception ex)
             {
@@ -28,9 +28,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/StructureType/objAdd")]
+        [Route("api/SocioEconomic/objAdd")]
         [HttpPost]
-        public object objAdd([FromBody] Models.StructureType obj)
+        public object objAdd([FromBody] Models.SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -38,7 +38,7 @@ namespace LadyO.API.Controllers
                 object objReturn = new object();
                 if (ModelState.IsValid)
                 {
-                    return Models.StructureType.objAdd(obj);
+                    return Models.SocioEconomic.objAdd(obj);
                 }
                 else
                 {
@@ -57,16 +57,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/StructureType/objUpdate")]
+        [Route("api/SocioEconomic/objUpdate")]
         [HttpPut]
-        public object objUpdate([FromBody] Models.StructureType obj)
+        public object objUpdate([FromBody] Models.SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.StructureType.objUpdate(obj);
+                    return Models.SocioEconomic.objUpdate(obj);
                 }
                 else
                 {
@@ -85,16 +85,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/StructureType/objDelete")]
+        [Route("api/SocioEconomic/objDelete")]
         [HttpDelete]
-        public object objDelete([FromBody] Models.StructureType obj)
+        public object objDelete([FromBody] Models.SocioEconomic obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.StructureType.objDelete(obj);
+                    return Models.SocioEconomic.objDelete(obj);
                 }
                 else
                 {
@@ -113,13 +113,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/StructureType/getList")]
+        [Route("api/SocioEconomic/getList")]
         [HttpGet]
         public object getList()
         {
             try
             {
-                return Models.StructureType.getList(); ;
+                return Models.SocioEconomic.getList(); ;
             }
             catch (Exception ex)
             {
@@ -131,13 +131,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/StructureType/getListAdm/{idPerson}")]
+        [Route("api/SocioEconomic/getListAdm/{idPerson}")]
         [HttpGet]
         public object getListAdm(int idPerson)
         {
             try
             {
-                return Models.StructureType.getListAdm(idPerson);
+                return Models.SocioEconomic.getListAdm(idPerson);
             }
             catch (Exception ex)
             {
