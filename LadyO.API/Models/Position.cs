@@ -6,28 +6,30 @@ using System.Web;
 
 namespace LadyO.API.Models
 {
-    public class StructureType
+    public class Position
     {
+        public int IdPosition { get; set; }
+        public string PositionName { get; set; }
         public int IdStructureType { get; set; }
-        public string StructureTypeName { get; set; }
         public bool IsDeleted { get; set; }
 
-        public StructureType()
+        public Position()
         {
 
         }
 
-        public StructureType(int idStructureType, string structureTypeName, bool isDeleted)
+        public Position(int idPosition, string positionName, int idStructureType, bool isDeleted)
         {
+            IdPosition = idPosition;
+            PositionName = positionName;
             IdStructureType = idStructureType;
-            StructureTypeName = structureTypeName;
             IsDeleted = isDeleted;
         }
 
-        public static StructureType getObj(int idStructureType)
+        private static Position getObj(int idPosition)
         {
-            List<StructureType> objReturnList = new List<StructureType>();
-            string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IsDeleted = 0 AND IdStructureType = " + idStructureType + ";";
+            List<Position> objReturnList = new List<Position>();
+            string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 AND IdPosition = " + idPosition + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -36,7 +38,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                        objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                     }
                     conexion.Close();
                 }
@@ -51,10 +53,10 @@ namespace LadyO.API.Models
             response.data = null;
             try
             {
-                StructureType objReturn = StructureType.getObj(id);
+                Position objReturn = Position.getObj(id);
                 if (objReturn == null)
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_GETOBJECT_NO_EXISTE;
                     return response;
                 }
                 else
@@ -72,87 +74,41 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objAdd(StructureType obj)
+        public static object objAdd(Position obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.StructureTypeName.Length > 0)
+                if (StructureType.getObj(obj.IdStructureType) != null)
                 {
-                    obj.StructureTypeName = Generic.Tools.Capital(obj.StructureTypeName);
-                    string sqlQuery = "INSERT INTO " + nameof(StructureType).ToUpper() + " VALUES(NULL, '" + obj.StructureTypeName + "', 0); SELECT LAST_INSERT_ID();";
-                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                    if (obj.PositionName.Length > 0)
                     {
-                        using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                        obj.PositionName = Generic.Tools.Capital(obj.PositionName);
+                        string sqlQuery = "INSERT INTO " + nameof(Position).ToUpper() + " VALUES(NULL, '" + obj.PositionName + "', '" + obj.IdStructureType + "' , 0); SELECT LAST_INSERT_ID();";
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
-                            conexion.Open();
-                            obj.IdStructureType = Convert.ToInt32(comando.ExecuteScalar());
-                            conexion.Close();
-                        }
-                    }
-                    response.isValid = true;
-                    response.msg = string.Empty;
-                    response.data = StructureType.getObj(obj.IdStructureType);
-                }
-                else
-                {
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    return response;
-                }
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.msg = ex.Message;
-                return response;
-            }
-        }
-
-        public static object objUpdate(StructureType obj)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            response.data = null;
-            response.isValid = false;
-            try
-            {
-                if (obj.IdStructureType > 0)
-                {
-                    if (StructureType.getObj(obj.IdStructureType) != null)
-                    {
-                        if (obj.StructureTypeName.Length > 0)
-                        {
-                            obj.StructureTypeName = Generic.Tools.Capital(obj.StructureTypeName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET StructureTypeName = '" + obj.StructureTypeName + "' WHERE IsDeleted = 0 AND IdStructureType =  " + obj.IdStructureType + ";";
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
-                                }
+                                conexion.Open();
+                                obj.IdPosition = Convert.ToInt32(comando.ExecuteScalar());
+                                conexion.Close();
                             }
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = StructureType.getObj(obj.IdStructureType);
                         }
-                        else
-                        {
-                            response.msg = Generic.Message.NAME_NO_EXISTE;
-                            return response;
-                        }
+                        response.isValid = true;
+                        response.msg = string.Empty;
+                        response.data = Position.getObj(obj.IdPosition);
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                        response.msg = Generic.Message.NAME_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_STRUCTURETYPE_OBJ_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -164,25 +120,87 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objDelete(StructureType obj)
+        public static object objUpdate(Position obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.IdStructureType > 0)
+                if (obj.IdPosition > 0)
                 {
-                    if (StructureType.getObj(obj.IdStructureType) != null)
+                    if (Position.getObj(obj.IdPosition) != null)
                     {
-                        string sqlQueryUpdate = string.Empty;
-                        if (StructureType.getObj(obj.IdStructureType).IsDeleted)
+                        if (StructureType.getObj(obj.IdStructureType) != null)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET IsDeleted = 0 WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            if (obj.PositionName.Length > 0)
+                            {
+                                obj.PositionName = Generic.Tools.Capital(obj.PositionName);
+                                string sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET PositionName = '" + obj.PositionName + "', IdStructureType = " + obj.IdStructureType + " WHERE IdPosition =  " + obj.IdPosition + ";";
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                {
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
+                                }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Position.getObj(obj.IdPosition);
+                            }
+                            else
+                            {
+                                response.msg = Generic.Message.NAME_NO_EXISTE;
+                                return response;
+                            }
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(StructureType).ToUpper() + " SET IsDeleted = 1 WHERE IdStructureType =  " + obj.IdStructureType + ";";
+                            response.msg = Generic.Message.ID_POSITIONS_STRUCTURETYPE_OBJ_NO_EXISTE;
+                            return response;
+                        }
+                    }
+                    else
+                    {
+                        response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
+                    return response;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.msg = ex.Message;
+                return response;
+            }
+        }
+
+        public static object objDelete(Position obj)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            response.data = null;
+            response.isValid = false;
+            try
+            {
+                if (obj.IdPosition > 0)
+                {
+                    if (Position.getObj(obj.IdPosition) != null)
+                    {
+                        string sqlQueryUpdate = string.Empty;
+                        if (Position.getObj(obj.IdPosition).IsDeleted)
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET IsDeleted = 0 WHERE IdPosition =  " + obj.IdPosition + ";";
+                        }
+                        else
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET IsDeleted = 1 WHERE IdPosition =  " + obj.IdPosition + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -199,13 +217,13 @@ namespace LadyO.API.Models
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                        response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_STRUCTURETYPE_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -222,8 +240,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " WHERE IsDeleted = 0 ORDER BY StructureTypeName;";
+                List<Position> objReturnList = new List<Position>();
+                string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 ORDER BY PositionName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -232,7 +250,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
@@ -253,8 +271,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<StructureType> objReturnList = new List<StructureType>();
-                string sqlQuery = "SELECT IdStructureType, StructureTypeName, IsDeleted FROM " + nameof(StructureType).ToUpper() + " ORDER BY StructureTypeName;";
+                List<Position> objReturnList = new List<Position>();
+                string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType,  IsDeleted FROM " + nameof(Position).ToUpper() + " ORDER BY PositionName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -263,7 +281,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new StructureType(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
