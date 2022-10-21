@@ -24,10 +24,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Sex getObj(int idSex)
+        public static Sex getObj(int idSex)
         {
             List<Sex> objReturnList = new List<Sex>();
-            string sqlQuery = "SELECT IdSex, SexName, IsDeleted FROM " + nameof(Sex).ToUpper() + " WHERE IdSex = " + idSex + ";";
+            string sqlQuery = "SELECT IdSex, SexName, IsDeleted FROM " + nameof(Sex).ToUpper() + " WHERE IsDeleted = 0 AND IsDeleted = 0 AND IdSex = " + idSex + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -89,13 +89,12 @@ namespace LadyO.API.Models
                         {
                             conexion.Open();
                             obj.IdSex = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = Sex.getObj(obj.IdSex);
                 }
                 else
                 {
@@ -125,7 +124,7 @@ namespace LadyO.API.Models
                         if (obj.SexName.Length > 0)
                         {
                             obj.SexName = Generic.Tools.Capital(obj.SexName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Sex).ToUpper() + " SET SexName = '" + obj.SexName + "' WHERE IdSex =  " + obj.IdSex + ";";
+                            string sqlQueryUpdate = "UPDATE " + nameof(Sex).ToUpper() + " SET SexName = '" + obj.SexName + "' WHERE IsDeleted = 0 AND IdSex =  " + obj.IdSex + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -137,7 +136,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = obj;
+                            response.data = Sex.getObj(obj.IdSex);
                         }
                         else
                         {
@@ -196,7 +195,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Sex.getObj(obj.IdSex);
+                        response.data = null;
                     }
                     else
                     {

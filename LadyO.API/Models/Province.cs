@@ -26,10 +26,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Province getObj(int idProvince)
+        public static Province getObj(int idProvince)
         {
             List<Province> objReturnList = new List<Province>();
-            string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " WHERE IdProvince = " + idProvince + ";";
+            string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " WHERE IsDeleted = 0 AND IdProvince = " + idProvince + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -74,26 +74,6 @@ namespace LadyO.API.Models
             }
         }
 
-        private static Region getRegion(int idRegion)
-        {
-            List<Region> objReturnList = new List<Region>();
-            string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IdRegion = " + idRegion + ";";
-            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-            {
-                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                {
-                    conexion.Open();
-                    MySqlDataReader reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        objReturnList.Add(new Region(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
-                    }
-                    conexion.Close();
-                }
-            }
-            return objReturnList.FirstOrDefault();
-        }
-
         public static object objAdd(Province obj)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -101,7 +81,7 @@ namespace LadyO.API.Models
             response.isValid = false;
             try
             {
-                if (Province.getRegion(obj.IdRegion) != null)
+                if (Region.getObj(obj.IdRegion) != null)
                 {
                     if (obj.ProvinceName.Length > 0)
                     {
@@ -119,7 +99,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = obj;
+                        response.data = Province.getObj(obj.IdProvince);
                     }
                     else
                     {
@@ -152,12 +132,12 @@ namespace LadyO.API.Models
                 {
                     if (Province.getObj(obj.IdProvince) != null)
                     {
-                        if (Province.getRegion(obj.IdRegion) != null)
+                        if (Region.getObj(obj.IdRegion) != null)
                         {
                             if (obj.ProvinceName.Length > 0)
                             {
                                 obj.ProvinceName = Generic.Tools.Capital(obj.ProvinceName);
-                                string sqlQueryUpdate = "UPDATE " + nameof(Province).ToUpper() + " SET ProvinceName = '" + obj.ProvinceName + "', IdRegion = " + obj.IdRegion + " WHERE IdProvince =  " + obj.IdProvince + ";";
+                                string sqlQueryUpdate = "UPDATE " + nameof(Province).ToUpper() + " SET ProvinceName = '" + obj.ProvinceName + "', IdRegion = " + obj.IdRegion + " WHERE IsDeleted = 0 AND IdProvince =  " + obj.IdProvince + ";";
                                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
                                     using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -169,7 +149,7 @@ namespace LadyO.API.Models
                                 }
                                 response.isValid = true;
                                 response.msg = string.Empty;
-                                response.data = obj;
+                                response.data = Province.getObj(obj.IdProvince);
                             }
                             else
                             {
@@ -262,7 +242,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Province> objReturnList = new List<Province>();
-                string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " WHERE IsDeleted = 0 ORDER BY ProvinceName;";
+                string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " WHERE IsDeleted = 0 ORDER BY IdRegion, ProvinceName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -293,7 +273,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Province> objReturnList = new List<Province>();
-                string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " ORDER BY ProvinceName;";
+                string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " ORDER BY IdRegion, ProvinceName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))

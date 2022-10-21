@@ -24,10 +24,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Gender getObj(int idGender)
+        public static Gender getObj(int idGender)
         {
             List<Gender> objReturnList = new List<Gender>();
-            string sqlQuery = "SELECT IdGender, GenderName, IsDeleted FROM " + nameof(Gender).ToUpper() + " WHERE IdGender = " + idGender + ";";
+            string sqlQuery = "SELECT IdGender, GenderName, IsDeleted FROM " + nameof(Gender).ToUpper() + " WHERE IsDeleted = 0 AND IdGender = " + idGender + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -89,13 +89,12 @@ namespace LadyO.API.Models
                         {
                             conexion.Open();
                             obj.IdGender = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = Gender.getObj(obj.IdGender);
                 }
                 else
                 {
@@ -125,7 +124,7 @@ namespace LadyO.API.Models
                         if (obj.GenderName.Length > 0)
                         {
                             obj.GenderName = Generic.Tools.Capital(obj.GenderName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Gender).ToUpper() + " SET GenderName = '" + obj.GenderName + "' WHERE IdGender =  " + obj.IdGender + ";";
+                            string sqlQueryUpdate = "UPDATE " + nameof(Gender).ToUpper() + " SET GenderName = '" + obj.GenderName + "' WHERE IsDeleted = 0 AND IdGender =  " + obj.IdGender + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -137,7 +136,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = obj;
+                            response.data = Gender.getObj(obj.IdGender);
                         }
                         else
                         {
@@ -196,7 +195,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Gender.getObj(obj.IdGender);
+                        response.data = null;
                     }
                     else
                     {

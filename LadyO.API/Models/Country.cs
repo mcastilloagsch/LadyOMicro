@@ -27,7 +27,7 @@ namespace LadyO.API.Models
         private static Country getObj(int idCountry)
         {
             List<Country> objReturnList = new List<Country>();
-            string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " WHERE IdCountry = " + idCountry + ";";
+            string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " WHERE IsDeleted = 0 AND IdCountry = " + idCountry + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -89,13 +89,12 @@ namespace LadyO.API.Models
                         {
                             conexion.Open();
                             obj.IdCountry = Convert.ToInt32(comando.ExecuteScalar());
-                            obj.IsDeleted = false;
                             conexion.Close();
                         }
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = Country.getObj(obj.IdCountry);
                 }
                 else
                 {
@@ -125,7 +124,7 @@ namespace LadyO.API.Models
                         if (obj.CountryName.Length > 0)
                         {
                             obj.CountryName = Generic.Tools.Capital(obj.CountryName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET CountryName = '" + obj.CountryName + "' WHERE IdCountry =  " + obj.IdCountry + ";";
+                            string sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET CountryName = '" + obj.CountryName + "' WHERE IsDeleted = 0 AND IdCountry =  " + obj.IdCountry + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -137,7 +136,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = obj;
+                            response.data = Country.getObj(obj.IdCountry);
                         }
                         else
                         {

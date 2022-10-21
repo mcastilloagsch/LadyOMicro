@@ -8,10 +8,12 @@ namespace LadyO.API.Models
 {
     public class Region
     {
+        #region Atributos
         public int IdRegion { get; set; }
         public string RegionName { get; set; }
         public int OrderSec { get; set; }
         public bool IsDeleted { get; set; }
+        #endregion
 
         public Region()
         {
@@ -26,10 +28,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Region getObj(int idRegion)
+        public static Region getObj(int idRegion)
         {
             List<Region> objReturnList = new List<Region>();
-            string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IdRegion = " + idRegion + ";";
+            string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 AND IdRegion = " + idRegion + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -98,7 +100,7 @@ namespace LadyO.API.Models
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = obj;
+                    response.data = Region.getObj(obj.IdRegion);
                 }
                 else
                 {
@@ -130,73 +132,7 @@ namespace LadyO.API.Models
                         if (obj.RegionName.Length > 0)
                         {
                             obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET RegionName = '" + obj.RegionName + "', ORDERSEC = " + obj.OrderSec + " WHERE IdRegion =  " + obj.IdRegion + ";";
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                            {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
-                                }
-                            }
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = obj;
-                        }
-                        else
-                        {
-                            response.isValid = false;
-                            response.msg = Generic.Message.REGIONS_NO_NAME;
-                            return response;
-                        }
-                    }
-                    else
-                    {
-                        response.isValid = false;
-                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
-                        return response;
-                    }
-                }
-                else
-                {
-                    response.isValid = false;
-                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
-                    return response;
-                }
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.isValid = false;
-                response.msg = ex.Message;
-                response.data = null;
-                return response;
-            }
-        }
-
-        public static object objDelete(Region obj)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            response.data = null;
-            try
-            {
-                if (obj.IdRegion > 0)
-                {
-                    if (Region.getObj(obj.IdRegion) != null)
-                    {
-                        if (obj.RegionName.Length > 0)
-                        {
-                            string sqlQueryUpdate = string.Empty;
-                            obj.RegionName = Generic.Tools.Capital(obj.RegionName);
-                            if (Region.getObj(obj.IdRegion).IsDeleted)
-                            {
-                                sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 0 WHERE IdRegion =  " + obj.IdRegion + ";";
-                            }
-                            else
-                            {
-                                sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 1 WHERE IdRegion =  " + obj.IdRegion + ";";
-                            }
+                            string sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET RegionName = '" + obj.RegionName + "', ORDERSEC = " + obj.OrderSec + " WHERE IsDeleted = 0 AND IdRegion =  " + obj.IdRegion + ";";
                             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                             {
                                 using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -241,13 +177,70 @@ namespace LadyO.API.Models
             }
         }
 
+        public static object objDelete(Region obj)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            response.data = null;
+            try
+            {
+                if (obj.IdRegion > 0)
+                {
+                    if (Region.getObj(obj.IdRegion) != null)
+                    {
+                        string sqlQueryUpdate = string.Empty;
+                        obj.RegionName = Generic.Tools.Capital(obj.RegionName);
+                        if (Region.getObj(obj.IdRegion).IsDeleted)
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 0 WHERE IdRegion =  " + obj.IdRegion + ";";
+                        }
+                        else
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Region).ToUpper() + " SET IsDeleted = 1 WHERE IdRegion =  " + obj.IdRegion + ";";
+                        }
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                        {
+                            using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                            {
+                                conexion.Open();
+                                comando.ExecuteReader();
+                                conexion.Close();
+                            }
+                        }
+                        response.isValid = true;
+                        response.msg = string.Empty;
+                        response.data = null;
+                    }
+                    else
+                    {
+                        response.isValid = false;
+                        response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.isValid = false;
+                    response.msg = Generic.Message.ID_REGIONS_NO_EXISTE;
+                    return response;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.isValid = false;
+                response.msg = ex.Message;
+                response.data = null;
+                return response;
+            }
+        }
+
         public static object getList()
         {
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 ORDER BY 4, 1;";
+                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " WHERE IsDeleted = 0 ORDER BY OrderSec, RegionName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -278,7 +271,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Region> objReturnList = new List<Region>();
-                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " ORDER BY 4, 1;";
+                string sqlQuery = "SELECT IdRegion, RegionName, OrderSec, IsDeleted FROM " + nameof(Region).ToUpper() + " ORDER BY 3, 1;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
