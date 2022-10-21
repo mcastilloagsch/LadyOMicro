@@ -6,28 +6,30 @@ using System.Web;
 
 namespace LadyO.API.Models
 {
-    public class Country
+    public class Position
     {
-        public int IdCountry { get; set; }
-        public string CountryName { get; set; }
+        public int IdPosition { get; set; }
+        public string PositionName { get; set; }
+        public int IdStructureType { get; set; }
         public bool IsDeleted { get; set; }
 
-        public Country()
+        public Position()
         {
 
         }
 
-        public Country(int idCountry, string countryName, bool isDeleted)
+        public Position(int idPosition, string positionName, int idStructureType, bool isDeleted)
         {
-            IdCountry = idCountry;
-            CountryName = countryName;
+            IdPosition = idPosition;
+            PositionName = positionName;
+            IdStructureType = idStructureType;
             IsDeleted = isDeleted;
         }
 
-        private static Country getObj(int idCountry)
+        private static Position getObj(int idPosition)
         {
-            List<Country> objReturnList = new List<Country>();
-            string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " WHERE IsDeleted = 0 AND IdCountry = " + idCountry + ";";
+            List<Position> objReturnList = new List<Position>();
+            string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 AND IdPosition = " + idPosition + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -36,7 +38,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new Country(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                        objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                     }
                     conexion.Close();
                 }
@@ -51,10 +53,10 @@ namespace LadyO.API.Models
             response.data = null;
             try
             {
-                Country objReturn = Country.getObj(id);
+                Position objReturn = Position.getObj(id);
                 if (objReturn == null)
                 {
-                    response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_GETOBJECT_NO_EXISTE;
                     return response;
                 }
                 else
@@ -72,87 +74,41 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objAdd(Country obj)
+        public static object objAdd(Position obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.CountryName.Length > 0)
+                if (StructureType.getObj(obj.IdStructureType) != null)
                 {
-                    obj.CountryName = Generic.Tools.Capital(obj.CountryName);
-                    string sqlQuery = "INSERT INTO " + nameof(Country).ToUpper() + " VALUES(NULL, '" + obj.CountryName + "', 0); SELECT LAST_INSERT_ID();";
-                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                    if (obj.PositionName.Length > 0)
                     {
-                        using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                        obj.PositionName = Generic.Tools.Capital(obj.PositionName);
+                        string sqlQuery = "INSERT INTO " + nameof(Position).ToUpper() + " VALUES(NULL, '" + obj.PositionName + "', '" + obj.IdStructureType + "' , 0); SELECT LAST_INSERT_ID();";
+                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
-                            conexion.Open();
-                            obj.IdCountry = Convert.ToInt32(comando.ExecuteScalar());
-                            conexion.Close();
-                        }
-                    }
-                    response.isValid = true;
-                    response.msg = string.Empty;
-                    response.data = Country.getObj(obj.IdCountry);
-                }
-                else
-                {
-                    response.msg = Generic.Message.NAME_NO_EXISTE;
-                    return response;
-                }
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.msg = ex.Message;
-                return response;
-            }
-        }
-
-        public static object objUpdate(Country obj)
-        {
-            APIGenericResponse response = new APIGenericResponse();
-            response.data = null;
-            response.isValid = false;
-            try
-            {
-                if (obj.IdCountry > 0)
-                {
-                    if (Country.getObj(obj.IdCountry) != null)
-                    {
-                        if (obj.CountryName.Length > 0)
-                        {
-                            obj.CountryName = Generic.Tools.Capital(obj.CountryName);
-                            string sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET CountryName = '" + obj.CountryName + "' WHERE IsDeleted = 0 AND IdCountry =  " + obj.IdCountry + ";";
-                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
-                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                {
-                                    conexion.Open();
-                                    comando.ExecuteReader();
-                                    conexion.Close();
-                                }
+                                conexion.Open();
+                                obj.IdPosition = Convert.ToInt32(comando.ExecuteScalar());
+                                conexion.Close();
                             }
-                            response.isValid = true;
-                            response.msg = string.Empty;
-                            response.data = Country.getObj(obj.IdCountry);
                         }
-                        else
-                        {
-                            response.msg = Generic.Message.NAME_NO_EXISTE;
-                            return response;
-                        }
+                        response.isValid = true;
+                        response.msg = string.Empty;
+                        response.data = Position.getObj(obj.IdPosition);
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                        response.msg = Generic.Message.NAME_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_STRUCTURETYPE_OBJ_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -164,25 +120,87 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objDelete(Country obj)
+        public static object objUpdate(Position obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.IdCountry > 0)
+                if (obj.IdPosition > 0)
                 {
-                    if (Country.getObj(obj.IdCountry) != null)
+                    if (Position.getObj(obj.IdPosition) != null)
                     {
-                        string sqlQueryUpdate = string.Empty;
-                        if (Country.getObj(obj.IdCountry).IsDeleted)
+                        if (StructureType.getObj(obj.IdStructureType) != null)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 0 WHERE IdCountry =  " + obj.IdCountry + ";";
+                            if (obj.PositionName.Length > 0)
+                            {
+                                obj.PositionName = Generic.Tools.Capital(obj.PositionName);
+                                string sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET PositionName = '" + obj.PositionName + "', IdStructureType = " + obj.IdStructureType + " WHERE IdPosition =  " + obj.IdPosition + ";";
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                {
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                    {
+                                        conexion.Open();
+                                        comando.ExecuteReader();
+                                        conexion.Close();
+                                    }
+                                }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Position.getObj(obj.IdPosition);
+                            }
+                            else
+                            {
+                                response.msg = Generic.Message.NAME_NO_EXISTE;
+                                return response;
+                            }
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 1 WHERE IdCountry =  " + obj.IdCountry + ";";
+                            response.msg = Generic.Message.ID_POSITIONS_STRUCTURETYPE_OBJ_NO_EXISTE;
+                            return response;
+                        }
+                    }
+                    else
+                    {
+                        response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
+                    return response;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.msg = ex.Message;
+                return response;
+            }
+        }
+
+        public static object objDelete(Position obj)
+        {
+            APIGenericResponse response = new APIGenericResponse();
+            response.data = null;
+            response.isValid = false;
+            try
+            {
+                if (obj.IdPosition > 0)
+                {
+                    if (Position.getObj(obj.IdPosition) != null)
+                    {
+                        string sqlQueryUpdate = string.Empty;
+                        if (Position.getObj(obj.IdPosition).IsDeleted)
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET IsDeleted = 0 WHERE IdPosition =  " + obj.IdPosition + ";";
+                        }
+                        else
+                        {
+                            sqlQueryUpdate = "UPDATE " + nameof(Position).ToUpper() + " SET IsDeleted = 1 WHERE IdPosition =  " + obj.IdPosition + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -195,17 +213,17 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Country.getObj(obj.IdCountry);
+                        response.data = null;
                     }
                     else
                     {
-                        response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                        response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
                         return response;
                     }
                 }
                 else
                 {
-                    response.msg = Generic.Message.ID_COUNTRIES_NO_EXISTE;
+                    response.msg = Generic.Message.ID_POSITIONS_NO_EXISTE;
                     return response;
                 }
                 return response;
@@ -222,8 +240,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Country> objReturnList = new List<Country>();
-                string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " WHERE IsDeleted = 0 ORDER BY CountryName;";
+                List<Position> objReturnList = new List<Position>();
+                string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 ORDER BY PositionName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -232,7 +250,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Country(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }
@@ -253,8 +271,8 @@ namespace LadyO.API.Models
             try
             {
                 APIGenericResponse response = new APIGenericResponse();
-                List<Country> objReturnList = new List<Country>();
-                string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " ORDER BY CountryName;";
+                List<Position> objReturnList = new List<Position>();
+                string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType,  IsDeleted FROM " + nameof(Position).ToUpper() + " ORDER BY PositionName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -263,7 +281,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Country(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) == "0" ? false : true));
+                            objReturnList.Add(new Position(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3) == "0" ? false : true));
                         }
                         conexion.Close();
                     }

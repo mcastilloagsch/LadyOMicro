@@ -26,10 +26,10 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Commune getObj(int idCommune)
+        public static Commune getObj(int idCommune)
         {
             List<Commune> objReturnList = new List<Commune>();
-            string sqlQuery = "SELECT IdCommune, IdProvince, CommuneName, IsDeleted FROM " + nameof(Commune).ToUpper() + " WHERE IdCommune = " + idCommune + ";";
+            string sqlQuery = "SELECT IdCommune, IdProvince, CommuneName, IsDeleted FROM " + nameof(Commune).ToUpper() + " WHERE IsDeleted = 0 AND IdCommune = " + idCommune + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -74,26 +74,6 @@ namespace LadyO.API.Models
             }
         }
 
-        private static Province getProvince(int idProvince)
-        {
-            List<Province> objReturnList = new List<Province>();
-            string sqlQuery = "SELECT IdProvince, IdRegion, ProvinceName, IsDeleted FROM " + nameof(Province).ToUpper() + " WHERE IdProvince = " + idProvince + ";";
-            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-            {
-                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                {
-                    conexion.Open();
-                    MySqlDataReader reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        objReturnList.Add(new Province(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3) == "0" ? false : true));
-                    }
-                    conexion.Close();
-                }
-            }
-            return objReturnList.FirstOrDefault();
-        }
-
         public static object objAdd(Commune obj)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -101,7 +81,7 @@ namespace LadyO.API.Models
             response.isValid = false;
             try
             {
-                if (Commune.getProvince(obj.IdProvince) != null)
+                if (Province.getObj(obj.IdProvince) != null)
                 {
                     if (obj.CommuneName.Length > 0)
                     {
@@ -113,13 +93,12 @@ namespace LadyO.API.Models
                             {
                                 conexion.Open();
                                 obj.IdCommune = Convert.ToInt32(comando.ExecuteScalar());
-                                obj.IsDeleted = false;
                                 conexion.Close();
                             }
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = obj;
+                        response.data = Commune.getObj(obj.IdCommune);
                     }
                     else
                     {
@@ -152,12 +131,12 @@ namespace LadyO.API.Models
                 {
                     if (Commune.getObj(obj.IdCommune) != null)
                     {
-                        if (Commune.getProvince(obj.IdProvince) != null)
+                        if (Province.getObj(obj.IdProvince) != null)
                         {
                             if (obj.CommuneName.Length > 0)
                             {
                                 obj.CommuneName = Generic.Tools.Capital(obj.CommuneName);
-                                string sqlQueryUpdate = "UPDATE " + nameof(Commune).ToUpper() + " SET CommuneName = '" + obj.CommuneName + "', IdProvince = " + obj.IdProvince + " WHERE IdCommune =  " + obj.IdCommune + ";";
+                                string sqlQueryUpdate = "UPDATE " + nameof(Commune).ToUpper() + " SET CommuneName = '" + obj.CommuneName + "', IdProvince = " + obj.IdProvince + " WHERE IsDeleted = 0 AND IdCommune =  " + obj.IdCommune + ";";
                                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
                                     using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
@@ -169,7 +148,7 @@ namespace LadyO.API.Models
                                 }
                                 response.isValid = true;
                                 response.msg = string.Empty;
-                                response.data = obj;
+                                response.data = Commune.getObj(obj.IdCommune);
                             }
                             else
                             {
@@ -234,7 +213,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Commune.getObj(obj.IdCommune);
+                        response.data = null;
                     }
                     else
                     {
