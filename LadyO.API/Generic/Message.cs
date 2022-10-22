@@ -35,7 +35,7 @@ namespace LadyO.API.Generic
         //RELIGIONS MESSAGES
         public static string ID_RELIGIONS_GETOBJECT_NO_EXISTE = "La religion que usted esta buscando no existe.";
         public static string ID_RELIGIONS_NO_EXISTE = "La religion que usted quiere modificar no existe.";
-        public static string RELIGIONS_CONFESION_OUTVALOR = "El valor de la confesion esta fuera de rango.";
+        public static string RELIGIONS_CONFESION_NO_EXISTE = "La confesion esta vacia.";
         //POSITIONS MESSAGES
         public static string ID_POSITIONS_GETOBJECT_NO_EXISTE = "La posicion que usted esta buscando no existe.";
         public static string ID_POSITIONS_NO_EXISTE = "La posicion que usted quiere modificar no existe.";
