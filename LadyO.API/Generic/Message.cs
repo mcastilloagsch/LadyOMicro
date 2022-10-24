@@ -35,7 +35,7 @@ namespace LadyO.API.Generic
         //RELIGIONS MESSAGES
         public static string ID_RELIGIONS_GETOBJECT_NO_EXISTE = "La religion que usted esta buscando no existe.";
         public static string ID_RELIGIONS_NO_EXISTE = "La religion que usted quiere modificar no existe.";
-        public static string RELIGIONS_CONFESION_OUTVALOR = "El valor de la confesion esta fuera de rango.";
+        public static string RELIGIONS_CONFESION_NO_EXISTE = "La confesion esta vacia.";
         //POSITIONS MESSAGES
         public static string ID_POSITIONS_GETOBJECT_NO_EXISTE = "La posicion que usted esta buscando no existe.";
         public static string ID_POSITIONS_NO_EXISTE = "La posicion que usted quiere modificar no existe.";
@@ -66,7 +66,10 @@ namespace LadyO.API.Generic
         //SEXES MESSAGES
         public static string ID_SEXES_GETOBJECT_NO_EXISTE = "El sexo que usted esta buscando no existe.";
         public static string ID_SEXES_NO_EXISTE = "El sexo que usted quiere modificar no existe.";
-
+        //DNITYPE MESSAGES
+        public static string ID_DNITYPE_GETOBJECT_NO_EXISTE = "El tipo de DNI que usted esta buscando no existe.";
+        public static string ID_DNITYPE_NO_EXISTE = "El tipo de DNI que usted quiere modificar no existe.";
+        public static string ID_DNITYPE_SHORTNAME_NO_EXISTE = "El nombre corto viene vacio.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
     }
