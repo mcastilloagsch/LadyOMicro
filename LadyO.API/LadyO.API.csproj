@@ -175,6 +175,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CommuneController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\GenderController.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\ReligionController.cs" />
     <Compile Include="Controllers\SexController.cs" />
     <Compile Include="Controllers\SocioEconomicController.cs" />
     <Compile Include="Controllers\StructureTypeController.cs" />
@@ -192,6 +194,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\APIGenericResponse.cs" />
+    <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\Commune.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Gender.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Religion.cs" />
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\SocioEconomic.cs" />
     <Compile Include="Models\StructureType.cs" />
@@ -259,6 +263,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Branches\" />
+    <Folder Include="Views\Branch\" />
     <Folder Include="Views\Communes\" />
     <Folder Include="Views\Countries\" />
     <Folder Include="Views\Country\" />
@@ -266,6 +271,7 @@
     <Folder Include="Views\Positions\" />
     <Folder Include="Views\Provinces\" />
     <Folder Include="Views\Regions\" />
+    <Folder Include="Views\Religion\" />
     <Folder Include="Views\Socioeconomics\" />
     <Folder Include="Views\Structures\" />
     <Folder Include="Views\StructureType\" />
