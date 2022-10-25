@@ -32,6 +32,10 @@ namespace LadyO.API.Generic
         //BRANCHES MESSAGES
         public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
         public static string ID_BRANCHES_NO_EXISTE = "La rama que usted quiere modificar no existe.";
+        public static string ID_BRANCHES_UNITNAME_NO_EXISTE = "El nombre de unidad viene vacio.";
+        public static string ID_BRANCHES_TEAMNAME_NO_EXISTE = "El nombre de equipo viene vacio.";
+        public static string ID_BRANCHES_LASTMODIFICATIONDATE_NO_EXISTE = "No se ingreso la fecha de la ultima modificacion.";
+        public static string ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE = "No se ingreso la persona que hizo la ultima modificacion.";
         //RELIGIONS MESSAGES
         public static string ID_RELIGIONS_GETOBJECT_NO_EXISTE = "La religion que usted esta buscando no existe.";
         public static string ID_RELIGIONS_NO_EXISTE = "La religion que usted quiere modificar no existe.";
