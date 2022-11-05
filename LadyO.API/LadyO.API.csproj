@@ -185,6 +185,7 @@
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\SexController.cs" />
     <Compile Include="Controllers\SocioEconomicController.cs" />
+    <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\StructureTypeController.cs" />
     <Compile Include="Generic\DBConnection.cs" />
     <Compile Include="Generic\Message.cs" />
@@ -198,11 +199,13 @@
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\LogIn.cs" />
+    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\SocioEconomic.cs" />
+    <Compile Include="Models\Structure.cs" />
     <Compile Include="Models\StructureType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -250,6 +253,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Structure\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

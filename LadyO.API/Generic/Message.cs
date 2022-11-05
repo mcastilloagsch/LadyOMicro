@@ -27,8 +27,13 @@ namespace LadyO.API.Generic
         //STRUCTURE MESSAGES
         public static string ID_STRUCTURES_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
         public static string ID_STRUCTURES_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
-        public static string ID_STRUCTURES_PARENT_ID = "El parent id no puede ser negativo.";
-        public static string ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
+        public static string ID_STRUCTURES_PARENT_NO_EXISTE = "No existe el structureparent que usted puso.";
+        public static string ID_STRUCTURES_STRUCTURETYPE_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
+        public static string ID_STRUCTURES_SOCIOECONOMIC_NO_EXISTE = "No existe el socioeconomic que usted puso.";
+        public static string ID_STRUCTURES_COMMUNE_NO_EXISTE = "No existe la comuna que usted puso.";
+        public static string ID_STRUCTURES_BRANCH_NO_EXISTE = "No existe la rama que usted puso.";
+        public static string ID_STRUCTURES_LASTMODIFICATIONDATE_NO_EXISTE = "La fecha de la ultima modificacion viene vacia.";
+        public static string ID_STRUCTURES_PERSON_NO_EXISTE = "No existe el usuario que usted puso.";
         //BRANCHES MESSAGES
         public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
         public static string ID_BRANCHES_NO_EXISTE = "La rama que usted quiere modificar no existe.";
@@ -74,6 +79,8 @@ namespace LadyO.API.Generic
         public static string ID_DNITYPE_GETOBJECT_NO_EXISTE = "El tipo de DNI que usted esta buscando no existe.";
         public static string ID_DNITYPE_NO_EXISTE = "El tipo de DNI que usted quiere modificar no existe.";
         public static string ID_DNITYPE_SHORTNAME_NO_EXISTE = "El nombre corto viene vacio.";
+        //DNITYPE MESSAGES
+        public static string ID_PERSON_GETOBJECT_NO_EXISTE = "El usuario que usted esta buscando no existe.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
     }

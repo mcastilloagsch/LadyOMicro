@@ -24,7 +24,7 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static SocioEconomic getObj(int idSocioEconomic)
+        public static SocioEconomic getObj(int idSocioEconomic)
         {
             List<SocioEconomic> objReturnList = new List<SocioEconomic>();
             string sqlQuery = "SELECT IdSocioEconomic, SocioEconomicName, IsDeleted FROM " + nameof(SocioEconomic).ToUpper() + " WHERE IsDeleted = 0 AND IdSocioEconomic = " + idSocioEconomic + ";";
