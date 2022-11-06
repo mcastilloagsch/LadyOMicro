@@ -79,8 +79,17 @@ namespace LadyO.API.Generic
         public static string ID_DNITYPE_GETOBJECT_NO_EXISTE = "El tipo de DNI que usted esta buscando no existe.";
         public static string ID_DNITYPE_NO_EXISTE = "El tipo de DNI que usted quiere modificar no existe.";
         public static string ID_DNITYPE_SHORTNAME_NO_EXISTE = "El nombre corto viene vacio.";
-        //DNITYPE MESSAGES
+        //PERSON MESSAGES
         public static string ID_PERSON_GETOBJECT_NO_EXISTE = "El usuario que usted esta buscando no existe.";
+        //PERSONPOSITIONSTRUCTURE MESSAGES
+        public static string ID_PERSONPOSITIONSTRUCTURE_GETOBJECT_NO_EXISTE = "El tipo de Person Position Structure que usted esta buscando no existe.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_NO_EXISTE = "El tipo de Person Position Structure que usted quiere modificar no existe.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_PRINCIPAL_NO_EXISTE = "El Principal viene vacio.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_PERSON_OBJ_NO_EXISTE = "No existe el usuario que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_POSITIONS_OBJ_NO_EXISTE = "No existe la posicion que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_STRUCTURE_OBJ_NO_EXISTE = "No existe la estructura que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE = "La persona que modifico viene vacio.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE = "La ultima modificacion viene vacio.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
     }

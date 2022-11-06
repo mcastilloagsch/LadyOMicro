@@ -180,6 +180,7 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\GenderController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\PersonPositionStructureController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\LogIn.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\PersonPositionStructure.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\Region.cs" />
@@ -253,6 +255,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PersonPositionStructure\" />
     <Folder Include="Views\Structure\" />
   </ItemGroup>
   <ItemGroup>

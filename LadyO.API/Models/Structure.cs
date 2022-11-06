@@ -52,7 +52,7 @@ namespace LadyO.API.Models
             LastModificationPerson = lastModificationPerson;
         }
 
-        private static Structure getObj(int idStructure)
+        public static Structure getObj(int idStructure)
         {
             List<Structure> objReturnList = new List<Structure>();
             string sqlQuery = "SELECT IdStructure, IdStructureParent, Address, IdCommune, IdStructureType, IdSocioEconomic, " +
