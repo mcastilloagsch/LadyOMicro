@@ -100,7 +100,7 @@ namespace LadyO.API.Models
                                     obj.BranchName = Generic.Tools.Capital(obj.BranchName);
                                     obj.UnitName = Generic.Tools.Capital(obj.UnitName);
                                     obj.TeamName = Generic.Tools.Capital(obj.TeamName);
-                                    string sqlQuery = "INSERT INTO " + nameof(Branch).ToUpper() + " VALUES(NULL, '" + obj.BranchName + "' , '" + obj.TeamName + "' , 0 , STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "', '" + obj.UnitName + "'); SELECT LAST_INSERT_ID();";
+                                    string sqlQuery = "INSERT INTO " + nameof(Branch).ToUpper() + " VALUES(NULL, '" + obj.BranchName + "' , '" + obj.TeamName + "' , 0 , '" + obj.UnitName + "', STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "); SELECT LAST_INSERT_ID();";
                                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                     {
                                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))

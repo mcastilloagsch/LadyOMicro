@@ -178,12 +178,14 @@
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CommuneController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\DniTypeController.cs" />
     <Compile Include="Controllers\GenderController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\PersonPositionStructureController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\ReligionController.cs" />
     <Compile Include="Controllers\SexController.cs" />
     <Compile Include="Controllers\SocioEconomicController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\Commune.cs" />
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\DniType.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\LogIn.cs" />
     <Compile Include="Models\Person.cs" />
@@ -205,6 +208,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Religion.cs" />
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\SocioEconomic.cs" />
     <Compile Include="Models\Structure.cs" />

@@ -164,25 +164,25 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objDelete(Country obj)
+        public static object objDelete(int idCountry)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (obj.IdCountry > 0)
+                if (idCountry > 0)
                 {
-                    if (Country.getObj(obj.IdCountry) != null)
+                    if (Country.getObj(idCountry) != null)
                     {
                         string sqlQueryUpdate = string.Empty;
-                        if (Country.getObj(obj.IdCountry).IsDeleted)
+                        if (Country.getObj(idCountry).IsDeleted)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 0 WHERE IdCountry =  " + obj.IdCountry + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 0 WHERE IdCountry =  " + idCountry + ";";
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 1 WHERE IdCountry =  " + obj.IdCountry + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 1 WHERE IdCountry =  " + idCountry + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -195,7 +195,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Country.getObj(obj.IdCountry);
+                        response.data = Country.getObj(idCountry);
                     }
                     else
                     {
