@@ -32,7 +32,7 @@ namespace LadyO.API.Models
             LastModificationPerson = lastModificationPerson;
         }
 
-        private static Branch getObj(int idBranch)
+        public static Branch getObj(int idBranch)
         {
             List<Branch> objReturnList = new List<Branch>();
             string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, DATE_FORMAT(LASTMODIFICATIONDATE, '%d/%m/%Y'), LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IdBranch = " + idBranch + ";";

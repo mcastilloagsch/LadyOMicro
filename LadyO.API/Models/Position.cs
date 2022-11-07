@@ -26,7 +26,7 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Position getObj(int idPosition)
+        public static Position getObj(int idPosition)
         {
             List<Position> objReturnList = new List<Position>();
             string sqlQuery = "SELECT IdPosition, PositionName, IdStructureType, IsDeleted FROM " + nameof(Position).ToUpper() + " WHERE IsDeleted = 0 AND IdPosition = " + idPosition + ";";
