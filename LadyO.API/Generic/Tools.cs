@@ -54,7 +54,7 @@ namespace LadyO.API.Generic
         {
             if (_texto.Length < 1)
                 return string.Empty;
-                _texto = _texto.Trim().ToLower();
+            _texto = _texto.Trim().ToLower();
             char[] array = _texto.ToCharArray();
             if (array.Length >= 1)
             {
@@ -75,5 +75,75 @@ namespace LadyO.API.Generic
             }
             return new string(array);
         }
+
+        public static bool ValidarDNI(int idDniType, string dni, string dniVerif)
+        {
+            try
+            {
+                switch (idDniType)
+                {
+                    case 1:
+                        return ValidaRut(dni, dniVerif);
+                    default:
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region Herramienta Validar RUT
+        private static bool ValidaRut(string rut)
+        {
+            rut = rut.Replace(".", "").ToUpper();
+            System.Text.RegularExpressions.Regex expresion = new System.Text.RegularExpressions.Regex("^([0-9]+-[0-9K])$");
+            string dv = rut.Substring(rut.Length - 1, 1);
+            if (!expresion.IsMatch(rut))
+            {
+                return false;
+            }
+            char[] charCorte = { '-' };
+            string[] rutTemp = rut.Split(charCorte);
+            if (dv != Digito(int.Parse(rutTemp[0])))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private static bool ValidaRut(string rut, string dv)
+        {
+            return ValidaRut(rut + "-" + dv);
+        }
+
+        private static string Digito(int rut)
+        {
+            int suma = 0;
+            int multiplicador = 1;
+            while (rut != 0)
+            {
+                multiplicador++;
+                if (multiplicador == 8)
+                    multiplicador = 2;
+                suma += (rut % 10) * multiplicador;
+                rut = rut / 10;
+            }
+            suma = 11 - (suma % 11);
+            if (suma == 11)
+            {
+                return "0";
+            }
+            else if (suma == 10)
+            {
+                return "K";
+            }
+            else
+            {
+                return suma.ToString();
+            }
+        }
+        #endregion
     }
 }

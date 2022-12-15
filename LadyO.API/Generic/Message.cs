@@ -27,10 +27,15 @@ namespace LadyO.API.Generic
         //STRUCTURE MESSAGES
         public static string ID_STRUCTURES_NO_EXISTE = "La estructura que usted quiere modificar no existe.";
         public static string ID_STRUCTURES_GETOBJECT_NO_EXISTE = "La estructura que usted esta buscando no existe.";
-        public static string ID_STRUCTURES_PARENT_ID = "El parent id no puede ser negativo.";
-        public static string ID_STRUCTURES_STRUCTURETYPE_OBJ_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
+        public static string ID_STRUCTURES_PARENT_NO_EXISTE = "No existe el structureparent que usted puso.";
+        public static string ID_STRUCTURES_STRUCTURETYPE_NO_EXISTE = "No existe el tipo de estructura que usted puso.";
+        public static string ID_STRUCTURES_SOCIOECONOMIC_NO_EXISTE = "No existe el socioeconomic que usted puso.";
+        public static string ID_STRUCTURES_COMMUNE_NO_EXISTE = "No existe la comuna que usted puso.";
+        public static string ID_STRUCTURES_BRANCH_NO_EXISTE = "No existe la rama que usted puso.";
+        public static string ID_STRUCTURES_LASTMODIFICATIONDATE_NO_EXISTE = "La fecha de la ultima modificacion viene vacia.";
+        public static string ID_STRUCTURES_PERSON_NO_EXISTE = "No existe el usuario que usted puso.";
         //BRANCHES MESSAGES
-        public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La rama que usted esta buscando no existe.";
+        public static string ID_BRANCHES_GETOBJECT_NO_EXISTE = "La Rama que usted esta buscando no existe.";
         public static string ID_BRANCHES_NO_EXISTE = "La rama que usted quiere modificar no existe.";
         public static string ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE = "La persona que modifico viene vacio.";
         public static string ID_BRANCHES_LASTMODIFICATIONDATE_NO_EXISTE = "La ultima modificacion viene vacio.";
@@ -53,6 +58,7 @@ namespace LadyO.API.Generic
         public static string REGIONS_NO_NAME = "Nombre de la Región no indicado.";
         public static string ID_REGIONS_NO_EXISTE = "La region que usted quiere modificar no existe.";
         public static string ID_REGIONS_GETOBJECT_NO_EXISTE = "La region que usted esta buscando no existe.";
+        public static string REGIONS_NO_COD = "Código de la Región no ingresado.";
         //SOCIOECONOMICS MESSAGE
         public static string ID_SOCIOECONOMICS_GETOBJECT_NO_EXISTE = "El tipo de socioeconomico que usted esta buscando no existe.";
         public static string ID_SOCIOECONOMICS_NO_EXISTE = "El tipo de socioeconomico que usted quiere modificar no existe.";
@@ -74,7 +80,34 @@ namespace LadyO.API.Generic
         public static string ID_DNITYPE_GETOBJECT_NO_EXISTE = "El tipo de DNI que usted esta buscando no existe.";
         public static string ID_DNITYPE_NO_EXISTE = "El tipo de DNI que usted quiere modificar no existe.";
         public static string ID_DNITYPE_SHORTNAME_NO_EXISTE = "El nombre corto viene vacio.";
+        //PERSON MESSAGES
+        public static string ID_PERSON_GETOBJECT_NO_EXISTE = "El usuario que usted esta buscando no existe.";
+        //PERSONPOSITIONSTRUCTURE MESSAGES
+        public static string ID_PERSONPOSITIONSTRUCTURE_GETOBJECT_NO_EXISTE = "El tipo de Person Position Structure que usted esta buscando no existe.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_NO_EXISTE = "El tipo de Person Position Structure que usted quiere modificar no existe.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_PRINCIPAL_NO_EXISTE = "El Principal viene vacio.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_PERSON_OBJ_NO_EXISTE = "No existe el usuario que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_POSITIONS_OBJ_NO_EXISTE = "No existe la posicion que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_STRUCTURE_OBJ_NO_EXISTE = "No existe la estructura que usted puso.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE = "La persona que modifico viene vacio.";
+        public static string ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE = "La ultima modificacion viene vacio.";
 
         public static string LOGIN_USUARIO_NO_VALIDO = "Usuario no valido o sin acceso - Contactar al Administrador.";
+
+        #region Mensajes de Person
+        public static string PERSON_ID_NO_EXISTE = "ID de Persona no existe.";
+        public static string PERSON_NO_FIRST_NAME = "Ingresar Nombre(s).";
+        public static string PERSON_NO_LAST_NAME = "Ingresar Apellido Paterno.";
+        public static string PERSON_NO_DNI_TYPE = "Indicar tipo de DNI.";
+        public static string PERSON_NO_DNI = "Ingresar DNI.";
+        public static string PERSON_NO_DNI_DIGIT = "Ingresar parámetro de verificación.";
+        public static string PERSON_NO_ADRESS = "Ingresar Dirección Personal.";
+        public static string PERSON_DNI_INVALID = "DNI Ingresado Invalido - Verificar.";
+        public static string PERSON_NO_EMAIL = "Ingresar Correo Electrónico Principal.";
+        public static string PERSON_EMAIL_PRIMARY_ERROR = "Correo Electrónico Principal Invalido - Verificar.";
+        public static string PERSON_EMAIL_SECUNDARY_ERROR = "Formato de Correo Secundario con erroneo.";
+        public static string PERSON_EMAIL_PRIMARY_EXIST = "Correo Electrónico Primario actualmente en el registrado.";
+        public static string PERSON_EMAIL_SECUNDARY_EXIST = "Correo Electrónico Secundario actualmente en el registrado.";
+        #endregion
     }
 }

@@ -104,4 +104,4 @@ C:\00-AGSCH-Proyects\LadyO.API\bin\System.Numerics.Vectors.xml
 C:\00-AGSCH-Proyects\LadyO.API\bin\System.Runtime.CompilerServices.Unsafe.xml
 C:\00-AGSCH-Proyects\LadyO.API\bin\System.Threading.Tasks.Extensions.xml
 C:\00-AGSCH-Proyects\LadyO.API\obj\Debug\LadyO.API.csproj.CopyComplete
-C:\00-AGSCH-Proyects\LadyO.API\obj\Debug\LadyO.API.csprojAssemblyReference.cache
+C:\00-AGSCH-Proyects\LadyO.API\obj\Debug\LadyO.API.csproj.AssemblyReference.cache

@@ -8,15 +8,15 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class CommuneController : ApiController
+    public class PersonPositionStructureController : ApiController
     {
-        [Route("api/Commune/getObject/{IdCommune}")]
+        [Route("api/PersonPositionStructure/getObject/{idPersonPositionStructure}")]
         [HttpGet]
-        public object getObject(int IdCommune)
+        public object getObject(int idPersonPositionStructure)
         {
             try
             {
-                return Models.Commune.getObject(IdCommune);
+                return Models.PersonPositionStructure.getObject(idPersonPositionStructure);
             }
             catch (Exception ex)
             {
@@ -28,9 +28,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Commune/objAdd")]
+        [Route("api/PersonPositionStructure/objAdd")]
         [HttpPost]
-        public object objAdd([FromBody] Models.Commune obj)
+        public object objAdd([FromBody] Models.PersonPositionStructure obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -38,7 +38,7 @@ namespace LadyO.API.Controllers
                 object objReturn = new object();
                 if (ModelState.IsValid)
                 {
-                    return Models.Commune.objAdd(obj);
+                    return Models.PersonPositionStructure.objAdd(obj);
                 }
                 else
                 {
@@ -57,16 +57,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Commune/objUpdate")]
+        [Route("api/PersonPositionStructure/objUpdate")]
         [HttpPut]
-        public object objUpdate([FromBody] Models.Commune obj)
+        public object objUpdate([FromBody] Models.PersonPositionStructure obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Commune.objUpdate(obj);
+                    return Models.PersonPositionStructure.objUpdate(obj);
                 }
                 else
                 {
@@ -85,16 +85,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Commune/objDelete")]
+        [Route("api/PersonPositionStructure/objDelete")]
         [HttpDelete]
-        public object objDelete([FromBody] Models.Commune obj)
+        public object objDelete([FromBody] Models.PersonPositionStructure obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Commune.objDelete(obj);
+                    return Models.PersonPositionStructure.objDelete(obj);
                 }
                 else
                 {
@@ -113,13 +113,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Commune/getList")]
+        [Route("api/PersonPositionStructure/getList")]
         [HttpGet]
         public object getList()
         {
             try
             {
-                return Models.Commune.getList();
+                return Models.PersonPositionStructure.getList(); ;
             }
             catch (Exception ex)
             {
@@ -131,13 +131,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Commune/getListAdm/{idPerson}")]
+        [Route("api/PersonPositionStructure/getListAdm/{idPerson}")]
         [HttpGet]
         public object getListAdm(int idPerson)
         {
             try
             {
-                return Models.Commune.getListAdm(idPerson);
+                return Models.PersonPositionStructure.getListAdm(idPerson);
             }
             catch (Exception ex)
             {
