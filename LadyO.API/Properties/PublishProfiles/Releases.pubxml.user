@@ -1,14 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
-Este archivo se usa en el proceso de publicación y empaquetado del proyecto web. Para personalizar el comportamiento de este proceso,
-edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 para obtener más información. 
+https://go.microsoft.com/fwlink/?LinkID=208121. 
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAvxQjqOm1O0K01oplJjstigAAAAACAAAAAAADZgAAwAAAABAAAACTVxng92BWU/5vRORy5ZXdAAAAAASAAACgAAAAEAAAAMlMmt26sPllHimEdxWlknMoAAAAD2JlOSVP9vK8N1/GNwncELto3aTi+LZNcj69XuOk9ZITz8B3XVWY7xQAAACOSHwn+GqoXnUR48tGRkpr38Z4Rw==</EncryptedPassword>
-    <_PublishTargetUrl>ftp://10.0.3.5</_PublishTargetUrl>
-    <History>True|2022-12-06T16:09:46.6239546Z;True|2022-12-06T13:01:15.2257734-03:00;True|2022-12-06T12:35:16.4796388-03:00;True|2022-12-06T12:28:32.0177997-03:00;True|2022-12-06T12:19:13.5159535-03:00;True|2022-12-06T11:38:27.8591308-03:00;True|2022-12-05T20:10:55.8845643-03:00;True|2022-12-05T19:44:14.1939777-03:00;True|2022-12-05T19:38:22.5770701-03:00;True|2022-12-05T19:35:13.5177076-03:00;True|2022-11-25T12:18:29.4997657-03:00;True|2022-11-25T11:43:27.6532059-03:00;False|2022-11-25T11:42:36.9278848-03:00;False|2022-11-25T11:42:29.4609977-03:00;True|2022-11-21T11:59:04.2626366-03:00;True|2022-11-21T11:41:11.1966810-03:00;True|2022-11-21T11:22:24.9646012-03:00;True|2022-11-21T10:54:50.3126295-03:00;True|2022-11-18T13:12:00.4956356-03:00;True|2022-11-18T13:06:03.4621361-03:00;True|2022-11-18T13:05:30.2395606-03:00;True|2022-11-18T13:01:52.3112304-03:00;True|2022-11-18T11:00:18.3391979-03:00;True|2022-11-17T12:43:37.8087243-03:00;True|2022-11-17T12:36:02.3129192-03:00;True|2022-11-17T11:41:12.9454398-03:00;True|2022-11-16T12:48:02.0884192-03:00;True|2022-11-15T12:26:46.3982581-03:00;True|2022-11-14T17:21:52.9236455-03:00;True|2022-11-14T16:46:50.0514526-03:00;True|2022-11-14T16:39:14.5480017-03:00;True|2022-11-14T15:58:18.4239976-03:00;True|2022-11-14T15:53:26.2317802-03:00;True|2022-11-14T15:52:36.3670391-03:00;True|2022-11-14T15:42:19.1483528-03:00;True|2022-11-14T15:35:13.7204146-03:00;True|2022-11-14T15:31:03.2077567-03:00;True|2022-11-14T14:32:39.1970595-03:00;True|2022-11-14T14:29:49.3209119-03:00;True|2022-11-14T13:58:35.3155932-03:00;True|2022-11-14T13:50:36.0755767-03:00;True|2022-11-14T13:36:51.6206657-03:00;False|2022-11-14T13:35:33.2597276-03:00;True|2022-11-14T13:24:40.5772764-03:00;True|2022-11-14T12:44:59.0558742-03:00;True|2022-11-14T12:37:51.3469245-03:00;True|2022-11-14T12:33:09.7965729-03:00;True|2022-11-14T12:30:27.5165646-03:00;True|2022-11-14T12:27:46.9388581-03:00;True|2022-11-02T12:08:07.3358905-03:00;True|2022-10-21T17:02:03.4179645-03:00;True|2022-10-21T15:04:31.4712696-03:00;True|2022-10-21T13:02:40.1199497-03:00;False|2022-10-18T11:58:55.0470062-03:00;False|2022-10-18T11:41:44.3031069-03:00;False|2022-10-17T22:31:32.9283539-03:00;False|2022-10-17T22:15:23.9393393-03:00;False|2022-10-17T22:11:03.1762610-03:00;False|2022-10-17T21:23:24.3248744-03:00;False|2022-10-17T20:53:09.6611730-03:00;True|2021-11-15T17:00:47.8084865-03:00;False|2021-11-15T16:52:20.6660160-03:00;False|2021-11-15T16:50:22.2021174-03:00;</History>
+    <_PublishTargetUrl>C:\00-AGSCH-Proyects\LadyO.API\bin\app.publish\</_PublishTargetUrl>
+    <History>True|2022-11-14T15:26:23.2536721Z;True|2022-11-11T12:26:50.8801588-03:00;True|2022-11-07T18:00:38.0923419-03:00;True|2022-11-07T16:49:09.9690900-03:00;True|2022-11-07T16:49:01.2692654-03:00;True|2022-11-07T16:48:57.7070671-03:00;True|2022-11-07T16:46:20.1762022-03:00;True|2022-11-07T16:40:16.3604018-03:00;False|2022-11-07T16:37:38.7563043-03:00;True|2022-11-02T12:30:48.7219242-03:00;True|2022-11-02T12:29:47.7223429-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
@@ -111,10 +108,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/17/2022 18:04:33</publishTime>
     </File>
     <File Include="bin/LadyO.API.dll">
-      <publishTime>12/06/2022 13:09:25</publishTime>
+      <publishTime>11/14/2022 12:26:15</publishTime>
     </File>
     <File Include="bin/LadyO.API.pdb">
-      <publishTime>12/06/2022 13:09:25</publishTime>
+      <publishTime>11/14/2022 12:26:15</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>10/14/2022 10:22:21</publishTime>
@@ -323,49 +320,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
     <File Include="bin/WebGrease.dll">
       <publishTime>10/14/2022 10:22:21</publishTime>
     </File>
-    <File Include="Content/bootstrap-theme.css">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap-theme.css.map">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap-theme.min.css">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap-theme.min.css.map">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap.css">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap.css.map">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap.min.css">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/bootstrap.min.css.map">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Content/Site.css">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
     <File Include="favicon.ico">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="fonts/glyphicons-halflings-regular.eot">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="fonts/glyphicons-halflings-regular.svg">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="fonts/glyphicons-halflings-regular.ttf">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="fonts/glyphicons-halflings-regular.woff">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="fonts/glyphicons-halflings-regular.woff2">
       <publishTime>10/14/2022 10:22:20</publishTime>
     </File>
     <File Include="Global.asax">
@@ -398,23 +353,8 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
     <File Include="Scripts/modernizr-2.8.3.js">
       <publishTime>10/14/2022 10:22:20</publishTime>
     </File>
-    <File Include="Views/Home/Index.cshtml">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Views/Shared/Error.cshtml">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
-    <File Include="Views/Web.config">
-      <publishTime>10/21/2022 15:46:08</publishTime>
-    </File>
-    <File Include="Views/_ViewStart.cshtml">
-      <publishTime>10/14/2022 10:22:20</publishTime>
-    </File>
     <File Include="Web.config">
-      <publishTime>11/14/2022 12:32:49</publishTime>
+      <publishTime>11/03/2022 16:51:29</publishTime>
     </File>
   </ItemGroup>
 </Project>

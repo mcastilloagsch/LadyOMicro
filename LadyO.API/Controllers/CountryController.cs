@@ -10,7 +10,7 @@ namespace LadyO.API.Controllers
 {
     public class CountryController : ApiController
     {
-        [Route("api/Country/getObject/{idCountry}")]
+        [Route("api/Country/getObject/{IdCountry}")]
         [HttpGet]
         public object getObject(int idCountry)
         {

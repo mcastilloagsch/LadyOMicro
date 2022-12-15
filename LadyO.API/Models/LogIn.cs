@@ -7,6 +7,7 @@ namespace LadyO.API.Models
 {
     public class LogIn
     {
+        public int idUser { get; set; }
         public string eMail { get; set; }
         public string token { get; set; }
 
@@ -15,15 +16,13 @@ namespace LadyO.API.Models
 
         }
 
-        public LogIn(string eMail, string token)
+        public LogIn(int idUser, string eMail, string token)
         {
+            this.idUser = idUser;
             this.eMail = eMail;
             this.token = token;
         }
 
-        ///<summary>
-        ///Clase que permite el Inicio de Sesión y Establece el TOKEN.
-        ///</summary>
         public static object LogInUser(LogIn objLogIn)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -39,6 +38,7 @@ namespace LadyO.API.Models
                             response.isValid = true;
                             response.msg = string.Empty;
                             LogIn obj = new LogIn();
+                            obj.idUser = 1;
                             obj.eMail = objLogIn.eMail.ToLower();
                             obj.token = Generic.Tools.TokenGen(30);
                             response.data = obj;

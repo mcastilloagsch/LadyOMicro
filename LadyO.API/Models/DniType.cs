@@ -8,10 +8,12 @@ namespace LadyO.API.Models
 {
     public class DniType
     {
+        #region Variables
         public int IdDniType { get; set; }
         public string DniTypeName { get; set; }
         public string ShortName { get; set; }
         public bool IsDeleted { get; set; }
+        #endregion
 
         public DniType()
         {
@@ -26,7 +28,7 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static DniType getObj(int idDniType)
+        public static DniType getObj(int idDniType)
         {
             List<DniType> objReturnList = new List<DniType>();
             string sqlQuery = "SELECT IdDniType, DniTypeName, ShortName, IsDeleted FROM " + nameof(DniType).ToUpper() + " WHERE IdDniType = " + idDniType + ";";
@@ -86,7 +88,9 @@ namespace LadyO.API.Models
                     if (obj.ShortName.Length > 0)
                     {
                         obj.DniTypeName = Generic.Tools.Capital(obj.DniTypeName);
-                        string sqlQuery = "INSERT INTO " + nameof(DniType).ToUpper() + " VALUES(NULL, '" + obj.DniTypeName + "', '" + obj.ShortName + "' , 0); SELECT LAST_INSERT_ID();";
+                        string sqlQuery = "INSERT INTO " + nameof(DniType).ToUpper() + "(IdDniType, DniTypeName, ShortName, IsDeleted)";
+                        sqlQuery += " VALUES(NULL, '" + obj.DniTypeName + "', '" + obj.ShortName + "' , 0);";
+                        sqlQuery += " SELECT LAST_INSERT_ID();";
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))

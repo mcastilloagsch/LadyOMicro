@@ -8,10 +8,12 @@ namespace LadyO.API.Models
 {
     public class Religion
     {
+        #region Variables
         public int IdReligion { get; set; }
         public string ReligionName { get; set; }
         public string Confesion { get; set; }
         public bool IsDeleted { get; set; }
+        #endregion
 
         public Religion()
         {
@@ -26,10 +28,18 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Religion getObj(int idReligion)
+        private static Religion getObj(int idReligion, bool onlyNotDeleted)
         {
             List<Religion> objReturnList = new List<Religion>();
-            string sqlQuery = "SELECT IdReligion, Religion, Confesion, IsDeleted FROM " + nameof(Religion).ToUpper() + " WHERE IdReligion = " + idReligion + ";";
+            string sqlQuery = "SELECT IdReligion, Religion, Confesion, IsDeleted FROM " + nameof(Religion).ToUpper();
+            if (onlyNotDeleted)
+            {
+                sqlQuery += " WHERE IdReligion = " + idReligion + " AND IsDeleted = 0;";
+            }
+            else
+            {
+                sqlQuery += " WHERE IdReligion = " + idReligion + ";";
+            }
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -53,7 +63,7 @@ namespace LadyO.API.Models
             response.data = null;
             try
             {
-                Religion objReturn = Religion.getObj(id);
+                Religion objReturn = Religion.getObj(id, false);
                 if (objReturn == null)
                 {
                     response.msg = Generic.Message.ID_RELIGIONS_GETOBJECT_NO_EXISTE;
@@ -86,20 +96,22 @@ namespace LadyO.API.Models
                     if (obj.Confesion.Length > 0)
                     {
                         obj.ReligionName = Generic.Tools.Capital(obj.ReligionName);
-                        string sqlQuery = "INSERT INTO " + nameof(Religion).ToUpper() + " VALUES(NULL, '" + obj.ReligionName + "', '" + obj.Confesion + "' , 0); SELECT LAST_INSERT_ID();";
+                        obj.Confesion = Generic.Tools.Capital(obj.Confesion);
+                        string sqlQuery = "INSERT INTO " + nameof(Religion).ToUpper() + "(IdReligion, Religion, Confesion, IsDeleted)";
+                        sqlQuery += " VALUES(NULL, '" + obj.ReligionName + "', '" + obj.Confesion + "' , 0);";
+                        sqlQuery += " SELECT LAST_INSERT_ID();";
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
                             using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                             {
                                 conexion.Open();
                                 obj.IdReligion = Convert.ToInt32(comando.ExecuteScalar());
-                                obj.IsDeleted = false;
                                 conexion.Close();
                             }
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = obj;
+                        response.data = Religion.getObj(obj.IdReligion, false);
                     }
                     else
                     {
@@ -130,7 +142,7 @@ namespace LadyO.API.Models
             {
                 if (obj.IdReligion > 0)
                 {
-                    if (Religion.getObj(obj.IdReligion) != null)
+                    if (Religion.getObj(obj.IdReligion, false) != null)
                     {
                         if (obj.ReligionName.Length > 0)
                         {
@@ -149,7 +161,7 @@ namespace LadyO.API.Models
                                 }
                                 response.isValid = true;
                                 response.msg = string.Empty;
-                                response.data = obj;
+                                response.data = Religion.getObj(obj.IdReligion, false);
                             }
                             else
                             {
@@ -192,10 +204,10 @@ namespace LadyO.API.Models
             {
                 if (obj.IdReligion > 0)
                 {
-                    if (Religion.getObj(obj.IdReligion) != null)
+                    if (Religion.getObj(obj.IdReligion, true) != null)
                     {
                         string sqlQueryUpdate = string.Empty;
-                        if (Religion.getObj(obj.IdReligion).IsDeleted)
+                        if (Religion.getObj(obj.IdReligion, true).IsDeleted)
                         {
                             sqlQueryUpdate = "UPDATE " + nameof(Religion).ToUpper() + " SET IsDeleted = 0 WHERE IdReligion =  " + obj.IdReligion + ";";
                         }
@@ -214,7 +226,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Religion.getObj(obj.IdReligion);
+                        response.data = Religion.getObj(obj.IdReligion, false);
                     }
                     else
                     {

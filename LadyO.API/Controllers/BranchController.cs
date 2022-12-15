@@ -8,15 +8,15 @@ using System.Web.Http;
 
 namespace LadyO.API.Controllers
 {
-    public class PositionController : ApiController
+    public class BranchController : ApiController
     {
-        [Route("api/Position/getObject/{idPosition}")]
+        [Route("api/Branch/getObject/{idBranch}")]
         [HttpGet]
-        public object getObject(int idPosition)
+        public object getObject(int idBranch)
         {
             try
             {
-                return Models.Position.getObject(idPosition);
+                return Models.Branch.getObject(idBranch);
             }
             catch (Exception ex)
             {
@@ -28,9 +28,9 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Position/objAdd")]
+        [Route("api/Branch/objAdd")]
         [HttpPost]
-        public object objAdd([FromBody] Models.Position obj)
+        public object objAdd([FromBody] Models.Branch obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
@@ -38,7 +38,7 @@ namespace LadyO.API.Controllers
                 object objReturn = new object();
                 if (ModelState.IsValid)
                 {
-                    return Models.Position.objAdd(obj);
+                    return Models.Branch.objAdd(obj);
                 }
                 else
                 {
@@ -57,16 +57,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Position/objUpdate")]
+        [Route("api/Branch/objUpdate")]
         [HttpPut]
-        public object objUpdate([FromBody] Models.Position obj)
+        public object objUpdate([FromBody] Models.Branch obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Position.objUpdate(obj);
+                    return Models.Branch.objUpdate(obj);
                 }
                 else
                 {
@@ -85,16 +85,16 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Position/objDelete")]
+        [Route("api/Branch/objDelete")]
         [HttpDelete]
-        public object objDelete([FromBody] Models.Position obj)
+        public object objDelete([FromBody] Models.Branch obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Position.objDelete(obj);
+                    return Models.Branch.objDelete(obj);
                 }
                 else
                 {
@@ -113,13 +113,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Position/getList")]
+        [Route("api/Branch/getList")]
         [HttpGet]
         public object getList()
         {
             try
             {
-                return Models.Position.getList(); ;
+                return Models.Branch.getList(); ;
             }
             catch (Exception ex)
             {
@@ -131,13 +131,13 @@ namespace LadyO.API.Controllers
             }
         }
 
-        [Route("api/Position/getListAdm/{idPerson}")]
+        [Route("api/Branch/getListAdm/{idPerson}")]
         [HttpGet]
         public object getListAdm(int idPerson)
         {
             try
             {
-                return Models.Position.getListAdm(idPerson); ;
+                return Models.Branch.getListAdm(idPerson);
             }
             catch (Exception ex)
             {
