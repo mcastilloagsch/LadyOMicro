@@ -8,20 +8,22 @@ namespace LadyO.API.Models
 {
     public class Branch
     {
+        #region Atributos
         public int IdBranch { get; set; }
         public string BranchName { get; set; }
         public string UnitName { get; set; }
         public string TeamName { get; set; }
         public bool IsDeleted { get; set; }
-        public string LastModificationDate { get; set; }
+        public DateTime LastModificationDate { get; set; }
         public int LastModificationPerson { get; set; }
+        #endregion
 
         public Branch()
         {
 
         }
 
-        public Branch(int idBranch, string branchName, string unitName, string teamName, bool isDeleted, string lastModificationDate, int lastModificationPerson)
+        public Branch(int idBranch, string branchName, string unitName, string teamName, bool isDeleted, DateTime lastModificationDate, int lastModificationPerson)
         {
             IdBranch = idBranch;
             BranchName = branchName;
@@ -35,7 +37,7 @@ namespace LadyO.API.Models
         public static Branch getObj(int idBranch)
         {
             List<Branch> objReturnList = new List<Branch>();
-            string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, DATE_FORMAT(LASTMODIFICATIONDATE, '%d/%m/%Y'), LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IdBranch = " + idBranch + ";";
+            string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, DATE_FORMAT(LastModificationDate, '%Y-%m-%d %H:%i:%S'), LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IDBRANCH = " + idBranch + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -44,7 +46,7 @@ namespace LadyO.API.Models
                     MySqlDataReader reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetString(5), reader.GetInt32(6)));
+                        objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetDateTime(5), reader.GetInt32(6)));
                     }
                     conexion.Close();
                 }
@@ -93,37 +95,31 @@ namespace LadyO.API.Models
                     {
                         if (obj.TeamName.Length > 0)
                         {
-                            if (obj.LastModificationDate.Length > 0)
+                            if (obj.LastModificationPerson > 0)
                             {
-                                if (obj.LastModificationPerson > 0)
+                                obj.BranchName = Generic.Tools.Capital(obj.BranchName);
+                                obj.UnitName = Generic.Tools.Capital(obj.UnitName);
+                                obj.TeamName = Generic.Tools.Capital(obj.TeamName);
+                                string sqlQuery = "INSERT INTO " + nameof(Branch).ToUpper() + "(IdBranch, BranchName, UnitName, TeamName, IsDeleted, LastModificationDate, LastModificationPerson)";
+                                sqlQuery += " VALUES(NULL, '" + obj.BranchName + "' , '" + obj.UnitName + "', '" + obj.TeamName + "', 0, NOW(), " + obj.LastModificationPerson + ");";
+                                sqlQuery += " SELECT LAST_INSERT_ID();";
+                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                 {
-                                    obj.BranchName = Generic.Tools.Capital(obj.BranchName);
-                                    obj.UnitName = Generic.Tools.Capital(obj.UnitName);
-                                    obj.TeamName = Generic.Tools.Capital(obj.TeamName);
-                                    string sqlQuery = "INSERT INTO " + nameof(Branch).ToUpper() + " VALUES(NULL, '" + obj.BranchName + "' , '" + obj.TeamName + "' , 0 , '" + obj.UnitName + "', STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "); SELECT LAST_INSERT_ID();";
-                                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                                     {
-                                        using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                                        {
-                                            conexion.Open();
-                                            obj.IdBranch = Convert.ToInt32(comando.ExecuteScalar());
-                                            obj.IsDeleted = false;
-                                            conexion.Close();
-                                        }
+                                        conexion.Open();
+                                        obj.IdBranch = Convert.ToInt32(comando.ExecuteScalar());
+                                        obj.IsDeleted = false;
+                                        conexion.Close();
                                     }
-                                    response.isValid = true;
-                                    response.msg = string.Empty;
-                                    response.data = obj;
                                 }
-                                else
-                                {
-                                    response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE;
-                                    return response;
-                                }
+                                response.isValid = true;
+                                response.msg = string.Empty;
+                                response.data = Branch.getObject(obj.IdBranch);
                             }
                             else
                             {
-                                response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONDATE_NO_EXISTE;
+                                response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE;
                                 return response;
                             }
                         }
@@ -170,36 +166,29 @@ namespace LadyO.API.Models
                             {
                                 if (obj.TeamName.Length > 0)
                                 {
-                                    if (obj.LastModificationDate.Length > 0)
+                                    if (obj.LastModificationPerson > 0)
                                     {
-                                        if (obj.LastModificationPerson > 0)
+                                        obj.BranchName = Generic.Tools.Capital(obj.BranchName);
+                                        string sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET BranchName = '" + obj.BranchName + "', UnitName = '" + obj.UnitName + "', TeamName = '" + obj.TeamName + "', LastModificationDate = NOW(), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IdBranch =  " + obj.IdBranch + ";";
+                                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                         {
-                                            obj.BranchName = Generic.Tools.Capital(obj.BranchName);
-                                            string sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET BranchName = '" + obj.BranchName + "', UnitName = '" + obj.UnitName + "', TeamName = '" + obj.TeamName + "', LastModificationDate = STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IdBranch =  " + obj.IdBranch + ";";
-                                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                            using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
                                             {
-                                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                                {
-                                                    conexion.Open();
-                                                    comando.ExecuteReader();
-                                                    conexion.Close();
-                                                }
+                                                conexion.Open();
+                                                comando.ExecuteReader();
+                                                conexion.Close();
                                             }
-                                            response.isValid = true;
-                                            response.msg = string.Empty;
-                                            response.data = obj;
                                         }
-                                        else
-                                        {
-                                            response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE;
-                                            return response;
-                                        }
+                                        response.isValid = true;
+                                        response.msg = string.Empty;
+                                        response.data = Branch.getObject(obj.IdBranch);
                                     }
                                     else
                                     {
-                                        response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONDATE_NO_EXISTE;
+                                        response.msg = Generic.Message.ID_BRANCHES_LASTMODIFICATIONPERSON_NO_EXISTE;
                                         return response;
                                     }
+
                                 }
                                 else
                                 {
@@ -239,7 +228,6 @@ namespace LadyO.API.Models
             }
         }
 
-
         public static object objDelete(Branch obj)
         {
             APIGenericResponse response = new APIGenericResponse();
@@ -252,13 +240,14 @@ namespace LadyO.API.Models
                     if (Branch.getObj(obj.IdBranch) != null)
                     {
                         string sqlQueryUpdate = string.Empty;
+                        obj.LastModificationDate = DateTime.Now;
                         if (Branch.getObj(obj.IdBranch).IsDeleted)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET IsDeleted = 0 WHERE IdBranch =  " + obj.IdBranch + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET IsDeleted = 0, LastModificationDate = NOW() WHERE IdBranch =  " + obj.IdBranch + ";";
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET IsDeleted = 1 WHERE IdBranch =  " + obj.IdBranch + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Branch).ToUpper() + " SET IsDeleted = 1, LastModificationDate = NOW() WHERE IdBranch =  " + obj.IdBranch + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -299,7 +288,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Branch> objReturnList = new List<Branch>();
-                string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, DATE_FORMAT(LastModificationDate, '%d/%m/%Y'), LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IsDeleted = 0 ORDER BY BranchName;";
+                string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, LastModificationDate, LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IsDeleted = 0 ORDER BY BranchName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -308,7 +297,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetString(5), reader.GetInt32(6)));
+                            objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetDateTime(5), reader.GetInt32(6)));
                         }
                         conexion.Close();
                     }
@@ -330,7 +319,7 @@ namespace LadyO.API.Models
             {
                 APIGenericResponse response = new APIGenericResponse();
                 List<Branch> objReturnList = new List<Branch>();
-                string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, DATE_FORMAT(LastModificationDate, '%d/%m/%Y'), LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IsDeleted = 0 ORDER BY BranchName;";
+                string sqlQuery = "SELECT IdBranch, BranchName, UnitName, TeamName, IsDeleted, LastModificationDate, LastModificationPerson FROM " + nameof(Branch).ToUpper() + " WHERE IsDeleted = 0 ORDER BY BranchName;";
                 using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                 {
                     using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -339,7 +328,7 @@ namespace LadyO.API.Models
                         MySqlDataReader reader = comando.ExecuteReader();
                         while (reader.Read())
                         {
-                            objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetString(5), reader.GetInt32(6)));
+                            objReturnList.Add(new Branch(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) == "0" ? false : true, reader.GetDateTime(5), reader.GetInt32(6)));
                         }
                         conexion.Close();
                     }

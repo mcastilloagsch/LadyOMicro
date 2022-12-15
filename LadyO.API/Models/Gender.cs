@@ -82,7 +82,9 @@ namespace LadyO.API.Models
                 if (obj.GenderName.Length > 0)
                 {
                     obj.GenderName = Generic.Tools.Capital(obj.GenderName);
-                    string sqlQuery = "INSERT INTO " + nameof(Gender).ToUpper() + " VALUES(NULL, '" + obj.GenderName + "', 0); SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + nameof(Gender).ToUpper() + "(IdGender, GenderName, IsDeleted)";
+                    sqlQuery += " VALUES(NULL, '" + obj.GenderName + "', 0);";
+                    sqlQuery += " SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -195,7 +197,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = null;
+                        response.data = Gender.getObj(obj.IdGender);
                     }
                     else
                     {

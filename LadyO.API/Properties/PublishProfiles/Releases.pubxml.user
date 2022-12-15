@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\00-AGSCH-Proyects\LadyO.API\bin\app.publish\</_PublishTargetUrl>
-    <History>True|2022-11-07T19:49:09.9690900Z;True|2022-11-07T16:49:01.2692654-03:00;True|2022-11-07T16:48:57.7070671-03:00;True|2022-11-07T16:46:20.1762022-03:00;True|2022-11-07T16:40:16.3604018-03:00;False|2022-11-07T16:37:38.7563043-03:00;True|2022-11-02T12:30:48.7219242-03:00;True|2022-11-02T12:29:47.7223429-03:00;</History>
+    <History>True|2022-11-14T15:26:23.2536721Z;True|2022-11-11T12:26:50.8801588-03:00;True|2022-11-07T18:00:38.0923419-03:00;True|2022-11-07T16:49:09.9690900-03:00;True|2022-11-07T16:49:01.2692654-03:00;True|2022-11-07T16:48:57.7070671-03:00;True|2022-11-07T16:46:20.1762022-03:00;True|2022-11-07T16:40:16.3604018-03:00;False|2022-11-07T16:37:38.7563043-03:00;True|2022-11-02T12:30:48.7219242-03:00;True|2022-11-02T12:29:47.7223429-03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
@@ -108,10 +108,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/17/2022 18:04:33</publishTime>
     </File>
     <File Include="bin/LadyO.API.dll">
-      <publishTime>11/07/2022 16:46:19</publishTime>
+      <publishTime>11/14/2022 12:26:15</publishTime>
     </File>
     <File Include="bin/LadyO.API.pdb">
-      <publishTime>11/07/2022 16:46:19</publishTime>
+      <publishTime>11/14/2022 12:26:15</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>10/14/2022 10:22:21</publishTime>

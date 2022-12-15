@@ -10,7 +10,7 @@ namespace LadyO.API.Controllers
 {
     public class CountryController : ApiController
     {
-        [Route("api/Country/getObject/{idCountry}")]
+        [Route("api/Country/getObject/{IdCountry}")]
         [HttpGet]
         public object getObject(int idCountry)
         {
@@ -87,14 +87,14 @@ namespace LadyO.API.Controllers
 
         [Route("api/Country/objDelete")]
         [HttpDelete]
-        public object objDelete([FromBody] int idCountry)
+        public object objDelete([FromBody] Models.Country obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Models.Country.objDelete(idCountry);
+                    return Models.Country.objDelete(obj);
                 }
                 else
                 {

@@ -8,6 +8,7 @@ namespace LadyO.API.Models
 {
     public class Structure
     {
+        #region Variables
         public int IdStructure { get; set; }
         public int? IdStructureParent { get; set; }
         public string Address { get; set; }
@@ -22,17 +23,16 @@ namespace LadyO.API.Models
         public string SponsorEmail { get; set; }
         public int? SponsorPhone { get; set; }
         public bool IsDeleted { get; set; }
-        public string LastModificationDate { get; set; }
+        public DateTime LastModificationDate { get; set; }
         public int LastModificationPerson { get; set; }
+        #endregion
 
         public Structure()
         {
 
         }
 
-        public Structure(int idStructure, int? idStructureParent, string address, int? idCommune, int idStructureType,
-        int idSocioEconomic, string structureName, int? idBranch, string sponsorName, string sponsorAddress, string sponsorDni,
-        string sponsorEmail, int? sponsorPhone, bool isDeleted, string lastModificationDate, int lastModificationPerson)
+        public Structure(int idStructure, int? idStructureParent, string address, int? idCommune, int idStructureType, int idSocioEconomic, string structureName, int? idBranch, string sponsorName, string sponsorAddress, string sponsorDni, string sponsorEmail, int? sponsorPhone, bool isDeleted, DateTime lastModificationDate, int lastModificationPerson)
         {
             IdStructure = idStructure;
             IdStructureParent = idStructureParent;
@@ -55,9 +55,8 @@ namespace LadyO.API.Models
         public static Structure getObj(int idStructure)
         {
             List<Structure> objReturnList = new List<Structure>();
-            string sqlQuery = "SELECT IdStructure, IdStructureParent, Address, IdCommune, IdStructureType, IdSocioEconomic, " +
-            "StructureName, IdBranch, SponsorName, SponsorAddress, SponsorDni, SponsorEmail, SponsorPhone, IsDeleted, DATE_FORMAT(LASTMODIFICATIONDATE, '%d/%m/%Y'), LastModificationPerson FROM "
-            + nameof(Structure).ToUpper() + " WHERE IdStructure = " + idStructure + ";";
+            string sqlQuery = "SELECT IdStructure, IdStructureParent, Address, IdCommune, IdStructureType, IdSocioEconomic, StructureName, IdBranch, SponsorName, SponsorAddress, SponsorDni, SponsorEmail, SponsorPhone, IsDeleted, DATE_FORMAT(LastModificationDate, '%Y-%m-%d %H:%i:%S'), LastModificationPerson ";
+            sqlQuery += "FROM" + nameof(Structure).ToUpper() + " WHERE IdStructure = " + idStructure + ";";
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -118,7 +117,7 @@ namespace LadyO.API.Models
                         }
                         objReturnList.Add(new Structure(reader.GetInt32(0), _IdStructureParent, _Address, _IdCommune, reader.GetInt32(4),
                         reader.GetInt32(5), _StructureName, _IdBranch, _SponsorName, _SponsorAddress, _SponsorDni, _SponsorEmail,
-                        _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetString(14), reader.GetInt32(15)));
+                        _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetDateTime(14), reader.GetInt32(15)));
                     }
                     conexion.Close();
                 }
@@ -163,82 +162,72 @@ namespace LadyO.API.Models
             {
                 if (StructureType.getObj(obj.IdStructureType) != null)
                 {
-                    
                     if (SocioEconomic.getObj(obj.IdSocioEconomic) != null)
                     {
-                        if (obj.LastModificationDate.Length > 0)
+                        if (Person.getObj(obj.LastModificationPerson, true) != null)
                         {
-                            if (Person.getObj(obj.LastModificationPerson) != null)
+                            int? _IdStructureParent = null;
+                            int? _IdCommune = null;
+                            int? _IdBranch = null;
+                            if (obj.IdStructureParent != null || obj.IdStructureParent > 0)
                             {
-                                int? _IdStructureParent = null;
-                                int? _IdCommune = null;
-                                int? _IdBranch = null;
-                                if (obj.IdStructureParent != null || obj.IdStructureParent > 0)
+                                int IdStructureParent = Convert.ToInt32(obj.IdStructureParent);
+                                if (Structure.getObj(IdStructureParent) != null)
                                 {
-                                    int IdStructureParent = Convert.ToInt32(obj.IdStructureParent);
-                                    if (Structure.getObj(IdStructureParent) != null)
-                                    {
-                                        _IdStructureParent = obj.IdStructureParent;
-                                    }
-                                    else
-                                    {
-                                        response.msg = Generic.Message.ID_STRUCTURES_PARENT_NO_EXISTE;
-                                        return response;
-                                    }
+                                    _IdStructureParent = obj.IdStructureParent;
                                 }
-                                if (obj.IdCommune != null || obj.IdCommune > 0)
+                                else
                                 {
-                                    int IdCommune = Convert.ToInt32(obj.IdCommune);
-                                    if (Commune.getObj(IdCommune) != null)
-                                    {
-                                        _IdCommune = obj.IdCommune;
-                                    }
-                                    else
-                                    {
-                                        response.msg = Generic.Message.ID_STRUCTURES_COMMUNE_NO_EXISTE;
-                                        return response;
-                                    }
+                                    response.msg = Generic.Message.ID_STRUCTURES_PARENT_NO_EXISTE;
+                                    return response;
                                 }
-                                if (obj.IdBranch != null || obj.IdBranch > 0)
-                                {
-                                    int IdBranch = Convert.ToInt32(obj.IdBranch);
-                                    if (Branch.getObj(IdBranch) != null)
-                                    {
-                                        _IdBranch = obj.IdBranch;
-                                    }
-                                    else
-                                    {
-                                        response.msg = Generic.Message.ID_STRUCTURES_BRANCH_NO_EXISTE;
-                                        return response;
-                                    }
-                                }
-                                obj.StructureName = Generic.Tools.Capital(obj.StructureName);
-                                string sqlQuery = "INSERT INTO " + nameof(Structure).ToUpper() + " VALUES(NULL, '" + _IdStructureParent + "' , '" + obj.Address + "' , '" + _IdCommune + "'," +
-                                " '" + obj.IdStructureType + "' , '" + obj.IdSocioEconomic + "' , '" + obj.StructureName + "' , '" + _IdBranch + "' , '" + obj.SponsorName + "' , '" + obj.SponsorAddress + "'," +
-                                " '" + obj.SponsorDni + "' , '" + obj.SponsorEmail + "' , '" + obj.SponsorPhone + "' , 0 , STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "'); SELECT LAST_INSERT_ID();";
-                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                                {
-                                    using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                                    {
-                                        conexion.Open();
-                                        obj.IdStructure = Convert.ToInt32(comando.ExecuteScalar());
-                                        obj.IsDeleted = false;
-                                        conexion.Close();
-                                    }
-                                }
-                                response.isValid = true;
-                                response.msg = string.Empty;
-                                response.data = obj;
                             }
-                            else
+                            if (obj.IdCommune != null || obj.IdCommune > 0)
                             {
-                                response.msg = Generic.Message.ID_STRUCTURES_PERSON_NO_EXISTE;
-                                return response;
+                                int IdCommune = Convert.ToInt32(obj.IdCommune);
+                                if (Commune.getObj(IdCommune, true) != null)
+                                {
+                                    _IdCommune = obj.IdCommune;
+                                }
+                                else
+                                {
+                                    response.msg = Generic.Message.ID_STRUCTURES_COMMUNE_NO_EXISTE;
+                                    return response;
+                                }
                             }
+                            if (obj.IdBranch != null || obj.IdBranch > 0)
+                            {
+                                int IdBranch = Convert.ToInt32(obj.IdBranch);
+                                if (Branch.getObj(IdBranch) != null)
+                                {
+                                    _IdBranch = obj.IdBranch;
+                                }
+                                else
+                                {
+                                    response.msg = Generic.Message.ID_STRUCTURES_BRANCH_NO_EXISTE;
+                                    return response;
+                                }
+                            }
+                            obj.StructureName = Generic.Tools.Capital(obj.StructureName);
+                            string sqlQuery = "INSERT INTO " + nameof(Structure).ToUpper() + "(IdStructure, IdStructureParent, Address, IdCommune, IdStructureType, IdSocioEconomic, StructureName, IdBranch, SponsorName, SponsorAddress, SponsorDni, SponsorEmail, SponsorPhone, IsDeleted, LastModificationDate, LastModificationPerson)";
+                            sqlQuery += " VALUES(NULL, '" + _IdStructureParent + "' , '" + obj.Address + "' , '" + _IdCommune + "'," + " '" + obj.IdStructureType + "' , '" + obj.IdSocioEconomic + "' , '" + obj.StructureName + "' , '" + _IdBranch + "' , '" + obj.SponsorName + "' , '" + obj.SponsorAddress + "'," + " '" + obj.SponsorDni + "' , '" + obj.SponsorEmail + "' , '" + obj.SponsorPhone + "' , 0 , NOW(), '" + obj.LastModificationPerson + "'); SELECT LAST_INSERT_ID();";
+                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                            {
+                                using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
+                                {
+                                    conexion.Open();
+                                    obj.IdStructure = Convert.ToInt32(comando.ExecuteScalar());
+                                    obj.IsDeleted = false;
+                                    conexion.Close();
+                                }
+                            }
+                            response.isValid = true;
+                            response.msg = string.Empty;
+                            response.data = obj;
                         }
                         else
                         {
-                            response.msg = Generic.Message.ID_STRUCTURES_LASTMODIFICATIONDATE_NO_EXISTE;
+                            response.msg = Generic.Message.ID_STRUCTURES_PERSON_NO_EXISTE;
                             return response;
                         }
                     }
@@ -277,79 +266,71 @@ namespace LadyO.API.Models
                         {
                             if (SocioEconomic.getObj(obj.IdSocioEconomic) != null)
                             {
-                                if (obj.LastModificationDate.Length > 0)
+                                if (Person.getObj(obj.LastModificationPerson, true) != null)
                                 {
-                                    if (Person.getObj(obj.LastModificationPerson) != null)
+                                    int? _IdStructureParent = null;
+                                    int? _IdCommune = null;
+                                    int? _IdBranch = null;
+                                    if (obj.IdStructureParent != null || obj.IdStructureParent > 0)
                                     {
-                                        int? _IdStructureParent = null;
-                                        int? _IdCommune = null;
-                                        int? _IdBranch = null;
-                                        if (obj.IdStructureParent != null || obj.IdStructureParent > 0)
+                                        int IdStructureParent = Convert.ToInt32(obj.IdStructureParent);
+                                        if (Structure.getObj(IdStructureParent) != null)
                                         {
-                                            int IdStructureParent = Convert.ToInt32(obj.IdStructureParent);
-                                            if (Structure.getObj(IdStructureParent) != null)
-                                            {
-                                                _IdStructureParent = obj.IdStructureParent;
-                                            }
-                                            else
-                                            {
-                                                response.msg = Generic.Message.ID_STRUCTURES_PARENT_NO_EXISTE;
-                                                return response;
-                                            }
+                                            _IdStructureParent = obj.IdStructureParent;
                                         }
-                                        if (obj.IdCommune != null || obj.IdCommune > 0)
+                                        else
                                         {
-                                            int IdCommune = Convert.ToInt32(obj.IdCommune);
-                                            if (Commune.getObj(IdCommune) != null)
-                                            {
-                                                _IdCommune = obj.IdCommune;
-                                            }
-                                            else
-                                            {
-                                                response.msg = Generic.Message.ID_STRUCTURES_COMMUNE_NO_EXISTE;
-                                                return response;
-                                            }
+                                            response.msg = Generic.Message.ID_STRUCTURES_PARENT_NO_EXISTE;
+                                            return response;
                                         }
-                                        if (obj.IdBranch != null || obj.IdBranch > 0)
-                                        {
-                                            int IdBranch = Convert.ToInt32(obj.IdBranch);
-                                            if (Branch.getObj(IdBranch) != null)
-                                            {
-                                                _IdBranch = obj.IdBranch;
-                                            }
-                                            else
-                                            {
-                                                response.msg = Generic.Message.ID_STRUCTURES_BRANCH_NO_EXISTE;
-                                                return response;
-                                            }
-                                        }
-                                        obj.StructureName = Generic.Tools.Capital(obj.StructureName);
-                                        string sqlQueryUpdate = "UPDATE " + nameof(Structure).ToUpper() + " SET IdStructureParent = '" + _IdStructureParent + "', Address = '" + obj.Address + "', IdCommune = '" + _IdCommune + "', " +
-                                        "IdStructureType = '" + obj.IdStructureType + "', IdSocioEconomic = '" + obj.IdSocioEconomic + "', StructureName = '" + obj.StructureName + "', IdBranch = '" + _IdBranch + "', " +
-                                        "SponsorName = '" + obj.SponsorName + "', SponsorAddress = '" + obj.SponsorAddress + "', SponsorDni = '" + obj.SponsorDni + "', SponsorEmail = '" + obj.SponsorEmail + "', " +
-                                        "SponsorPhone = '" + obj.SponsorPhone + "', LastModificationDate = STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IdStructure =  " + obj.IdStructure + ";";
-                                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
-                                        {
-                                            using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                            {
-                                                conexion.Open();
-                                                comando.ExecuteReader();
-                                                conexion.Close();
-                                            }
-                                        }
-                                        response.isValid = true;
-                                        response.msg = string.Empty;
-                                        response.data = obj;
                                     }
-                                    else
+                                    if (obj.IdCommune != null || obj.IdCommune > 0)
                                     {
-                                        response.msg = Generic.Message.ID_STRUCTURES_PERSON_NO_EXISTE;
-                                        return response;
+                                        int IdCommune = Convert.ToInt32(obj.IdCommune);
+                                        if (Commune.getObj(IdCommune, true) != null)
+                                        {
+                                            _IdCommune = obj.IdCommune;
+                                        }
+                                        else
+                                        {
+                                            response.msg = Generic.Message.ID_STRUCTURES_COMMUNE_NO_EXISTE;
+                                            return response;
+                                        }
                                     }
+                                    if (obj.IdBranch != null || obj.IdBranch > 0)
+                                    {
+                                        int IdBranch = Convert.ToInt32(obj.IdBranch);
+                                        if (Branch.getObj(IdBranch) != null)
+                                        {
+                                            _IdBranch = obj.IdBranch;
+                                        }
+                                        else
+                                        {
+                                            response.msg = Generic.Message.ID_STRUCTURES_BRANCH_NO_EXISTE;
+                                            return response;
+                                        }
+                                    }
+                                    obj.StructureName = Generic.Tools.Capital(obj.StructureName);
+                                    string sqlQueryUpdate = "UPDATE " + nameof(Structure).ToUpper() + " SET IdStructureParent = '" + _IdStructureParent + "', Address = '" + obj.Address + "', IdCommune = '" + _IdCommune + "', " +
+                                    "IdStructureType = '" + obj.IdStructureType + "', IdSocioEconomic = '" + obj.IdSocioEconomic + "', StructureName = '" + obj.StructureName + "', IdBranch = '" + _IdBranch + "', " +
+                                    "SponsorName = '" + obj.SponsorName + "', SponsorAddress = '" + obj.SponsorAddress + "', SponsorDni = '" + obj.SponsorDni + "', SponsorEmail = '" + obj.SponsorEmail + "', " +
+                                    "SponsorPhone = '" + obj.SponsorPhone + "', LastModificationDate = STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IdStructure =  " + obj.IdStructure + ";";
+                                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                    {
+                                        using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
+                                        {
+                                            conexion.Open();
+                                            comando.ExecuteReader();
+                                            conexion.Close();
+                                        }
+                                    }
+                                    response.isValid = true;
+                                    response.msg = string.Empty;
+                                    response.data = obj;
                                 }
                                 else
                                 {
-                                    response.msg = Generic.Message.ID_STRUCTURES_LASTMODIFICATIONDATE_NO_EXISTE;
+                                    response.msg = Generic.Message.ID_STRUCTURES_PERSON_NO_EXISTE;
                                     return response;
                                 }
                             }
@@ -384,7 +365,6 @@ namespace LadyO.API.Models
                 return response;
             }
         }
-
 
         public static object objDelete(Structure obj)
         {
@@ -508,7 +488,7 @@ namespace LadyO.API.Models
                             }
                             objReturnList.Add(new Structure(reader.GetInt32(0), _IdStructureParent, _Address, _IdCommune, reader.GetInt32(4),
                             reader.GetInt32(5), _StructureName, _IdBranch, _SponsorName, _SponsorAddress, _SponsorDni, _SponsorEmail,
-                            _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetString(14), reader.GetInt32(15)));
+                            _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetDateTime(14), reader.GetInt32(15)));
                         }
                         conexion.Close();
                     }
@@ -593,7 +573,7 @@ namespace LadyO.API.Models
                             }
                             objReturnList.Add(new Structure(reader.GetInt32(0), _IdStructureParent, _Address, _IdCommune, reader.GetInt32(4),
                             reader.GetInt32(5), _StructureName, _IdBranch, _SponsorName, _SponsorAddress, _SponsorDni, _SponsorEmail,
-                            _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetString(14), reader.GetInt32(15)));
+                            _SponsorPhone, reader.GetString(13) == "0" ? false : true, reader.GetDateTime(14), reader.GetInt32(15)));
                         }
                         conexion.Close();
                     }

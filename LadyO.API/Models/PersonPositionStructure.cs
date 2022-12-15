@@ -8,6 +8,7 @@ namespace LadyO.API.Models
 {
     public class PersonPositionStructure
     {
+        #region Variables
         public int IdPersonPositionStructure { get; set; }
         public int IdPerson { get; set; }
         public int IdPosition { get; set; }
@@ -16,6 +17,7 @@ namespace LadyO.API.Models
         public bool IsDeleted { get; set; }
         public string LastModificationDate { get; set; }
         public int LastModificationPerson { get; set; }
+        #endregion
 
         public PersonPositionStructure()
         {
@@ -91,48 +93,40 @@ namespace LadyO.API.Models
             response.isValid = false;
             try
             {
-                if (Person.getObj(obj.IdPerson) != null)
+                if (Person.getObj(obj.IdPerson, true) != null)
                 {
-                    if (Position.getObj(obj.IdPosition) != null)
+                    if (PositionType.getObj(obj.IdPosition, false) != null)
                     {
                         if (Structure.getObj(obj.IdStructure) != null)
                         {
-                            if (obj.Principal != null)
+                            if (obj.LastModificationDate.Length > 0)
                             {
-                                if (obj.LastModificationDate.Length > 0)
+                                if (obj.LastModificationPerson > 0)
                                 {
-                                    if (obj.LastModificationPerson > 0)
+                                    string sqlQuery = "INSERT INTO " + nameof(PersonPositionStructure).ToUpper() + " VALUES(NULL, '" + obj.IdPerson + "', '" + obj.IdPosition + "', '" + obj.IdStructure + "', '" + obj.Principal + "', 0,  STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "'); SELECT LAST_INSERT_ID();";
+                                    using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                     {
-                                        string sqlQuery = "INSERT INTO " + nameof(PersonPositionStructure).ToUpper() + " VALUES(NULL, '" + obj.IdPerson + "', '" + obj.IdPosition + "', '" + obj.IdStructure + "', '" + obj.Principal + "', 0,  STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), '" + obj.LastModificationPerson + "'); SELECT LAST_INSERT_ID();";
-                                        using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                        using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
                                         {
-                                            using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
-                                            {
-                                                conexion.Open();
-                                                obj.IdPersonPositionStructure = Convert.ToInt32(comando.ExecuteScalar());
-                                                obj.IsDeleted = false;
-                                                conexion.Close();
-                                            }
+                                            conexion.Open();
+                                            obj.IdPersonPositionStructure = Convert.ToInt32(comando.ExecuteScalar());
+                                            obj.IsDeleted = false;
+                                            conexion.Close();
                                         }
-                                        response.isValid = true;
-                                        response.msg = string.Empty;
-                                        response.data = PersonPositionStructure.getObj(obj.IdPersonPositionStructure);
                                     }
-                                    else
-                                    {
-                                        response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE;
-                                        return response;
-                                    }
+                                    response.isValid = true;
+                                    response.msg = string.Empty;
+                                    response.data = PersonPositionStructure.getObj(obj.IdPersonPositionStructure);
                                 }
                                 else
                                 {
-                                    response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE;
+                                    response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE;
                                     return response;
                                 }
                             }
                             else
                             {
-                                response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_PRINCIPAL_NO_EXISTE;
+                                response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE;
                                 return response;
                             }
                         }
@@ -173,49 +167,42 @@ namespace LadyO.API.Models
                 {
                     if (PersonPositionStructure.getObj(obj.IdPersonPositionStructure) != null)
                     {
-                        if (Person.getObj(obj.IdPerson) != null)
+                        if (Person.getObj(obj.IdPerson, true) != null)
                         {
-                            if (Position.getObj(obj.IdPosition) != null)
+                            if (PositionType.getObj(obj.IdPosition, false) != null)
                             {
                                 if (Structure.getObj(obj.IdStructure) != null)
                                 {
-                                    if (obj.Principal != null)
+                                    if (obj.LastModificationDate.Length > 0)
                                     {
-                                        if (obj.LastModificationDate.Length > 0)
+                                        if (obj.LastModificationPerson > 0)
                                         {
-                                            if (obj.LastModificationPerson > 0)
+                                            string sqlQueryUpdate = "UPDATE " + nameof(PersonPositionStructure).ToUpper() + " SET IdPerson = '" + obj.IdPerson + "', IdPosition = " + obj.IdPosition + ", IdStructure = " + obj.IdStructure + ", Principal = " + obj.Principal + ", LastModificationDate = STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IsDeleted = 0 AND IdPersonPositionStructure =  " + obj.IdPersonPositionStructure + ";";
+                                            using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                                             {
-                                                string sqlQueryUpdate = "UPDATE " + nameof(PersonPositionStructure).ToUpper() + " SET IdPerson = '" + obj.IdPerson + "', IdPosition = " + obj.IdPosition + ", IdStructure = " + obj.IdStructure + ", Principal = " + obj.Principal + ", LastModificationDate = STR_TO_DATE('" + obj.LastModificationDate + "', '%d/%m/%Y'), LastModificationPerson = '" + obj.LastModificationPerson + "' WHERE IsDeleted = 0 AND IdPersonPositionStructure =  " + obj.IdPersonPositionStructure + ";";
-                                                using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
+                                                using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
                                                 {
-                                                    using (MySqlCommand comando = new MySqlCommand(sqlQueryUpdate, conexion))
-                                                    {
-                                                        conexion.Open();
-                                                        comando.ExecuteReader();
-                                                        conexion.Close();
-                                                    }
+                                                    conexion.Open();
+                                                    comando.ExecuteReader();
+                                                    conexion.Close();
                                                 }
-                                                response.isValid = true;
-                                                response.msg = string.Empty;
-                                                response.data = PersonPositionStructure.getObj(obj.IdPersonPositionStructure);
                                             }
-                                            else
-                                            {
-                                                response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE;
-                                                return response;
-                                            }
+                                            response.isValid = true;
+                                            response.msg = string.Empty;
+                                            response.data = PersonPositionStructure.getObj(obj.IdPersonPositionStructure);
                                         }
                                         else
                                         {
-                                            response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE;
+                                            response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONPERSON_NO_EXISTE;
                                             return response;
                                         }
                                     }
                                     else
                                     {
-                                        response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_PRINCIPAL_NO_EXISTE;
+                                        response.msg = Generic.Message.ID_PERSONPOSITIONSTRUCTURE_LASTMODIFICATIONDATE_NO_EXISTE;
                                         return response;
                                     }
+
                                 }
                                 else
                                 {

@@ -181,8 +181,9 @@
     <Compile Include="Controllers\DniTypeController.cs" />
     <Compile Include="Controllers\GenderController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PersonPositionStructureController.cs" />
-    <Compile Include="Controllers\PositionController.cs" />
+    <Compile Include="Controllers\PositionTypeController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\ReligionController.cs" />
@@ -205,7 +206,7 @@
     <Compile Include="Models\LogIn.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\PersonPositionStructure.cs" />
-    <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\PositionType.cs" />
     <Compile Include="Models\Province.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Religion.cs" />
@@ -260,6 +261,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PersonPositionStructure\" />
+    <Folder Include="Views\PositionType\" />
     <Folder Include="Views\Structure\" />
   </ItemGroup>
   <ItemGroup>

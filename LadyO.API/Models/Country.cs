@@ -8,9 +8,11 @@ namespace LadyO.API.Models
 {
     public class Country
     {
+        #region Variables
         public int IdCountry { get; set; }
         public string CountryName { get; set; }
         public bool IsDeleted { get; set; }
+        #endregion
 
         public Country()
         {
@@ -24,10 +26,18 @@ namespace LadyO.API.Models
             IsDeleted = isDeleted;
         }
 
-        private static Country getObj(int idCountry)
+        private static Country getObj(int idCountry, bool onlyNotDeleted)
         {
             List<Country> objReturnList = new List<Country>();
-            string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper() + " WHERE IsDeleted = 0 AND IdCountry = " + idCountry + ";";
+            string sqlQuery = "SELECT IdCountry, CountryName, IsDeleted FROM " + nameof(Country).ToUpper();
+            if (onlyNotDeleted)
+            {
+                sqlQuery += " WHERE IdCountry = " + idCountry + " AND IsDeleted = 0;";
+            }
+            else
+            {
+                sqlQuery += " WHERE IdCountry = " + idCountry + ";";
+            }
             using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
             {
                 using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -51,7 +61,7 @@ namespace LadyO.API.Models
             response.data = null;
             try
             {
-                Country objReturn = Country.getObj(id);
+                Country objReturn = Country.getObj(id, true);
                 if (objReturn == null)
                 {
                     response.msg = Generic.Message.ID_COUNTRIES_GETOBJECT_NO_EXISTE;
@@ -82,7 +92,9 @@ namespace LadyO.API.Models
                 if (obj.CountryName.Length > 0)
                 {
                     obj.CountryName = Generic.Tools.Capital(obj.CountryName);
-                    string sqlQuery = "INSERT INTO " + nameof(Country).ToUpper() + " VALUES(NULL, '" + obj.CountryName + "', 0); SELECT LAST_INSERT_ID();";
+                    string sqlQuery = "INSERT INTO " + nameof(Country).ToUpper()+ "(IdCountry, CountryName, IsDeleted)";
+                    sqlQuery += " VALUES(NULL, '" + obj.CountryName + "', 0);";
+                    sqlQuery += " SELECT LAST_INSERT_ID();";
                     using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                     {
                         using (MySqlCommand comando = new MySqlCommand(sqlQuery, conexion))
@@ -94,7 +106,7 @@ namespace LadyO.API.Models
                     }
                     response.isValid = true;
                     response.msg = string.Empty;
-                    response.data = Country.getObj(obj.IdCountry);
+                    response.data = Country.getObj(obj.IdCountry, true);
                 }
                 else
                 {
@@ -119,7 +131,7 @@ namespace LadyO.API.Models
             {
                 if (obj.IdCountry > 0)
                 {
-                    if (Country.getObj(obj.IdCountry) != null)
+                    if (Country.getObj(obj.IdCountry, true) != null)
                     {
                         if (obj.CountryName.Length > 0)
                         {
@@ -136,7 +148,7 @@ namespace LadyO.API.Models
                             }
                             response.isValid = true;
                             response.msg = string.Empty;
-                            response.data = Country.getObj(obj.IdCountry);
+                            response.data = Country.getObj(obj.IdCountry, true);
                         }
                         else
                         {
@@ -164,25 +176,26 @@ namespace LadyO.API.Models
             }
         }
 
-        public static object objDelete(int idCountry)
+        public static object objDelete(Country obj)
         {
             APIGenericResponse response = new APIGenericResponse();
             response.data = null;
             response.isValid = false;
             try
             {
-                if (idCountry > 0)
+                if (obj.IdCountry > 0)
                 {
-                    if (Country.getObj(idCountry) != null)
+                    var objGeneric = Country.getObj(obj.IdCountry, false);
+                    if (objGeneric != null)
                     {
                         string sqlQueryUpdate = string.Empty;
-                        if (Country.getObj(idCountry).IsDeleted)
+                        if (objGeneric.IsDeleted)
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 0 WHERE IdCountry =  " + idCountry + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 0 WHERE IdCountry =  " + obj.IdCountry + ";";
                         }
                         else
                         {
-                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 1 WHERE IdCountry =  " + idCountry + ";";
+                            sqlQueryUpdate = "UPDATE " + nameof(Country).ToUpper() + " SET IsDeleted = 1 WHERE IdCountry =  " + obj.IdCountry + ";";
                         }
                         using (MySqlConnection conexion = Generic.DBConnection.MySqlConnectionObj())
                         {
@@ -195,7 +208,7 @@ namespace LadyO.API.Models
                         }
                         response.isValid = true;
                         response.msg = string.Empty;
-                        response.data = Country.getObj(idCountry);
+                        response.data = Country.getObj(obj.IdCountry, true);
                     }
                     else
                     {

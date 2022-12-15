@@ -10,13 +10,13 @@ namespace LadyO.API.Controllers
 {
     public class CommuneController : ApiController
     {
-        [Route("api/Commune/getObject/{idCommune}")]
+        [Route("api/Commune/getObject/{IdCommune}")]
         [HttpGet]
-        public object getObject(int idCommune)
+        public object getObject(int IdCommune)
         {
             try
             {
-                return Models.Commune.getObject(idCommune);
+                return Models.Commune.getObject(IdCommune);
             }
             catch (Exception ex)
             {
